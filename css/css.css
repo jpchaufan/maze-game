@@ -1,0 +1,229 @@
+.gameScreen {
+	width: 400px;
+	height: 400px;
+	margin: 50px auto;
+	border: 10px solid black;
+	background: rgba(0, 0, 0, 0);
+}
+
+/**************************
+      Maze Screen
+**************************/
+
+.mazeSq {
+	background: rgba(0, 0, 0, 0);
+}
+.mazeScreen {
+	width: 100%;
+	height: 100%;
+	line-height: 0;
+	
+}
+.fog {
+	position: relative;
+	top: -100%;
+	width: 100%;
+	height: 100%;
+	box-shadow: inset 0px 150px 80px 150px black;
+	/*
+		box shadow is the fog, 
+		n1=(-150 to 150) n2=(-150 to 150), n3=80 n4=150.
+		n1 and n2 are x and y coords
+		n3 is the fuzziness, n4 is the range of vision
+	*/
+}
+.mazeSq {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	border: 1px solid #ccc;
+	  -webkit-box-sizing: border-box;
+	     -moz-box-sizing: border-box;
+	          box-sizing: border-box;
+
+}
+.wallBlock {
+	background: #3f3f3f;
+}
+.player {
+	background: blue;
+}
+.encounter {
+	background: red;
+}
+
+/**************************
+      Battle Screen
+**************************/
+
+.battleScreen {
+	display: none;
+	width: 400px;
+	height: 400px;
+	font-family: "Comic Sans MS", cursive, sans-serif;
+}
+.gameSide, .playerSide {
+	width: 400px;
+	height: 200px;
+}
+.gameSide {
+	margin: 0;
+	border-bottom: 3px solid black;
+	-webkit-box-sizing: border-box;
+	     -moz-box-sizing: border-box;
+	          box-sizing: border-box;
+}
+.gameStats {
+	display: inline-block;
+	margin: 0;
+	height: 200px;
+	width: 160px;
+	vertical-align: top;
+}
+.gameHealthBar {
+	width: 140px;
+	height: 20px;
+	border: 3px solid black;
+	margin: 15px auto 0;
+	border-radius: 15px;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	-o-border-radius: 15px;
+	overflow: hidden;
+
+}
+.gameHealthRemaining {
+	width: 100%;
+	height: 100%;
+	background: red;
+}
+.gamePic {
+	display: inline-block;
+	margin: 0;
+	height: 197px;
+	width: 230px;
+	background: url("../imgs/monster1.png");
+	background-size: 100% 100%;
+}
+.playerPic {
+	display: inline-block;
+	width: 160px;
+	height: 200px;
+	background: url("../imgs/player1.png");
+	background-size: 100% 100%;
+}
+.playerUI {
+	display: inline-block;
+	width: 230px;
+	height: 200px;
+
+}
+.playerStats {
+	width: 230px;
+	height: 40px;
+	vertical-align: top;
+}
+.playerHealthBar {
+	width: 200px;
+	height: 20px;
+	border: 3px solid black;
+	margin: 7px auto;
+	border-radius: 15px;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	-o-border-radius: 15px;
+	overflow: hidden;
+}
+.playerHealthRemaining {
+	width: 100%;
+	height: 100%;
+	background: red;
+}
+.playerMenu {
+	
+	width: 230px;
+	height: 160px;
+}
+.encounterMsg {
+	-webkit-box-sizing: border-box;
+	     -moz-box-sizing: border-box;
+	          box-sizing: border-box;
+	width: 100%;
+	height: 100%;
+	text-align: center;	
+	padding: 30px;
+	font-weight: bolder;
+}
+.battleMenu {
+	display: none;
+	width: 100%;
+	height: 100%;
+	text-align: center;	
+}
+.quadrant {
+	-webkit-box-sizing: border-box;
+	     -moz-box-sizing: border-box;
+	          box-sizing: border-box;
+	width: 45%;
+	height: 50%;
+	display: inline-block;
+}
+.quadrant button {
+	vertical-align: top;
+	margin-top: 8px;
+	width: 100%;
+	height: 90%;
+}
+.attackMenu {
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	display: none;
+}
+.playerReport {
+	display: none;
+	-webkit-box-sizing: border-box;
+	     -moz-box-sizing: border-box;
+	          box-sizing: border-box;
+	width: 100%;
+	height: 100%;
+	text-align: center;	
+	padding: 30px;
+	font-weight: bolder;
+}
+.victory {
+	display: none;
+	-webkit-box-sizing: border-box;
+	     -moz-box-sizing: border-box;
+	          box-sizing: border-box;
+	width: 100%;
+	height: 100%;
+	text-align: center;	
+	padding: 30px;
+	font-weight: bolder;
+}
+.gameReport {
+	display: none;
+	-webkit-box-sizing: border-box;
+	     -moz-box-sizing: border-box;
+	          box-sizing: border-box;
+	width: 100%;
+	height: 100%;
+	text-align: center;	
+	padding: 30px;
+	font-weight: bolder;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
