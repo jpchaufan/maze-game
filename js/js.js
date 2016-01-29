@@ -17,17 +17,36 @@ function mazeGame(){
 		maxHealth: 0,
 		health: 0,
 		armor: 0,
-		weaponDamage: 0
+		resistance: 0,
+		weaponDamage: 0,
+		magicDamage: 0
 	};
 	var player = {
 		xpos: 10,
 		ypos: 19,
-		fighting: true,
+		fighting: false,
 		myturn: false,
+		searchingPack: false,
+		weaponAbilities: ['slash','pierce'],
+		weaponAbilitiesReserve: [],
+		magicAbilities: ['fireball'],
+		magicAbilitiesReserve: [],
+		tacticAbilities: ['safeguard'],
+		tacticAbilitiesReserve: [],
 		maxHealth: 100,
 		health: 100,
-		armor: 5,
-		weaponDamage: 40
+		maxMana: 100,
+		mana: 100,
+		armor: 0,
+		armorNow: 0,
+		resistance: 0,
+		resistanceNow: 0,
+		weaponDamage: 35,
+		weaponDamageNow: 35,
+		magicDamage: 35,
+		magicDamageNow: 35,
+		tacticSkill: 35,
+		tacticSkillNow: 35
 	};
 	function makeWalls(){
 		function addOuterWalls20x20(){
@@ -194,16 +213,20 @@ function mazeGame(){
 
 
 	/*****************************************************
-				encounter functions
+				encounter resolution functions
 	*****************************************************/
 
 
-	function setHornBeast(){
-		game.maxHealth = 50;
-		game.health = 50;
-		game.weaponDamage = 12;
-		game.armor = 100;
-		game.enemyName = "Horn Beast"
+	function setEnemy(x){
+		game.maxHealth = enemies[x].maxHealth;
+		game.health = enemies[x].maxHealth;
+		game.weaponDamage = enemies[x].weaponDamage;
+		game.armor = enemies[x].armor;
+		game.enemyName = enemies[x].enemyName;
+		game.resistance = enemies[x].resistance;
+		$('.gamePic').css('background', 'url("'+enemies[x].img+'")');
+		$('.gamePic').css('background-size', '100% 100%');
+		$('.encounterMsg p').html('Encountered a '+enemies[x].enemyName+"!");
 	}
 	
 	function encounterBattle(){
@@ -212,7 +235,9 @@ function mazeGame(){
 		$('.mazeScreen').hide();
 		$('.fog').hide();
 		$('.battleScreen').fadeIn();
-		setHornBeast();
+		//random enemy
+		var x = Math.floor((Math.random() * enemies.length));
+		setEnemy(x);
 	};
 	function resetBattle(){
 		$('.playerReport').hide();
@@ -221,11 +246,21 @@ function mazeGame(){
 		$('.attackMenu').hide();
 		$('.battleMenu').hide();
 	}
-	encounterBattle()
+	function resetStatChanges() {
+		player.armorNow = player.armor;
+		player.resistanceNow = player.resistance;
+		player.weaponDamageNow = player.weaponDamage;
+		player.magicDamageNow = player.magicDamage;
+		player.tacticSkillNow = player.tacticSkill;
+	}
+
+
 	function goToMaze(){
+		$('.battleScreen').hide();
+		$('.victory').hide();
 		$('.mazeScreen').fadeIn();
 		$('.fog').show();
-		
+		resetStatChanges()
 		player.fighting = false;
 		resetBattle();
 	}	
@@ -250,12 +285,18 @@ function mazeGame(){
 			var defense = game.armor;
 		};
 		if ((defender == 'player') && (typeOfDamage == 'weapon')){
-			var defense = player.armor;
+			var defense = player.armorNow;
+		};
+		if ((defender == 'game') && (typeOfDamage == 'magic')){
+			var defense = game.resistance;
+		};
+		if ((defender == 'player') && (typeOfDamage == 'magic')){
+			var defense = player.resistanceNow;
 		};
 		if (defense <= 0){
 			defense = 1;
 		}
-		var incomingDamage = (num * ( 1 - ( ( defense/(defense+50) * 0.75 ) )));
+		var incomingDamage = (num * ( 1 - ( ( defense/(defense+50) * 0.9 ) )));
 		return incomingDamage;
 	}
 	function displayPlayerHealth(){
@@ -264,6 +305,25 @@ function mazeGame(){
 		$('.playerHealthRemaining').animate({
 			width: value
 		}, 400);
+	}
+	function consumePlayerMana(x){
+		player.mana -= x;
+		var percentLeftPlayer = player.mana / player.maxMana * 100;
+		var value = percentLeftPlayer.toString()+"%";
+		$('.playerManaRemaining').animate({
+			width: value
+		}, 400);
+	}
+	function notEnoughMana(){
+		$('.playerManaBar').fadeOut().fadeIn();
+	}
+	function gameAttacks() {
+		msg = game.enemyName + " Attacks!";
+		$('.gameReport p').html(msg);
+		$('.gameReport').show();
+		damage = calcDamage(game.weaponDamage, 'player', 'weapon')
+		playerIsHit(damage);
+		console.log('ouch');
 	}
 	function playerIsHit(x){
 		player.health -= x;
@@ -286,11 +346,11 @@ function mazeGame(){
 	}
 
 	function displayPlayerReport(x){
-		$('.attackMenu').hide();
+		$('.weaponAttackMenu').hide();
+		$('.magicAttackMenu').hide();
+		$('.tacticAttackMenu').hide();
 		$('.playerReport p').html(x);
 		$('.playerReport').show();
-
-
 	}
 
 
@@ -316,34 +376,107 @@ function mazeGame(){
 			$('.attackMenu').show();
 		};
 	};
-	$('.attackMenu').on('click', '.slash', clickSlash);
+	$('.attackMenu').on('click', '.weapon', useWeapon);
+	function useWeapon(){
+		if (player.myturn && player.fighting){
+			$('.attackMenu').hide();
+			$('.weaponAttackMenu').show();
+		};
+	};
+	$('.attackMenu').on('click', '.magic', useMagic);
+	function useMagic(){
+		if (player.myturn && player.fighting){
+			$('.attackMenu').hide();
+			$('.magicAttackMenu').show();
+		};
+	};
+	$('.attackMenu').on('click', '.tactic', useTactic);
+	function useTactic(){
+		if (player.myturn && player.fighting){
+			$('.attackMenu').hide();
+			$('.tacticAttackMenu').show();
+		};
+	};
+	$('.weaponAttackMenu').on('click', '.back', backToAttack);
+	$('.magicAttackMenu').on('click', '.back', backToAttack);
+	$('.tacticAttackMenu').on('click', '.back', backToAttack);
+	function backToAttack(){
+		if (player.myturn && player.fighting){
+			$('.attackMenu').show();
+			$('.weaponAttackMenu').hide();
+			$('.magicAttackMenu').hide();
+			$('.tacticAttackMenu').hide();
+		};
+	};
+	$('.attackMenu').on('click', '.back', backToBattle);
+	function backToBattle(){
+		if (player.myturn && player.fighting){
+			$('.battleMenu').show();
+			$('.attackMenu').hide();
+		};
+	};
+
+	/***   Weapon Attacks   ***/
+	$('.weaponAttackMenu').on('click', '.slash', clickSlash);
 	function clickSlash(){
 		if (player.myturn && player.fighting){
-			var damage = calcDamage(player.weaponDamage,'game','weapon');
+			var damage = calcDamage((player.weaponDamageNow*1.25),'game','weapon');
 			gameIsHit(damage);
 			displayPlayerReport(" You slash the " + game.enemyName + " with your sword! ");
 		};
 	};
-	$('.attackMenu').on('click', '.pierce', clickPierce);
+	$('.weaponAttackMenu').on('click', '.pierce', clickPierce);
 	function clickPierce(){
 		if (player.myturn && player.fighting){
-			var damage = calcDamage((player.weaponDamage/2),'game','weapon')+(player.weaponDamage/2);
+			var damage = calcDamage((player.weaponDamageNow/2),'game','weapon')+(player.weaponDamageNow/2);
 			gameIsHit(damage);
 			displayPlayerReport(" You pierce the " + game.enemyName + "'s gut! ");
 		};
 	};
+	/***   Magic Attacks   ***/
+	$('.magicAttackMenu').on('click', '.fireball', clickFireball);
+	function clickFireball(){
+		if (player.myturn && player.fighting){
+			if (player.mana > 30){
+				consumePlayerMana(30);
+				var damage = calcDamage((player.magicDamageNow*1.7),'game','magic');
+				gameIsHit(damage);
+				displayPlayerReport(" You launch a fireball at " + game.enemyName + "!");
+			} else {
+				notEnoughMana();
+			};	
+		};
+	};
+	/***   Tactic Attacks   ***/
+	$('.tacticAttackMenu').on('click', '.safeguard', clickSafeguard);
+	function clickSafeguard(){
+		if (player.myturn && player.fighting){
+			if (player.mana > 15){
+				consumePlayerMana(15);
+				player.health += (player.tacticSkill/2);
+			if (player.MaxHealth < player.health){
+					player.health = player.maxHealth;
+				}
+				player.armorNow += player.tacticSkill;
+				displayPlayerHealth();
+				displayPlayerReport("You improve your health and armor!");
+			} else {
+				notEnoughMana();
+			};	
+			
+		};
+	};
+
+
+
+
 	$('.playerReport').on('click', '.ok', endOfTurn);
 	function endOfTurn(){
 		if (player.myturn && player.fighting){
-			console.log('clicked playerReport\'s ok');
 			player.myturn = false;
 			$('.playerReport').hide();
 			setTimeout(function(){
-				msg = game.enemyName + " Attacks!";
-				$('.gameReport p').html(msg);
-				$('.gameReport').show();
-				playerIsHit(game.weaponDamage);
-				console.log('ouch');
+				gameAttacks();
 			},500);
 			
 		}
@@ -361,6 +494,40 @@ function mazeGame(){
 				 end encounter functions
 	*****************************************************/
 
+
+	/*****************************************************
+				     pack functions
+	*****************************************************/
+	window.addEventListener('keydown', togglePack, false);
+	function togglePack(e){
+		
+		if (!player.fighting && !player.searchingPack){
+			if (e.keyCode == '32'){
+				player.searchingPack = true;
+				$('.mazeScreen').hide();
+				$('.fog').hide();
+				$('.packScreen').show();
+			}
+		} else if (!player.fighting && player.searchingPack){
+			if (e.keyCode == '32'){
+				player.searchingPack = false;
+				$('.mazeScreen').show();
+				$('.fog').show();
+				$('.packScreen').hide();
+			}
+			
+		}
+	}
+
+
+
+	/*** on clicks ****/
+
+
+
+	/*****************************************************
+			     	end pack functions
+	*****************************************************/
 	function fogAdjust() {
 		var multiplier = 17;
 		var xfog = player.xpos * multiplier - 165.75;
@@ -386,14 +553,14 @@ function mazeGame(){
 
 	window.addEventListener('keydown', move, false);
 	function move(e){
-		if (!player.fighting){
-			if ((e.keyCode == '37') && !wallCollision((player.xpos-1), player.ypos)){ 
+		if (!player.fighting && !player.searchingPack){
+			if (((e.keyCode == '37') || (e.keyCode == '65')) && !wallCollision((player.xpos-1), player.ypos)){ 
 				player.xpos -= 1; //left
-			} else if ((e.keyCode == '38') && !wallCollision((player.xpos), player.ypos-1)){
+			} else if (((e.keyCode == '38') || (e.keyCode == '87')) && !wallCollision((player.xpos), player.ypos-1)){
 				player.ypos -= 1; // up
-			} else if ((e.keyCode == '39') && !wallCollision((player.xpos+1), player.ypos)){
+			} else if (((e.keyCode == '39') || (e.keyCode == '68')) && !wallCollision((player.xpos+1), player.ypos)){
 				player.xpos += 1; // right
-			} else if ((e.keyCode == '40') && !wallCollision((player.xpos), player.ypos+1)){
+			} else if (((e.keyCode == '40') || (e.keyCode == '83')) && !wallCollision((player.xpos), player.ypos+1)){
 				player.ypos += 1; // down
 			};
 			encounterCheck();

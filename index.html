@@ -52,16 +52,58 @@
                             </div>
                             <div class="attackMenu">
                                 <div class="quadrant">
-                                    <button class="slash">Slash: an accurate attack</button>
+                                    <button class="weapon"><b>Use Weapon Attack</b></button>
                                 </div>
                                 <div class="quadrant">
-                                    <button class="pierce">Pierce: good against armor</button>
+                                    <button class="magic"><b>Use Magic</b></button>
                                 </div>
                                 <div class="quadrant">
-                                    <button class="fireball">Fireball</button>
+                                    <button class="tactic"><b>Use Tactic</b></button>
                                 </div>
                                 <div class="quadrant">
-                                    <button class="run">Run</button>
+                                    <button class="back"><b>Back</b></button>
+                                </div>
+                            </div>
+                            <div class="weaponAttackMenu">
+                                <div class="quadrant">
+                                    <button class="slash"><b>Slash:</b> a powerful attack</button>
+                                </div>
+                                <div class="quadrant">
+                                    <button class="pierce"><b>Pierce:</b> good against armor</button>
+                                </div>
+                                <div class="quadrant">
+                                    <button class=""><b>nothing yet</b></button>
+                                </div>
+                                <div class="quadrant">
+                                    <button class="back"><b>Back</b></button>
+                                </div>                                
+                            </div>
+                            <div class="magicAttackMenu">
+                                <div class="quadrant">
+                                    <button class="fireball"><b>Fireball</b> basic magical attack</button>
+                                </div>
+                                <div class="quadrant">
+                                    <button class="run"><b>Run</b></button>
+                                </div>
+                                <div class="quadrant">
+                                    <button class="back"><b>Back</b></button>
+                                </div>
+                                <div class="quadrant">
+                                    <button class="back"><b>Back</b></button>
+                                </div>
+                            </div>
+                            <div class="tacticAttackMenu">
+                                <div class="quadrant">
+                                    <button class="safeguard"><b>Safeguard</b></button>
+                                </div>
+                                <div class="quadrant">
+                                    <button class="run"><b>Run</b></button>
+                                </div>
+                                <div class="quadrant">
+                                    <button class="back"><b>Back</b></button>
+                                </div>
+                                <div class="quadrant">
+                                    <button class="back"><b>Back</b></button>
                                 </div>
                             </div>
                             <div class="playerReport">
@@ -86,15 +128,20 @@
                             <div class="playerHealthBar">
                                 <div class="playerHealthRemaining"></div>
                             </div>
+                            <div class="playerManaBar">
+                                <div class="playerManaRemaining"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div> <!-- Close Battle Screen -->
+            <div class="packScreen"></div> <!-- Close pack Screen -->
+        </div> <!-- Close Game Screen -->
 
 
 
-       <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+       <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+       <script type="text/javascript" src="js/enemies.js"></script>
        <script type="text/javascript" src="js/js.js"></script>
     </body>
 </html>
