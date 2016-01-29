@@ -107,7 +107,7 @@
 	display: inline-block;
 	width: 160px;
 	height: 200px;
-	background: url("../imgs/player1.png");
+	background: url("../imgs/misc/player1.png");
 	background-size: 100% 100%;
 }
 .playerUI {
@@ -242,10 +242,53 @@
 	display: none;
 	width: 100%;
 	height: 100%;
-	background: green;
+	background: #50360A;
 }
-
-
+.equiptUI, .packUI {
+	vertical-align: top;
+	height: 100%;
+	width: 49%;
+	display: inline-block;
+	background: #624A22;
+}
+.packGrid {
+	margin: 20px auto;
+	height: 360px;
+	width: 160px;
+	background: #856837;
+	line-height: 0;
+}
+.packSq {
+	-webkit-box-sizing: border-box;
+	     -moz-box-sizing: border-box;
+	          box-sizing: border-box;
+	width: 40px;
+	height: 40px;
+	display: inline-block;
+	border: 1px solid #999;
+}
+.selectedItem {
+	box-shadow: inset 0 0 5px 2px yellow;
+}
+.healthPotion {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/healthPotion.png');
+	background-size: 100% 100%;
+}
+.manaPotion {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/manaPotion.png');
+	background-size: 100% 100%;
+}
+.packStatDisplay {
+	position: relative;
+	top: 355px;
+}
+.packStatDisplay .playerHealthBar, .packStatDisplay .playerManaBar {
+	width: 180px;
+}
 
 
 

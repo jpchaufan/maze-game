@@ -27,6 +27,7 @@ function mazeGame(){
 		fighting: false,
 		myturn: false,
 		searchingPack: false,
+		pack: [],
 		weaponAbilities: ['slash','pierce'],
 		weaponAbilitiesReserve: [],
 		magicAbilities: ['fireball'],
@@ -306,8 +307,7 @@ function mazeGame(){
 			width: value
 		}, 400);
 	}
-	function consumePlayerMana(x){
-		player.mana -= x;
+	function displayPlayerMana(){
 		var percentLeftPlayer = player.mana / player.maxMana * 100;
 		var value = percentLeftPlayer.toString()+"%";
 		$('.playerManaRemaining').animate({
@@ -438,7 +438,8 @@ function mazeGame(){
 	function clickFireball(){
 		if (player.myturn && player.fighting){
 			if (player.mana > 30){
-				consumePlayerMana(30);
+				player.mana -= 30;
+				displayPlayerMana();
 				var damage = calcDamage((player.magicDamageNow*1.7),'game','magic');
 				gameIsHit(damage);
 				displayPlayerReport(" You launch a fireball at " + game.enemyName + "!");
@@ -452,7 +453,8 @@ function mazeGame(){
 	function clickSafeguard(){
 		if (player.myturn && player.fighting){
 			if (player.mana > 15){
-				consumePlayerMana(15);
+				player.mana -= 15;
+				displayPlayerMana();
 				player.health += (player.tacticSkill/2);
 			if (player.MaxHealth < player.health){
 					player.health = player.maxHealth;
@@ -514,14 +516,125 @@ function mazeGame(){
 				$('.mazeScreen').show();
 				$('.fog').show();
 				$('.packScreen').hide();
-			}
-			
+			} 
 		}
 	}
+	function makePack(){
+		for (var i = 0; i < 36; i++) {
+				$('.packGrid').append('<div class="packSq" space="'+i+'"></div>');
+		player.pack.push(0);
+		};
+		
 
+	};
+	makePack();
+	
+
+	function addHealthPotion(){	
+		var freeSpace = player.pack.indexOf(0);
+		if (freeSpace == -1){
+			alert('Pack is too full! lost the item: Health Potion.');
+		} else {
+			player.pack[freeSpace] = 'healthPotion';
+			$('.packSq[space="'+freeSpace+'"]').addClass('healthPotion');
+			$('.packSq[space="'+freeSpace+'"]').addClass('hasItem');
+		}	
+	}
+	function addManaPotion(){	
+		var freeSpace = player.pack.indexOf(0);
+		if (freeSpace == -1){
+			alert('Pack is too full! lost the item: Mana Potion.');
+		} else {
+			player.pack[freeSpace] = 'manaPotion';
+			$('.packSq[space="'+freeSpace+'"]').addClass('manaPotion');
+			$('.packSq[space="'+freeSpace+'"]').addClass('hasItem');
+		}
+	}
+	addHealthPotion();
+	addManaPotion();
+	addHealthPotion();
+	addManaPotion();
+	addHealthPotion();
 
 
 	/*** on clicks ****/
+	$('.packGrid').on('click', '.packSq', function(){
+		var alreadySelected = $('.selectedItem').length;
+		var spaceClicked = $(this).attr('space');
+		
+		if (($(this).hasClass('hasItem')) && (alreadySelected == 0)) {
+		// if item is here and none are selected, select it
+			$(this).addClass('selectedItem');
+		} else if (!($(this).hasClass('hasItem')) && (alreadySelected == 1)){
+		// if no item is here and one is selected, move to here	
+			var from = $('.selectedItem').attr('space');
+			var to = $(this).attr('space');
+			var item = player.pack[from];
+			$('.packSq[space="'+from+'"]').removeClass(item);
+			$('.packSq[space="'+from+'"]').removeClass('hasItem');
+			$('.packSq[space="'+from+'"]').removeClass('selectedItem');
+			$('.packSq[space="'+to+'"]').addClass(item);
+			$('.packSq[space="'+to+'"]').addClass('hasItem');
+
+			player.pack[from] = 0;
+			player.pack[to] = item;
+
+			console.log('moved '+item+' from '+from +' to '+to);
+		} else if (($(this).hasClass('hasItem')) && (alreadySelected == 1)){
+		// if item is here and one is selected, switch em
+			console.log('swapping');
+			var from = $('.selectedItem').attr('space');
+			var to = $(this).attr('space');
+			var item1 = player.pack[from];
+			var item2 = player.pack[to];
+			$('.packSq[space="'+from+'"]').removeClass('selectedItem');
+			$('.packSq[space="'+from+'"]').removeClass(item1);
+			$('.packSq[space="'+to+'"]').removeClass(item2);
+			$('.packSq[space="'+to+'"]').addClass(item1);
+			$('.packSq[space="'+from+'"]').addClass(item2);
+			player.pack[from] = item2;
+			player.pack[to] = item1;
+			console.log('moved '+item1+' from '+from +' to '+to);
+		}
+	});
+
+	/*****************************************************
+				     Use Items From Pack
+	*****************************************************/
+	window.addEventListener('keydown', drinkPotionFromPack, false);
+	function drinkPotionFromPack(e){ // z
+		if (player.searchingPack){
+			if ((e.keyCode == '90'))
+				if (($('.selectedItem').hasClass('healthPotion')) && (player.health < player.maxHealth)){
+					var use = $('.selectedItem').attr('space');
+					$('.packSq[space="'+use+'"]').removeClass('selectedItem');
+					$('.packSq[space="'+use+'"]').removeClass('hasItem');
+					$('.packSq[space="'+use+'"]').removeClass('healthPotion');
+					player.pack[use] = 0;
+					player.health += (player.maxHealth*0.6);
+					if (player.health > player.maxHealth){
+						player.health = player.maxHealth;
+					}
+					displayPlayerHealth();
+				}
+				if (($('.selectedItem').hasClass('manaPotion')) && (player.mana < player.maxMana)){
+					var use = $('.selectedItem').attr('space');
+					$('.packSq[space="'+use+'"]').removeClass('selectedItem');
+					$('.packSq[space="'+use+'"]').removeClass('hasItem');
+					$('.packSq[space="'+use+'"]').removeClass('manaPotion');
+					player.pack[use] = 0;
+					player.mana += (player.maxMana*0.6);
+					if (player.mana > player.maxMana){
+						player.mana = player.maxMana;
+					}
+					displayPlayerMana();
+				}
+			}
+		}
+	
+
+
+		
 
 
 
