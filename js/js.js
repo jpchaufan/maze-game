@@ -528,33 +528,89 @@ function mazeGame(){
 
 	};
 	makePack();
-	
+		/************************************************************
 
-	function addHealthPotion(){	
-		var freeSpace = player.pack.indexOf(0);
-		if (freeSpace == -1){
-			alert('Pack is too full! lost the item: Health Potion.');
-		} else {
-			player.pack[freeSpace] = 'healthPotion';
-			$('.packSq[space="'+freeSpace+'"]').addClass('healthPotion');
-			$('.packSq[space="'+freeSpace+'"]').addClass('hasItem');
-		}	
-	}
-	function addManaPotion(){	
-		var freeSpace = player.pack.indexOf(0);
-		if (freeSpace == -1){
-			alert('Pack is too full! lost the item: Mana Potion.');
-		} else {
-			player.pack[freeSpace] = 'manaPotion';
-			$('.packSq[space="'+freeSpace+'"]').addClass('manaPotion');
-			$('.packSq[space="'+freeSpace+'"]').addClass('hasItem');
+						Items
+
+	**************************************************************/
+
+	items = [
+	{
+		name: 'healthPotion',
+		id: 0,
+		consumable: true,
+		effect: function(){
+			if (($('.selectedItem').hasClass('healthPotion')) && (player.health < player.maxHealth)){
+					var use = $('.selectedItem').attr('space');
+					$('.packSq[space="'+use+'"]').removeClass('selectedItem');
+					$('.packSq[space="'+use+'"]').removeClass('hasItem');
+					$('.packSq[space="'+use+'"]').removeClass('healthPotion');
+					player.pack[use] = 0;
+					player.health += (player.maxHealth*0.6);
+					if (player.health > player.maxHealth){
+						player.health = player.maxHealth;
+					}
+					displayPlayerHealth();
+				}
+		}
+	},
+	{
+		name: 'manaPotion',
+		id: 1,
+		consumable: true,
+		effect: function(){
+			if (($('.selectedItem').hasClass('manaPotion')) && (player.mana < player.maxMana)){
+					var use = $('.selectedItem').attr('space');
+					$('.packSq[space="'+use+'"]').removeClass('selectedItem');
+					$('.packSq[space="'+use+'"]').removeClass('hasItem');
+					$('.packSq[space="'+use+'"]').removeClass('manaPotion');
+					player.pack[use] = 0;
+					player.mana += (player.maxMana*0.6);
+					if (player.mana > player.maxMana){
+						player.mana = player.maxMana;
+					}
+					displayPlayerMana();
+				}
+		}
+	},
+	{
+		name: 'sword1',
+		id: 2,
+		consumable: false,
+		equip: function(){
+			//?
+		},
+		unequip: function(){
+			//?
 		}
 	}
-	addHealthPotion();
-	addManaPotion();
-	addHealthPotion();
-	addManaPotion();
-	addHealthPotion();
+];
+
+	
+
+	function addItem(item){	
+		var freeSpace = player.pack.indexOf(0);
+		if (freeSpace == -1){
+			alert('Pack is too full! Dumping items...');
+		} else {
+			player.pack[freeSpace] = item;
+			$('.packSq[space="'+freeSpace+'"]').addClass(item);
+			$('.packSq[space="'+freeSpace+'"]').addClass('hasItem');
+
+			for (var i = 0; i < items.length; i++) {
+				if (items[i].name == item){
+					var itemId = items[i].id;
+				} 
+			};
+			$('.packSq[space="'+freeSpace+'"]').attr('itemId', itemId);
+		}	
+	}
+	addItem('healthPotion');
+	addItem('manaPotion');
+	addItem('healthPotion');
+	addItem('sword1');
+
+
 
 
 	/*** on clicks ****/
@@ -568,11 +624,14 @@ function mazeGame(){
 		} else if (!($(this).hasClass('hasItem')) && (alreadySelected == 1)){
 		// if no item is here and one is selected, move to here	
 			var from = $('.selectedItem').attr('space');
+			var fromId = $('.selectedItem').attr('itemId');
 			var to = $(this).attr('space');
 			var item = player.pack[from];
 			$('.packSq[space="'+from+'"]').removeClass(item);
 			$('.packSq[space="'+from+'"]').removeClass('hasItem');
 			$('.packSq[space="'+from+'"]').removeClass('selectedItem');
+			$('.packSq[space="'+from+'"]').removeAttr('itemId');
+			$('.packSq[space="'+to+'"]').attr('itemId', fromId);
 			$('.packSq[space="'+to+'"]').addClass(item);
 			$('.packSq[space="'+to+'"]').addClass('hasItem');
 
@@ -584,11 +643,15 @@ function mazeGame(){
 		// if item is here and one is selected, switch em
 			console.log('swapping');
 			var from = $('.selectedItem').attr('space');
+			var fromId = $('.selectedItem').attr('itemId');
+			var toId = $(this).attr('itemId');
 			var to = $(this).attr('space');
 			var item1 = player.pack[from];
 			var item2 = player.pack[to];
 			$('.packSq[space="'+from+'"]').removeClass('selectedItem');
 			$('.packSq[space="'+from+'"]').removeClass(item1);
+			$('.packSq[space="'+from+'"]').attr('itemId', toId);
+			$('.packSq[space="'+to+'"]').attr('itemId', fromId);
 			$('.packSq[space="'+to+'"]').removeClass(item2);
 			$('.packSq[space="'+to+'"]').addClass(item1);
 			$('.packSq[space="'+from+'"]').addClass(item2);
@@ -601,37 +664,17 @@ function mazeGame(){
 	/*****************************************************
 				     Use Items From Pack
 	*****************************************************/
-	window.addEventListener('keydown', drinkPotionFromPack, false);
-	function drinkPotionFromPack(e){ // z
+	window.addEventListener('keydown', consumeFromPack, false);
+	function consumeFromPack(e){ // z
 		if (player.searchingPack){
-			if ((e.keyCode == '90'))
-				if (($('.selectedItem').hasClass('healthPotion')) && (player.health < player.maxHealth)){
-					var use = $('.selectedItem').attr('space');
-					$('.packSq[space="'+use+'"]').removeClass('selectedItem');
-					$('.packSq[space="'+use+'"]').removeClass('hasItem');
-					$('.packSq[space="'+use+'"]').removeClass('healthPotion');
-					player.pack[use] = 0;
-					player.health += (player.maxHealth*0.6);
-					if (player.health > player.maxHealth){
-						player.health = player.maxHealth;
-					}
-					displayPlayerHealth();
-				}
-				if (($('.selectedItem').hasClass('manaPotion')) && (player.mana < player.maxMana)){
-					var use = $('.selectedItem').attr('space');
-					$('.packSq[space="'+use+'"]').removeClass('selectedItem');
-					$('.packSq[space="'+use+'"]').removeClass('hasItem');
-					$('.packSq[space="'+use+'"]').removeClass('manaPotion');
-					player.pack[use] = 0;
-					player.mana += (player.maxMana*0.6);
-					if (player.mana > player.maxMana){
-						player.mana = player.maxMana;
-					}
-					displayPlayerMana();
-				}
+			if ((e.keyCode == '90')){
+				var itemId = $('.selectedItem').attr('itemId')
+				if (items[itemId].consumable){
+					items[itemId].effect();
+				} 
 			}
 		}
-	
+	}
 
 
 		
@@ -647,6 +690,7 @@ function mazeGame(){
 		var yfog = player.ypos * multiplier - 165.75;
 		$('.fog').css('box-shadow', 'inset '+xfog+'px '+yfog+'px 80px 150px black');
 	};
+	fogAdjust()
 
 	function wallCollision(x, y){ // returns true if wall collision
 		for (var i = 0; i < game.walls.length; i++) {

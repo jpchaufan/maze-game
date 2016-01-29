@@ -270,6 +270,18 @@
 .selectedItem {
 	box-shadow: inset 0 0 5px 2px yellow;
 }
+.packStatDisplay {
+	position: relative;
+	top: 355px;
+}
+.packStatDisplay .playerHealthBar, .packStatDisplay .playerManaBar {
+	width: 180px;
+}
+
+/**************************
+      Items
+**************************/
+
 .healthPotion {
 	width: 40px;
 	height: 40px;
@@ -282,13 +294,59 @@
 	background: url('../imgs/items/manaPotion.png');
 	background-size: 100% 100%;
 }
-.packStatDisplay {
-	position: relative;
-	top: 355px;
+.sword1 {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/sword1.png');
+	background-size: 100% 100%;
 }
-.packStatDisplay .playerHealthBar, .packStatDisplay .playerManaBar {
-	width: 180px;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
