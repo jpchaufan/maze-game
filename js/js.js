@@ -9,11 +9,12 @@ function makeGrid(){
 };
 makeGrid();
 
-function mazeGame(){
+
 	var game = {
 		walls: [],
 		encounters: [],
 		enemyName: "",
+		enemyId: 0,
 		maxHealth: 0,
 		health: 0,
 		armor: 0,
@@ -25,9 +26,11 @@ function mazeGame(){
 		xpos: 10,
 		ypos: 19,
 		fighting: false,
+		paralyzed: false,
 		myturn: false,
 		searchingPack: false,
 		pack: [],
+		equip: [],
 		weaponAbilities: ['slash','pierce'],
 		weaponAbilitiesReserve: [],
 		magicAbilities: ['fireball'],
@@ -38,16 +41,21 @@ function mazeGame(){
 		health: 100,
 		maxMana: 100,
 		mana: 100,
-		armor: 0,
-		armorNow: 0,
-		resistance: 0,
-		resistanceNow: 0,
-		weaponDamage: 35,
-		weaponDamageNow: 35,
-		magicDamage: 35,
-		magicDamageNow: 35,
-		tacticSkill: 35,
-		tacticSkillNow: 35
+		restoreHealth: 0,
+		restoreHealthNow: 0,
+		restoreMana: 0,
+		restoreManaNow: 0,
+		armor: 25,
+		armorNow: 25,
+		resistance: 25,
+		resistanceNow: 25,
+		weaponDamage: 25,
+		weaponDamageNow: 25,
+		magicDamage: 25,
+		magicDamageNow: 25,
+		tacticSkill: 25,
+		tacticSkillNow: 25,
+		magicFind: 0
 	};
 	function makeWalls(){
 		function addOuterWalls20x20(){
@@ -219,18 +227,32 @@ function mazeGame(){
 
 
 	function setEnemy(x){
+		game.enemyId = x;
+		game.damageType = enemies[x].damageType;
 		game.maxHealth = enemies[x].maxHealth;
 		game.health = enemies[x].maxHealth;
 		game.weaponDamage = enemies[x].weaponDamage;
+		game.magicDamage = enemies[x].magicDamage;
 		game.armor = enemies[x].armor;
 		game.enemyName = enemies[x].enemyName;
 		game.resistance = enemies[x].resistance;
+		$('.gamePic').show();
 		$('.gamePic').css('background', 'url("'+enemies[x].img+'")');
 		$('.gamePic').css('background-size', '100% 100%');
 		$('.encounterMsg p').html('Encountered a '+enemies[x].enemyName+"!");
 	}
-	
+	function resetStatChanges() {
+		player.armorNow = player.armor;
+		player.resistanceNow = player.resistance;
+		player.weaponDamageNow = player.weaponDamage;
+		player.magicDamageNow = player.magicDamage;
+		player.tacticSkillNow = player.tacticSkill;
+		player.restoreHealthNow = player.restoreHealth;
+		player.restoreManaNow = player.restoreHealth;
+	}
 	function encounterBattle(){
+		resetStatChanges();
+		turnEffects = [];
 		player.fighting = true;
 		player.myturn = true;
 		$('.mazeScreen').hide();
@@ -238,6 +260,7 @@ function mazeGame(){
 		$('.battleScreen').fadeIn();
 		//random enemy
 		var x = Math.floor((Math.random() * enemies.length));
+		x = 4;
 		setEnemy(x);
 	};
 	function resetBattle(){
@@ -247,15 +270,6 @@ function mazeGame(){
 		$('.attackMenu').hide();
 		$('.battleMenu').hide();
 	}
-	function resetStatChanges() {
-		player.armorNow = player.armor;
-		player.resistanceNow = player.resistance;
-		player.weaponDamageNow = player.weaponDamage;
-		player.magicDamageNow = player.magicDamage;
-		player.tacticSkillNow = player.tacticSkill;
-	}
-
-
 	function goToMaze(){
 		$('.battleScreen').hide();
 		$('.victory').hide();
@@ -271,34 +285,63 @@ function mazeGame(){
 			location.reload();
 		}
 	}
-	
+	function getLoot(){
+		var x = player.magicFind;
+		if (x == 0){
+			x == 1;
+		}
+		var roll = Math.random()*100+1;
+		var magicFind = roll*(1+(x/(x+50)));
+		if (roll >  70){
+			var num = Math.floor(Math.random()*items.length);
+			addItem(items[num].name);
+			$(".lootReport").html(items[num].title);
+		} else if (roll > 40){
+			addItem('healthPotion');
+			$(".lootReport").html('Health Potion');
+		} else if (roll > 20){
+			addItem('manaPotion');
+			$(".lootReport").html('Mana Potion');
+		} else {
+			$(".lootReport").html('Nothing...');
+		}
+	}
 	function checkForGameDefeat(){
 		if (game.health <= 0){
-			player.fighting = false;
+			$('.gamePic').fadeOut(800);
 			setTimeout(function(){
+				$('.gameReport').hide();
+				$('.battleMenu').hide();
+				$('.attackMenu').hide();
 				$('.playerReport').hide();
+			},200);
+			setTimeout(function(){
 				$('.victory').show();
+				getLoot()
 			}, 800);
 		}
 	}
 	function calcDamage(num, defender, typeOfDamage){
 		if ((defender == 'game') && (typeOfDamage == 'weapon')){
-			var defense = game.armor;
+			var defensePoints = game.armor;
 		};
 		if ((defender == 'player') && (typeOfDamage == 'weapon')){
-			var defense = player.armorNow;
+			var defensePoints = player.armorNow;
 		};
 		if ((defender == 'game') && (typeOfDamage == 'magic')){
-			var defense = game.resistance;
+			var defensePoints = game.resistance;
 		};
 		if ((defender == 'player') && (typeOfDamage == 'magic')){
-			var defense = player.resistanceNow;
+			var defensePoints = player.resistanceNow;
+			console.log('player receiving maagic damage. player res = '+player.resistanceNow);
 		};
-		if (defense <= 0){
-			defense = 1;
+		if (defensePoints <= 0){
+			defensePoints = 1;
 		}
-		var incomingDamage = (num * ( 1 - ( ( defense/(defense+50) * 0.9 ) )));
+		var incomingDamage = (num * ( 1 - ( ( defensePoints/(defensePoints+50) * 0.9 ) )));
+		console.log('incoming damage:' +incomingDamage)
 		return incomingDamage;
+
 	}
 	function displayPlayerHealth(){
 		var percentLeftPlayer = player.health / player.maxHealth * 100;
@@ -314,16 +357,48 @@ function mazeGame(){
 			width: value
 		}, 400);
 	}
+	function restoreEffect(){
+		player.health += player.restoreHealthNow;
+		player.mana += player.restoreManaNow;
+		if (player.health > player.maxHealth){
+			player.health = player.maxHealth;
+		} 
+		if (player.mana > player.maxMana){
+			player.mana = player.maxMana;
+		}
+		displayPlayerHealth();
+		displayPlayerMana();
+	}
 	function notEnoughMana(){
 		$('.playerManaBar').fadeOut().fadeIn();
 	}
-	function gameAttacks() {
-		msg = game.enemyName + " Attacks!";
-		$('.gameReport p').html(msg);
-		$('.gameReport').show();
-		damage = calcDamage(game.weaponDamage, 'player', 'weapon')
-		playerIsHit(damage);
-		console.log('ouch');
+	function gameAttacks(damageType) {
+		if (game.health > 0){
+			if (game.damageType == 'weapon'){
+				damage = calcDamage(game.weaponDamage, 'player', 'weapon');
+				msg = game.enemyName + " Charges you with a weapon!";
+				playerIsHit(damage);
+			} else if (damageType == 'magic'){
+				msg = game.enemyName + " sends a magical blast!";
+				damage = calcDamage(game.magicDamage, 'player', 'magic');
+				playerIsHit(damage);
+			} else if (damageType == 'special'){
+				enemies[game.enemyId].special();
+				console.log('inc special atack');
+			} else if (damageType == 'varied2'){
+				var chance = Math.random()*100 + 1;
+				var atk1 = enemies[game.enemyId].varied1
+				if (chance < atk1){
+					enemies[game.enemyId].special1();
+				} else {
+					enemies[game.enemyId].special2();
+				}
+			}
+			$('.gameReport p').html(msg);
+			$('.gameReport').show();
+			
+		}
+		
 	}
 	function playerIsHit(x){
 		player.health -= x;
@@ -352,7 +427,26 @@ function mazeGame(){
 		$('.playerReport p').html(x);
 		$('.playerReport').show();
 	}
+	var turnEffects = [];
 
+
+	function perTurnEffects(){
+		console.log('function ran');
+		if (turnEffects.length){
+			console.log('turn effects occurred');
+			for (var i = 0; i < turnEffects.length; i++) {
+				if (!turnEffects[i].duration){
+					turnEffects.splice(i, 1);
+				} else {
+					turnEffects[i].effect();
+					turnEffects[i].duration -=1
+				}
+				
+			};
+			checkForGameOver();
+			checkForGameDefeat();
+		}
+	}
 
 	/**** ON CLICKS *****/
 
@@ -428,7 +522,7 @@ function mazeGame(){
 	$('.weaponAttackMenu').on('click', '.pierce', clickPierce);
 	function clickPierce(){
 		if (player.myturn && player.fighting){
-			var damage = calcDamage((player.weaponDamageNow/2),'game','weapon')+(player.weaponDamageNow/2);
+			var damage = calcDamage((player.weaponDamageNow*0.75),'game','weapon')+(player.weaponDamageNow*0.25);
 			gameIsHit(damage);
 			displayPlayerReport(" You pierce the " + game.enemyName + "'s gut! ");
 		};
@@ -437,10 +531,10 @@ function mazeGame(){
 	$('.magicAttackMenu').on('click', '.fireball', clickFireball);
 	function clickFireball(){
 		if (player.myturn && player.fighting){
-			if (player.mana > 30){
-				player.mana -= 30;
+			if (player.mana > 10){
+				player.mana -= 10;
 				displayPlayerMana();
-				var damage = calcDamage((player.magicDamageNow*1.7),'game','magic');
+				var damage = calcDamage((player.magicDamageNow*1.4),'game','magic');
 				gameIsHit(damage);
 				displayPlayerReport(" You launch a fireball at " + game.enemyName + "!");
 			} else {
@@ -455,13 +549,40 @@ function mazeGame(){
 			if (player.mana > 15){
 				player.mana -= 15;
 				displayPlayerMana();
-				player.health += (player.tacticSkill/2);
+				player.health += (10 + player.tacticSkill*0.5);
 			if (player.MaxHealth < player.health){
 					player.health = player.maxHealth;
 				}
 				player.armorNow += player.tacticSkill;
 				displayPlayerHealth();
 				displayPlayerReport("You improve your health and armor!");
+			} else {
+				notEnoughMana();
+			};	
+			
+		};
+	};
+	$('.tacticAttackMenu').on('click', '.envenom', clickEnvenom);
+	function clickEnvenom(){
+		if (player.myturn && player.fighting){
+			if (player.mana > 15){
+				player.mana -= 15;
+				displayPlayerMana();
+				var damage = calcDamage((player.weaponDamageNow*0.25),'game','weapon');
+				turnEffects.push(
+					{
+						name: 'poison',
+						duration: 8,
+						effect: function(){
+							damage = calcDamage((10+player.tacticSkillNow*0.25), 'game', 'magic');
+							game.health -= damage;
+							displayGameHealth();
+							console.log('poison ran');
+						}
+					}
+				);
+				gameIsHit(damage);
+				displayPlayerReport("You strike with a hidden blade, poisoning your foe!");
 			} else {
 				notEnoughMana();
 			};	
@@ -476,9 +597,11 @@ function mazeGame(){
 	function endOfTurn(){
 		if (player.myturn && player.fighting){
 			player.myturn = false;
+			restoreEffect();
+			perTurnEffects();
 			$('.playerReport').hide();
 			setTimeout(function(){
-				gameAttacks();
+				gameAttacks(game.damageType);
 			},500);
 			
 		}
@@ -486,9 +609,17 @@ function mazeGame(){
 	$('.playerReport').on('click', '.ok', endOfTurn);
 	$('.gameReport').on('click', '.ok', nextRound);
 	function nextRound(){
-		$('.gameReport').hide();
-		$('.battleMenu').show();
-		player.myturn = true;
+		if (!player.paralyzed){
+			$('.gameReport').hide();
+			$('.battleMenu').show();
+			player.myturn = true;
+		} else {
+			player.paralyzed = false;
+			$('.gameReport').hide();
+			$('.playerReport').show();
+			playerReport("You are paralyzed!");
+		}
+		
 	}
 	$('.victory').on('click', '.ok', goToMaze);
 
@@ -516,6 +647,8 @@ function mazeGame(){
 				$('.mazeScreen').show();
 				$('.fog').show();
 				$('.packScreen').hide();
+				$('.selectedFromPack').removeClass('selectedFromPack');
+				$('.selectedFromEquipt').removeClass('selectedFromEquipt');
 			} 
 		}
 	}
@@ -534,57 +667,7 @@ function mazeGame(){
 
 	**************************************************************/
 
-	items = [
-	{
-		name: 'healthPotion',
-		id: 0,
-		consumable: true,
-		effect: function(){
-			if (($('.selectedItem').hasClass('healthPotion')) && (player.health < player.maxHealth)){
-					var use = $('.selectedItem').attr('space');
-					$('.packSq[space="'+use+'"]').removeClass('selectedItem');
-					$('.packSq[space="'+use+'"]').removeClass('hasItem');
-					$('.packSq[space="'+use+'"]').removeClass('healthPotion');
-					player.pack[use] = 0;
-					player.health += (player.maxHealth*0.6);
-					if (player.health > player.maxHealth){
-						player.health = player.maxHealth;
-					}
-					displayPlayerHealth();
-				}
-		}
-	},
-	{
-		name: 'manaPotion',
-		id: 1,
-		consumable: true,
-		effect: function(){
-			if (($('.selectedItem').hasClass('manaPotion')) && (player.mana < player.maxMana)){
-					var use = $('.selectedItem').attr('space');
-					$('.packSq[space="'+use+'"]').removeClass('selectedItem');
-					$('.packSq[space="'+use+'"]').removeClass('hasItem');
-					$('.packSq[space="'+use+'"]').removeClass('manaPotion');
-					player.pack[use] = 0;
-					player.mana += (player.maxMana*0.6);
-					if (player.mana > player.maxMana){
-						player.mana = player.maxMana;
-					}
-					displayPlayerMana();
-				}
-		}
-	},
-	{
-		name: 'sword1',
-		id: 2,
-		consumable: false,
-		equip: function(){
-			//?
-		},
-		unequip: function(){
-			//?
-		}
-	}
-];
+	
 
 	
 
@@ -605,60 +688,251 @@ function mazeGame(){
 			$('.packSq[space="'+freeSpace+'"]').attr('itemId', itemId);
 		}	
 	}
+	//starting items:
+	addItem('healthPotion');
+	addItem('healthPotion');
+	addItem('healthPotion');
 	addItem('healthPotion');
 	addItem('manaPotion');
-	addItem('healthPotion');
+	addItem('manaPotion');
+	addItem('manaPotion');
+	addItem('manaPotion');
 	addItem('sword1');
+	addItem('staff1');
+	addItem('shield1');
 
 
+	addItem('zenithArmor');
+	addItem('enchantedSword');
+	addItem('enchantedSword');
 
+
+	function equipSlotType(slot){
+		if (slot == 0){
+			return 'head';
+		} else if (slot == 1){
+			return 'neck';
+		} else if ((slot == 2) || (slot == 4)){
+			return 'hand';
+		} else if (slot == 3){
+			return 'torso';
+		} else if ((slot == 5) || (slot == 6)){
+			return 'ring';
+		}
+	}
+	function displaySelectedItemsInfo(){
+		var packSel = $('.selectedFromPack').length;
+		var equipSel = $('.selectedFromEquipt').length;
+		if (packSel){
+			var itemId = $('.selectedFromPack').attr('itemId');
+			var title = items[itemId].title;
+			var desc = items[itemId].desc;
+			$('.itemTitle').html(title);
+			$('.itemDesc').html(desc);
+		} else if (equipSel){
+			var itemId = $('.selectedFromEquipt').attr('itemId');
+			var title = items[itemId].title;
+			var desc = items[itemId].desc;
+			$('.itemTitle').html(title);
+			$('.itemDesc').html(desc);
+		} else {
+			$('.itemTitle').html('');
+			$('.itemDesc').html('');
+		}
+	}
 
 	/*** on clicks ****/
 	$('.packGrid').on('click', '.packSq', function(){
-		var alreadySelected = $('.selectedItem').length;
+		var equipSelecting = $('.selectedFromEquipt').length;
+		var packSelecting = $('.selectedFromPack').length;
 		var spaceClicked = $(this).attr('space');
+		var hasItem = $(this).hasClass('hasItem');
 		
-		if (($(this).hasClass('hasItem')) && (alreadySelected == 0)) {
-		// if item is here and none are selected, select it
-			$(this).addClass('selectedItem');
-		} else if (!($(this).hasClass('hasItem')) && (alreadySelected == 1)){
-		// if no item is here and one is selected, move to here	
-			var from = $('.selectedItem').attr('space');
-			var fromId = $('.selectedItem').attr('itemId');
-			var to = $(this).attr('space');
-			var item = player.pack[from];
-			$('.packSq[space="'+from+'"]').removeClass(item);
-			$('.packSq[space="'+from+'"]').removeClass('hasItem');
-			$('.packSq[space="'+from+'"]').removeClass('selectedItem');
-			$('.packSq[space="'+from+'"]').removeAttr('itemId');
-			$('.packSq[space="'+to+'"]').attr('itemId', fromId);
-			$('.packSq[space="'+to+'"]').addClass(item);
-			$('.packSq[space="'+to+'"]').addClass('hasItem');
+			if (hasItem && !packSelecting && !equipSelecting) {
+			// if item is here and none are selected, select it
+				$(this).addClass('selectedFromPack');
+			} else if (!hasItem && packSelecting){
+			// if no item is here and one is selected, move to here	
+				var from = $('.selectedFromPack').attr('space');
+				var fromId = $('.selectedFromPack').attr('itemId');
+				var to = $(this).attr('space');
+				var item = player.pack[from];
+				$('.packSq[space="'+from+'"]').removeClass(item);
+				$('.packSq[space="'+from+'"]').removeClass('hasItem');
+				$('.packSq[space="'+from+'"]').removeClass('selectedFromPack');
+				$('.packSq[space="'+from+'"]').removeAttr('itemId');
+				$('.packSq[space="'+to+'"]').attr('itemId', fromId);
+				$('.packSq[space="'+to+'"]').addClass(item);
+				$('.packSq[space="'+to+'"]').addClass('hasItem');
 
-			player.pack[from] = 0;
-			player.pack[to] = item;
+				player.pack[from] = 0;
+				player.pack[to] = item;
 
-			console.log('moved '+item+' from '+from +' to '+to);
-		} else if (($(this).hasClass('hasItem')) && (alreadySelected == 1)){
-		// if item is here and one is selected, switch em
-			console.log('swapping');
-			var from = $('.selectedItem').attr('space');
-			var fromId = $('.selectedItem').attr('itemId');
-			var toId = $(this).attr('itemId');
+				console.log('moved '+item+' from '+from +' to '+to);
+			} else if (hasItem && packSelecting){
+			// if item is here and one is selected, switch em
+				console.log('swapping');
+				var from = $('.selectedFromPack').attr('space');
+				var fromId = $('.selectedFromPack').attr('itemId');
+				var toId = $(this).attr('itemId');
+				var to = $(this).attr('space');
+				var item1 = player.pack[from];
+				var item2 = player.pack[to];
+				$('.packSq[space="'+from+'"]').removeClass('selectedFromPack');
+				$('.packSq[space="'+from+'"]').removeClass(item1);
+				$('.packSq[space="'+from+'"]').attr('itemId', toId);
+				$('.packSq[space="'+to+'"]').attr('itemId', fromId);
+				$('.packSq[space="'+to+'"]').removeClass(item2);
+				$('.packSq[space="'+to+'"]').addClass(item1);
+				$('.packSq[space="'+from+'"]').addClass(item2);
+				player.pack[from] = item2;
+				player.pack[to] = item1;
+				console.log('moved '+item1+' from '+from +' to '+to);
+			} else if (equipSelecting && !hasItem){
+				//if selecting from equip and empty, unequip
+				var itemId = $('.selectedFromEquipt').attr('itemId');
+				var equipSpace = $('.selectedFromEquipt').attr('space');
+				var packSpace = $(this).attr('space');
+				var item = items[itemId].name;
+				player.equip[equipSpace] = 0;
+				player.pack[packSpace] = item;
+				$('.selectedFromEquipt').removeClass('hasItem');
+				$('.selectedFromEquipt').removeClass(item);
+				$('.selectedFromEquipt').removeAttr('itemId');
+				$(this).addClass('hasItem');
+				$(this).addClass(item);
+				$(this).attr('itemId', itemId);
+				$('.selectedFromEquipt').removeClass('selectedFromEquipt');
+				items[itemId].unequip();
+			} else if (equipSelecting && hasItem){
+				// if selecting from equip and pack is occupied, switch
+				var equipSpace = $('.selectedFromEquipt').attr('space');
+				var packSpace = $(this).attr('space');
+				var itemId1 = $('.selectedFromEquipt').attr('itemId'); 
+				var item1 = items[itemId1].name;
+				var itemId2 = $(this).attr('itemId');
+				var item2 = items[itemId2].name;
+				var itemType1 = items[itemId1].equipSlot;
+				var est = equipSlotType(equipSpace);
+				var itemType2 = items[itemId2].equipSlot;
+				if ((est == itemType1) && (est == itemType2)){
+					player.equip[equipSpace] = item2;
+					player.pack[packSpace] = item1;
+					$(this).removeClass(item2);
+					$(this).addClass(item1);
+					$(this).attr('itemId', itemId1);
+					$('.selectedFromEquipt').removeClass(item1);
+					$('.selectedFromEquipt').addClass(item2);
+					$('.selectedFromEquipt').attr('itemId', itemId2);
+					$('.selectedFromEquipt').removeClass('selectedFromEquipt');
+				}
+				
+			}
+		resetStatChanges();
+		displaySelectedItemsInfo();
+		
+	});
+	
+	$('.equipSlots').on('click', '.equipSlot', function(){
+		var hasItem = $(this).hasClass('hasItem');
+		var equipSelecting = $('.selectedFromEquipt').length;
+		var packSelecting = $('.selectedFromPack').length;
+
+		if (hasItem && !equipSelecting && !packSelecting){
+			// if none selected from pack or equipt, select
+			$(this).addClass('selectedFromEquipt')
+		} else if (packSelecting && !hasItem){
+			// if selected from pack and empty, equip
+			//check if the item belongs here
+				// remove it from pack
+				var from = $('.selectedFromPack').attr('space');
+				var itemId = $('.selectedFromPack').attr('itemId');
+				var item = items[itemId].name;
+				var to = $(this).attr('space');
+				var est = equipSlotType(to);
+				var itemType = items[itemId].equipSlot;
+				if (est == itemType){
+					player.pack[from] = 0;
+					player.equip[to] = item;
+					$('.packSq[space="'+from+'"]').removeClass(item);
+					$('.packSq[space="'+from+'"]').removeClass('hasItem');
+					$('.packSq[space="'+from+'"]').removeClass('selectedFromPack');
+					$('.packSq[space="'+from+'"]').removeAttr('itemId');
+					$(this).addClass('hasItem');
+					$(this).addClass(item);
+					$(this).attr('itemId', itemId);
+					items[itemId].equip();
+				}
+				
+		} else if (packSelecting && hasItem){
+			// if selected from pack and occupied, switch
+			var packSpace = $('.selectedFromPack').attr('space');
+			var equipSpace = $(this).attr('space');
+			var itemId1 = $('.selectedFromPack').attr('itemId');
+			var item1 = items[itemId1].name;
+			var itemId2 = $(this).attr('itemId');
+			var item2 = items[itemId2].name;
+			var est = equipSlotType(equipSpace);
+			var itemType = items[itemId1].equipSlot;
+			if (est == itemType){
+				player.pack[packSpace] = item2;
+				player.equip[equipSpace] = item1;
+				$(this).removeClass(item2);
+				$(this).addClass(item1);
+				$(this).attr('itemId', itemId1);
+				$('.selectedFromPack').removeClass(item1);
+				$('.selectedFromPack').addClass(item2);
+				$('.selectedFromPack').attr('itemId', itemId2);
+				$('.selectedFromPack').removeClass('selectedFromPack');
+				items[itemId1].equip();
+				items[itemId2].unequip();
+			}
+			
+		} else if (equipSelecting && hasItem){
+			// if selected from equipt and occupied, switch
+			var space1 = $('.selectedFromEquipt').attr('space');
+			var space2 = $(this).attr('space');
+			var itemId1 = $('.selectedFromEquipt').attr('itemId');
+			var itemId2 = $(this).attr('itemId');
+			var item1 = items[itemId1].name;
+			var item2 = items[itemId2].name;
+			var itemType = items[itemId1].equipSlot;
+			var est = equipSlotType(space2);
+			if (est == itemType){
+				player.equip[space1] = item2;
+				player.equip[space2] = item1;
+				$('.selectedFromEquipt').attr('itemId', itemId2);
+				$(this).attr('itemId', itemId1);
+				$('.selectedFromEquipt').removeClass(item1);
+				$(this).removeClass(item2);
+				$('.selectedFromEquipt').addClass(item2);
+				$(this).addClass(item1);
+				$('.selectedFromEquipt').removeClass('selectedFromEquipt');
+			}
+			
+		} else if (equipSelecting && !hasItem){
+			//if selected from equip and empty, move
+			var from = $('.selectedFromEquipt').attr('space');
 			var to = $(this).attr('space');
-			var item1 = player.pack[from];
-			var item2 = player.pack[to];
-			$('.packSq[space="'+from+'"]').removeClass('selectedItem');
-			$('.packSq[space="'+from+'"]').removeClass(item1);
-			$('.packSq[space="'+from+'"]').attr('itemId', toId);
-			$('.packSq[space="'+to+'"]').attr('itemId', fromId);
-			$('.packSq[space="'+to+'"]').removeClass(item2);
-			$('.packSq[space="'+to+'"]').addClass(item1);
-			$('.packSq[space="'+from+'"]').addClass(item2);
-			player.pack[from] = item2;
-			player.pack[to] = item1;
-			console.log('moved '+item1+' from '+from +' to '+to);
+			itemId = $('.selectedFromEquipt').attr('itemId');
+			item = items[itemId].name;
+			var itemType = items[itemId].equipSlot;
+			var est = equipSlotType(to);
+			if (est == itemType){
+				player.equip[from] = 0;
+				player.equip[to] = item;
+				$('.selectedFromEquipt').removeClass('hasItem');
+				$('.selectedFromEquipt').removeClass(item);
+				$('.selectedFromEquipt').removeAttr('itemId');
+				$(this).addClass('hasItem');
+				$(this).addClass(item);
+				$(this).attr('itemId', itemId);
+				$('.selectedFromEquipt').removeClass('selectedFromEquipt');
+			}
+			
 		}
+		resetStatChanges();
+		displaySelectedItemsInfo();
 	});
 
 	/*****************************************************
@@ -668,10 +942,22 @@ function mazeGame(){
 	function consumeFromPack(e){ // z
 		if (player.searchingPack){
 			if ((e.keyCode == '90')){
-				var itemId = $('.selectedItem').attr('itemId')
+				var itemId = $('.selectedFromPack').attr('itemId')
 				if (items[itemId].consumable){
 					items[itemId].effect();
 				} 
+			} else if ((e.keyCode == '88') && $('.selectedFromPack').length){
+				conf = confirm('Are you sure you want to delete this item?');
+				if (conf){
+					var itemId = $('.selectedFromPack').attr('itemId')
+					var space = $('.selectedFromPack').attr('space');
+					player.pack[space] = 0;
+					$('.selectedFromPack').removeClass(items[itemId].name);
+					$('.selectedFromPack').removeClass('hasItem');
+					$('.selectedFromPack').removeAttr('itemId');
+					$('.selectedFromPack').removeClass('selectedFromPack');
+
+				}
 			}
 		}
 	}
@@ -729,8 +1015,7 @@ function mazeGame(){
 	redrawPlayer();
 
 
-};
-mazeGame();
+
 
 
 

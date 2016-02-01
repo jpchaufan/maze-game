@@ -220,7 +220,7 @@
 	width: 100%;
 	height: 100%;
 	text-align: center;	
-	padding: 30px;
+	padding: 10px;
 }
 .gameReport {
 	display: none;
@@ -267,16 +267,87 @@
 	display: inline-block;
 	border: 1px solid #999;
 }
-.selectedItem {
+.selectedFromPack, .selectedFromEquipt {
 	box-shadow: inset 0 0 5px 2px yellow;
 }
 .packStatDisplay {
 	position: relative;
-	top: 355px;
+	top: 10px;
 }
 .packStatDisplay .playerHealthBar, .packStatDisplay .playerManaBar {
 	width: 180px;
 }
+
+/**************************
+      Equip Slots
+**************************/
+.equipSlots {
+	width: 100%;
+	height: 45%;
+	position: relative;
+	background: url('../imgs/misc/playerEquip.png') no-repeat;
+	background-position: top;
+	background-size: 100% 100%;
+	border: 1px solid rgba(0, 0, 0, 0);
+}
+
+.equipHat, .equipNeck, .equipLeftHand, .equipRightHand, .equipTorso, .equipLeftRing, .equipRightRing {
+	border: 1px solid #999;
+	vertical-align: top;
+	line-height: 0;
+	width: 40px;
+	height: 40px;
+}
+.equipHat {
+	margin: 20px auto 0px;
+}
+.equipNeck {
+	position: relative;
+	top: -38px;
+	left: 138px;
+}
+.equipTorso {
+	margin: -25px auto 5px;
+}
+.equipLeftHand {
+	position: absolute;
+	left: 10px;
+	margin-top: -27px;
+}
+.equipRightHand {
+	position: absolute;
+	right: 10px;
+	margin-top: -27px;
+}
+.equipRightRing {
+	position: absolute;
+	right: 10px;
+	margin-top: 5px;
+}
+.equipLeftRing {
+	position: absolute;
+	left: 10px;
+	margin-top: 5px;
+}
+.itemInfo {
+	height: 120px;
+	margin: 0 auto;
+	width: 95%;
+	color: #dfdfdf;
+}
+.itemInfo p {
+	margin: 0;
+}
+.itemControls {
+	color: #999;
+	padding: 4px;
+	border-bottom: 1px solid #999;
+}
+.itemTitle {
+	font-weight: bold;
+}
+
+
 
 /**************************
       Items
@@ -300,6 +371,136 @@
 	background: url('../imgs/items/sword1.png');
 	background-size: 100% 100%;
 }
+.staff1 {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/staff1.png');
+	background-size: 100% 100%;
+}
+.shield1 {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/shield1.png');
+	background-size: 100% 100%;
+}
+.ringOfHealth {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/ringOfHealth.png');
+	background-size: 100% 100%;
+}
+.greenBandana {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/greenBandana.png');
+	background-size: 100% 100%;
+}
+.mageRobes {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/mageRobes.png');
+	background-size: 100% 100%;
+}
+.monksRobes {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/monksRobes.png');
+	background-size: 100% 100%;
+}
+.copperNecklace {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/copperNecklace.png');
+	background-size: 100% 100%;
+}
+.skullBand {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/skullBand.png');
+	background-size: 100% 100%;
+}
+.sickle1 {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/sickle1.png');
+	background-size: 100% 100%;
+}
+.tunic1 {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/tunic1.png');
+	background-size: 100% 100%;
+}
+.ironTunic {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/ironTunic.png');
+	background-size: 100% 100%;
+}
+.firePendant {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/firePendant.png');
+	background-size: 100% 100%;
+}
+.magicShield {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/magicShield.png');
+	background-size: 100% 100%;
+}
+.leafBand {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/leafBand.png');
+	background-size: 100% 100%;
+}
+.ringOfLuck {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/ringOfLuck.png');
+	background-size: 100% 100%;
+}
+.enchantedSword {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/enchantedSword.png');
+	background-size: 100% 100%;
+}
+.spikedShield1 {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/spikedShield1.png');
+	background-size: 100% 100%;
+}
+.hookedSword {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/hookedSword.png');
+	background-size: 100% 100%;
+}
+.moonWand {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/moonWand.png');
+	background-size: 100% 100%;
+}
+.zenithArmor {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/zenithArmor.png');
+	background-size: 100% 100%;
+}
+.wizardsHat {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/wizardsHat.png');
+	background-size: 100% 100%;
+}
+
+
+
+
 
 
 
