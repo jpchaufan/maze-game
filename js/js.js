@@ -20,15 +20,18 @@ makeGrid();
 		armor: 0,
 		resistance: 0,
 		weaponDamage: 0,
-		magicDamage: 0
+		magicDamage: 0,
+		delay: 100,
+		speed: 100,
+		delayTimerRunning: false
 	};
 	var player = {
 		xpos: 10,
 		ypos: 19,
+		wonBattle: false,
 		fighting: false,
-		paralyzed: false,
-		myturn: false,
 		searchingPack: false,
+		fightsWon: 0,
 		pack: [],
 		equip: [],
 		weaponAbilities: ['slash','pierce'],
@@ -55,7 +58,11 @@ makeGrid();
 		magicDamageNow: 25,
 		tacticSkill: 25,
 		tacticSkillNow: 25,
-		magicFind: 0
+		magicFind: 0,
+		delay: 100,
+		speed: 100,
+		speedNow: 100
+		
 	};
 	function makeWalls(){
 		function addOuterWalls20x20(){
@@ -132,7 +139,7 @@ makeGrid();
 				};
 			};
 			for (var i = 1; i <= 20; i++) {  //col 5
-				if ((i!=5) && (i!=7) && (i!=9) && (i!=10) && (i!=11) && (i!=13) && (i!=19)){
+				if ((i!=5) && (i!=7) && (i!=9) && (i!=10) && (i!=11) && (i!=13) && (i!=17) && (i!=19)){
 					$('.mazeSq[row="'+i+'"][col="5"]').addClass('wallBlock');
 					game.walls.push([5, i]);
 				};
@@ -236,6 +243,9 @@ makeGrid();
 		game.armor = enemies[x].armor;
 		game.enemyName = enemies[x].enemyName;
 		game.resistance = enemies[x].resistance;
+		game.speed = enemies[x].speed;
+		game.delay = 100;
+		player.delay = 100;
 		$('.gamePic').show();
 		$('.gamePic').css('background', 'url("'+enemies[x].img+'")');
 		$('.gamePic').css('background-size', '100% 100%');
@@ -248,9 +258,12 @@ makeGrid();
 		player.magicDamageNow = player.magicDamage;
 		player.tacticSkillNow = player.tacticSkill;
 		player.restoreHealthNow = player.restoreHealth;
-		player.restoreManaNow = player.restoreHealth;
+		player.restoreManaNow = player.restoreMana;
+		player.speedNow = player.speed;
+
 	}
 	function encounterBattle(){
+		player.wonBattle = false;
 		resetStatChanges();
 		turnEffects = [];
 		player.fighting = true;
@@ -260,7 +273,6 @@ makeGrid();
 		$('.battleScreen').fadeIn();
 		//random enemy
 		var x = Math.floor((Math.random() * enemies.length));
-		x = 4;
 		setEnemy(x);
 	};
 	function resetBattle(){
@@ -307,7 +319,10 @@ makeGrid();
 		}
 	}
 	function checkForGameDefeat(){
-		if (game.health <= 0){
+		if ((game.health <= 0) && !player.wonBattle){
+			player.wonBattle = true;
+			turnEffectsPlayer = [];
+			turnEffectsGame = [];
 			$('.gamePic').fadeOut(800);
 			setTimeout(function(){
 				$('.gameReport').hide();
@@ -316,8 +331,9 @@ makeGrid();
 				$('.playerReport').hide();
 			},200);
 			setTimeout(function(){
+				player.fightsWon += 1;
 				$('.victory').show();
-				getLoot()
+				getLoot();
 			}, 800);
 		}
 	}
@@ -357,7 +373,7 @@ makeGrid();
 			width: value
 		}, 400);
 	}
-	function restoreEffect(){
+	function restorePlayer(){
 		player.health += player.restoreHealthNow;
 		player.mana += player.restoreManaNow;
 		if (player.health > player.maxHealth){
@@ -373,6 +389,9 @@ makeGrid();
 		$('.playerManaBar').fadeOut().fadeIn();
 	}
 	function gameAttacks(damageType) {
+		perTurnEffectsGame();
+		checkForGameOver();
+		checkForGameDefeat();
 		if (game.health > 0){
 			if (game.damageType == 'weapon'){
 				damage = calcDamage(game.weaponDamage, 'player', 'weapon');
@@ -404,7 +423,7 @@ makeGrid();
 		player.health -= x;
 		displayPlayerHealth();
 		$('.playerHealthBar').fadeOut().fadeIn();
-		checkForGameOver();
+
 	}
 	function displayGameHealth(){
 		var percentLeftGame = game.health / game.maxHealth * 100;
@@ -417,7 +436,6 @@ makeGrid();
 		game.health -= x;
 		displayGameHealth();
 		$('.gameHealthBar').fadeOut().fadeIn();
-		checkForGameDefeat();
 	}
 
 	function displayPlayerReport(x){
@@ -427,26 +445,92 @@ makeGrid();
 		$('.playerReport p').html(x);
 		$('.playerReport').show();
 	}
-	var turnEffects = [];
+	var turnEffectsPlayer = [];
+	var turnEffectsGame = [];
 
-
-	function perTurnEffects(){
-		console.log('function ran');
-		if (turnEffects.length){
-			console.log('turn effects occurred');
-			for (var i = 0; i < turnEffects.length; i++) {
-				if (!turnEffects[i].duration){
-					turnEffects.splice(i, 1);
+	function perTurnEffectsPlayer(){
+		if (turnEffectsPlayer.length && !player.wonBattle){
+			for (var i = 0; i < turnEffectsPlayer.length; i++) {
+				if (!turnEffectsPlayer[i].duration){
+					turnEffectsPlayer.splice(i, 1);
 				} else {
-					turnEffects[i].effect();
-					turnEffects[i].duration -=1
+					turnEffectsPlayer[i].effect();
+					turnEffectsPlayer[i].duration -=1
 				}
-				
-			};
-			checkForGameOver();
-			checkForGameDefeat();
+			};		
 		}
 	}
+	function perTurnEffectsGame(){
+		if (turnEffectsGame.length && !player.wonBattle){
+			for (var i = 0; i < turnEffectsGame.length; i++) {
+				if (!turnEffectsGame[i].duration){
+					turnEffectsGame.splice(i, 1);
+				} else {
+					turnEffectsGame[i].effect();
+					turnEffectsGame[i].duration -=1
+				}
+			};		
+		}
+	}
+	function displayDelay(){
+		var gameValue = game.delay.toString()+"%";
+		$('.gameDelayRemaining').css('width', gameValue)
+
+		var playerValue = player.delay.toString()+"%";
+		$('.playerDelayRemaining').css('width', playerValue)
+
+		if (game.delayTimerRunning){
+			speedCountDown = window.setTimeout(function() {
+				delayTimer();
+			}, 20);
+		}
+	}
+	var speedCountDown;
+	function delayTimer(){
+		if (!player.wonBattle){
+			console.log('delayTimer');
+			if (game.delayTimerRunning && (player.delay > 0) && (game.delay > 0)){
+				player.delay -= (player.speedNow/100);
+				game.delay -= (game.speed/100);
+			} else if (game.delayTimerRunning && (player.delay <= 0) && (game.delay > 0)){
+				game.delayTimerRunning = false;
+				$('.battleMenu').show();
+				console.log('tst1');
+			} else if (game.delayTimerRunning && (player.delay > 0) && (game.delay <= 0)){
+				game.delayTimerRunning = false;
+				gameAttacks(game.damageType);
+				console.log('tst2');
+			} else if (game.delayTimerRunning && (player.delay <= 0) && (game.delay <= 0)){
+				game.delayTimerRunning = false;
+				game.delay = 1;
+				$('.battleMenu').show();
+				console.log('tst3');
+			} 
+			if (!game.delayTimerRunning) {
+				window.clearTimeout(speedCountDown);
+				console.log('tst4');
+			}
+			displayDelay();
+		}	
+	}
+
+	function checkItemAvailability(){
+		usables = ['healthPotion', 'manaPotion'];
+		for (var i = 0; i < usables.length; i++) {
+			var item = usables[i];
+			space = player.pack.indexOf(item);
+			console.log(space);
+			console.log(item);
+			if (space == -1){
+				$('button[type="'+item+'"').addClass('opacity');
+			} else {
+				$('button[type="'+item+'"').removeClass('opacity');
+			}
+
+		};
+
+	}
+
 
 	/**** ON CLICKS *****/
 
@@ -454,7 +538,8 @@ makeGrid();
 	function clickFight(){
 		if (player.myturn && player.fighting){
 			$('.encounterMsg').hide();
-			$('.battleMenu').show();
+			game.delayTimerRunning = true;
+			delayTimer();
 		};
 	};
 	$('.playerMenu').on('click', '.run', clickRun);
@@ -468,6 +553,14 @@ makeGrid();
 		if (player.myturn && player.fighting){
 			$('.battleMenu').hide();
 			$('.attackMenu').show();
+		};
+	};
+	$('.battleMenu').on('click', '.items', clickItems);
+	function clickItems(){
+		if (player.myturn && player.fighting){
+			$('.battleMenu').hide();
+			$('.itemsMenu').show();
+			checkItemAvailability();
 		};
 	};
 	$('.attackMenu').on('click', '.weapon', useWeapon);
@@ -494,9 +587,11 @@ makeGrid();
 	$('.weaponAttackMenu').on('click', '.back', backToAttack);
 	$('.magicAttackMenu').on('click', '.back', backToAttack);
 	$('.tacticAttackMenu').on('click', '.back', backToAttack);
+	$('.itemsMenu').on('click', '.back', backToAttack);
 	function backToAttack(){
 		if (player.myturn && player.fighting){
 			$('.attackMenu').show();
+			$('.itemsMenu').hide();
 			$('.weaponAttackMenu').hide();
 			$('.magicAttackMenu').hide();
 			$('.tacticAttackMenu').hide();
@@ -510,115 +605,57 @@ makeGrid();
 		};
 	};
 
-	/***   Weapon Attacks   ***/
-	$('.weaponAttackMenu').on('click', '.slash', clickSlash);
-	function clickSlash(){
-		if (player.myturn && player.fighting){
-			var damage = calcDamage((player.weaponDamageNow*1.25),'game','weapon');
-			gameIsHit(damage);
-			displayPlayerReport(" You slash the " + game.enemyName + " with your sword! ");
-		};
-	};
-	$('.weaponAttackMenu').on('click', '.pierce', clickPierce);
-	function clickPierce(){
-		if (player.myturn && player.fighting){
-			var damage = calcDamage((player.weaponDamageNow*0.75),'game','weapon')+(player.weaponDamageNow*0.25);
-			gameIsHit(damage);
-			displayPlayerReport(" You pierce the " + game.enemyName + "'s gut! ");
-		};
-	};
-	/***   Magic Attacks   ***/
-	$('.magicAttackMenu').on('click', '.fireball', clickFireball);
-	function clickFireball(){
-		if (player.myturn && player.fighting){
-			if (player.mana > 10){
-				player.mana -= 10;
-				displayPlayerMana();
-				var damage = calcDamage((player.magicDamageNow*1.4),'game','magic');
-				gameIsHit(damage);
-				displayPlayerReport(" You launch a fireball at " + game.enemyName + "!");
-			} else {
-				notEnoughMana();
-			};	
-		};
-	};
-	/***   Tactic Attacks   ***/
-	$('.tacticAttackMenu').on('click', '.safeguard', clickSafeguard);
-	function clickSafeguard(){
-		if (player.myturn && player.fighting){
-			if (player.mana > 15){
-				player.mana -= 15;
-				displayPlayerMana();
-				player.health += (10 + player.tacticSkill*0.5);
-			if (player.MaxHealth < player.health){
-					player.health = player.maxHealth;
-				}
-				player.armorNow += player.tacticSkill;
-				displayPlayerHealth();
-				displayPlayerReport("You improve your health and armor!");
-			} else {
-				notEnoughMana();
-			};	
-			
-		};
-	};
-	$('.tacticAttackMenu').on('click', '.envenom', clickEnvenom);
-	function clickEnvenom(){
-		if (player.myturn && player.fighting){
-			if (player.mana > 15){
-				player.mana -= 15;
-				displayPlayerMana();
-				var damage = calcDamage((player.weaponDamageNow*0.25),'game','weapon');
-				turnEffects.push(
-					{
-						name: 'poison',
-						duration: 8,
-						effect: function(){
-							damage = calcDamage((10+player.tacticSkillNow*0.25), 'game', 'magic');
-							game.health -= damage;
-							displayGameHealth();
-							console.log('poison ran');
-						}
-					}
-				);
-				gameIsHit(damage);
-				displayPlayerReport("You strike with a hidden blade, poisoning your foe!");
-			} else {
-				notEnoughMana();
-			};	
-			
-		};
-	};
+	
 
+	/***   Use Items   ***/
+
+	$('.itemsMenu').on('click', '.useHealthPotion', useHealthPotion);
+	function useHealthPotion(){
+		if (player.myturn && player.fighting){
+			var index = player.pack.indexOf('healthPotion');
+			if (index != -1){
+				items[0].effect(index);
+				$('.itemsMenu').hide();
+				displayPlayerReport(" You drink a health potion!");
+			}
+			
+		};
+	};
+	$('.itemsMenu').on('click', '.useManaPotion', useManaPotion);
+	function useManaPotion(){
+		if (player.myturn && player.fighting){
+			var index = player.pack.indexOf('manaPotion');
+			if (index != -1){
+				items[1].effect(index);
+			}
+			displayPlayerReport(" You drink a mana potion!");
+		};
+	};
 
 
 
 	$('.playerReport').on('click', '.ok', endOfTurn);
 	function endOfTurn(){
-		if (player.myturn && player.fighting){
-			player.myturn = false;
-			restoreEffect();
-			perTurnEffects();
-			$('.playerReport').hide();
-			setTimeout(function(){
-				gameAttacks(game.damageType);
-			},500);
-			
-		}
+		$('.playerReport').hide();
+		player.delay = 100;
+		restorePlayer();
+		perTurnEffectsPlayer();
+		checkForGameOver();
+		checkForGameDefeat();
+		game.delayTimerRunning = true;
+		delayTimer();
 	};
-	$('.playerReport').on('click', '.ok', endOfTurn);
+	// $('.playerReport').on('click', '.ok', endOfTurn);
 	$('.gameReport').on('click', '.ok', nextRound);
 	function nextRound(){
-		if (!player.paralyzed){
-			$('.gameReport').hide();
-			$('.battleMenu').show();
-			player.myturn = true;
-		} else {
-			player.paralyzed = false;
-			$('.gameReport').hide();
-			$('.playerReport').show();
-			playerReport("You are paralyzed!");
-		}
+		$('.gameReport').hide();
+		game.delay = 100;
+
+		checkForGameOver();
+		checkForGameDefeat();
+		game.delayTimerRunning = true;
+		delayTimer();
+	
 		
 	}
 	$('.victory').on('click', '.ok', goToMaze);
@@ -647,6 +684,7 @@ makeGrid();
 				$('.mazeScreen').show();
 				$('.fog').show();
 				$('.packScreen').hide();
+				$('.statsNSkills').hide();
 				$('.selectedFromPack').removeClass('selectedFromPack');
 				$('.selectedFromEquipt').removeClass('selectedFromEquipt');
 			} 
@@ -661,7 +699,7 @@ makeGrid();
 
 	};
 	makePack();
-		/************************************************************
+	/************************************************************
 
 						Items
 
@@ -693,6 +731,8 @@ makeGrid();
 	addItem('healthPotion');
 	addItem('healthPotion');
 	addItem('healthPotion');
+	addItem('healthPotion');
+	addItem('healthPotion');
 	addItem('manaPotion');
 	addItem('manaPotion');
 	addItem('manaPotion');
@@ -700,11 +740,19 @@ makeGrid();
 	addItem('sword1');
 	addItem('staff1');
 	addItem('shield1');
+	addItem('sickle1');
 
 
-	addItem('zenithArmor');
-	addItem('enchantedSword');
-	addItem('enchantedSword');
+	function speedSet(){
+		addItem('darkHood');
+		addItem('scoutsBand');
+		addItem('scoutsBand');
+		addItem('sickle1');
+		addItem('darkTunic');
+		addItem('darkAmulet');
+	}
+	speedSet();
+	
 
 
 	function equipSlotType(slot){
@@ -944,7 +992,8 @@ makeGrid();
 			if ((e.keyCode == '90')){
 				var itemId = $('.selectedFromPack').attr('itemId')
 				if (items[itemId].consumable){
-					items[itemId].effect();
+					space = $('.selectedFromPack').attr('space');
+					items[itemId].effect(space);
 				} 
 			} else if ((e.keyCode == '88') && $('.selectedFromPack').length){
 				conf = confirm('Are you sure you want to delete this item?');
@@ -970,6 +1019,49 @@ makeGrid();
 	/*****************************************************
 			     	end pack functions
 	*****************************************************/
+
+
+	/************************************************************
+
+						Stats N Skills
+
+	**************************************************************/
+
+	$('.packScreen').on('click', '.menuRight', function(){
+		$('.packScreen').hide();
+		updateStatDisplay();
+		$('.statsNSkills').show();
+	});
+	$('.packScreen').on('click', '.menuLeft', function(){
+		$('.packScreen').hide();
+		updateStatDisplay();
+		$('.statsNSkills').show();
+	});
+	$('.statsNSkills').on('click', '.menuRight', function(){
+		$('.statsNSkills').hide();
+		$('.packScreen').show();
+	});
+	$('.statsNSkills').on('click', '.menuLeft', function(){
+		$('.statsNSkills').hide();
+		$('.packScreen').show();
+	});
+
+	function updateStatDisplay(){
+		$('.statHealth span').html(player.maxHealth);
+		$('.statMana span').html(player.maxMana);
+		$('.statArmor span').html(player.armor);
+		$('.statResistance span').html(player.resistance);
+		$('.statSpeed span').html(player.speed);
+		$('.statWeaponDamage span').html(player.weaponDamage);
+		$('.statMagicDamage span').html(player.magicDamage);
+		$('.statTacticSkill span').html(player.tacticSkill);
+		$('.statFightsWon span').html(player.fightsWon);
+	}
+
+	/*****************************************************
+			     	end stats n skills
+	*****************************************************/
+
 	function fogAdjust() {
 		var multiplier = 17;
 		var xfog = player.xpos * multiplier - 165.75;

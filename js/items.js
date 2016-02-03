@@ -4,19 +4,16 @@ items = [
 		id: 0,
 		consumable: true,
 		equipSlot: null,
-		effect: function(){
-			if (($('.selectedFromPack').hasClass('healthPotion')) && (player.health < player.maxHealth)){
-					var use = $('.selectedFromPack').attr('space');
-					$('.packSq[space="'+use+'"]').removeClass('selectedFromPack');
-					$('.packSq[space="'+use+'"]').removeClass('hasItem');
-					$('.packSq[space="'+use+'"]').removeClass('healthPotion');
-					player.pack[use] = 0;
-					player.health += (player.maxHealth*0.6);
-					if (player.health > player.maxHealth){
-						player.health = player.maxHealth;
-					}
-					displayPlayerHealth();
-				}
+		effect: function(space){
+			$('.packSq[space="'+space+'"]').removeClass('selectedFromPack');
+			$('.packSq[space="'+space+'"]').removeClass('hasItem');
+			$('.packSq[space="'+space+'"]').removeClass('healthPotion');
+			player.pack[space] = 0;
+			player.health += (player.maxHealth*0.6);
+			if (player.health > player.maxHealth){
+				player.health = player.maxHealth;
+			}
+			displayPlayerHealth();	
 		}
 	},
 	{
@@ -24,19 +21,16 @@ items = [
 		id: 1,
 		consumable: true,
 		equipSlot: null,
-		effect: function(){
-			if (($('.selectedFromPack').hasClass('manaPotion')) && (player.mana < player.maxMana)){
-					var use = $('.selectedFromPack').attr('space');
-					$('.packSq[space="'+use+'"]').removeClass('selectedFromPack');
-					$('.packSq[space="'+use+'"]').removeClass('hasItem');
-					$('.packSq[space="'+use+'"]').removeClass('manaPotion');
-					player.pack[use] = 0;
-					player.mana += (player.maxMana*0.6);
-					if (player.mana > player.maxMana){
-						player.mana = player.maxMana;
-					}
-					displayPlayerMana();
-				}
+		effect: function(space){
+			$('.packSq[space="'+space+'"]').removeClass('selectedFromPack');
+			$('.packSq[space="'+space+'"]').removeClass('hasItem');
+			$('.packSq[space="'+space+'"]').removeClass('manaPotion');
+			player.pack[space] = 0;
+			player.mana += (player.maxMana*0.6);
+			if (player.mana > player.maxMana){
+				player.mana = player.maxMana;
+			}
+			displayPlayerMana();
 		}
 	},
 	{
@@ -143,17 +137,17 @@ items = [
 		name: 'monksRobes',
 		id: 8,
 		title: 'Monk\'s Robes',
-		desc: '+5 Restore Mana<br>+20 Resistance<br>+12 Tactic Skill',
+		desc: '+5 Restore Mana<br>+30 Resistance<br>+12 Tactic Skill',
 		consumable: false,
 		equipSlot: 'torso',
 		equip: function(){
 			player.restoreMana += 5;
-			player.resistance += 20;
+			player.resistance += 30;
 			player.tacticSkill += 12;
 		},
 		unequip: function(){
 			player.restoreMana -= 5;
-			player.resistance -= 20;
+			player.resistance -= 30;
 			player.tacticSkill -= 12;
 		}
 	},
@@ -197,18 +191,18 @@ items = [
 		name: 'sickle1',
 		id: 11,
 		title: 'Sickle',
-		desc: '+10 Weapon Damage<br>+10 Tactic Skill<br>+10 Armor',
+		desc: '+10 Weapon Damage<br>+10 Tactic Skill<br>+5 Speed',
 		consumable: false,
 		equipSlot: 'hand',
 		equip: function(){
 			player.weaponDamage += 10;
 			player.tacticSkill +=10;
-			player.armor += 10;
+			player.speed += 5;
 		},
 		unequip: function(){
 			player.weaponDamage -= 10;
 			player.tacticSkill -=10;
-			player.armor -= 10;
+			player.speed -= 5;
 		}
 	},
 	{
@@ -221,24 +215,26 @@ items = [
 		equip: function(){
 			player.tacticSkill +=8;
 			player.armor += 30;
+			player.speed += 5;
 		},
 		unequip: function(){
 			player.tacticSkill -=8;
 			player.armor -= 30;
+			player.speed -= 5;
 		}
 	},
 	{
 		name: 'ironTunic',
 		id: 13,
 		title: 'Iron Tunic',
-		desc: '+60 Armor',
+		desc: '+90 Armor',
 		consumable: false,
 		equipSlot: 'torso',
 		equip: function(){
-			player.armor += 60;
+			player.armor += 90;
 		},
 		unequip: function(){
-			player.armor -= 60;
+			player.armor -= 90;
 		}
 	},
 	{
@@ -298,12 +294,12 @@ items = [
 		equipSlot: 'ring',
 		equip: function(){
 			player.magicFind += 30;
-			player.healthMax += 20;
+			player.maxHealth += 20;
 			displayPlayerHealth();
 		},
 		unequip: function(){
 			player.magicFind -= 30;
-			player.healthMax -= 20;
+			player.maxHealth += 20;
 			displayPlayerHealth();
 		}
 	},
@@ -401,6 +397,102 @@ items = [
 		unequip: function(){
 			player.magicDamage -= 15;
 			player.restoreMana -= 5;
+		}
+	},
+	{
+		name: 'scoutsBand',
+		id: 24,
+		title: 'Scout\'s Band',
+		desc: '+10 Speed<br>+5 Tactic Skill',
+		consumable: false,
+		equipSlot: 'ring',
+		equip: function(){
+			player.speed += 10;
+			player.tacticSkill += 5;
+		},
+		unequip: function(){
+			player.speed -= 10;
+			player.tacticSkill -= 5;
+		}
+	},
+	{
+		name: 'darkHood',
+		id: 25,
+		title: 'Dark Hood',
+		desc: '+15 Speed',
+		consumable: false,
+		equipSlot: 'head',
+		equip: function(){
+			player.speed += 15;
+		},
+		unequip: function(){
+			player.speed -= 15;
+		}
+	},
+	{
+		name: 'darkTunic',
+		id: 26,
+		title: 'Dark Tunic',
+		desc: '+10 Speed<br>+5 Weapon Skill<br>+5 Tactic Skill',
+		consumable: false,
+		equipSlot: 'torso',
+		equip: function(){
+			player.speed += 10;
+			player.weaponSkill += 5;
+			player.tacticSkill += 5;
+		},
+		unequip: function(){
+			player.speed -= 10;
+			player.weaponSkill -= 5;
+			player.tacticSkill += 5;
+		}
+	},
+	{
+		name: 'darkAmulet',
+		id: 27,
+		title: 'Dark Amulet',
+		desc: '+15 Speed',
+		consumable: false,
+		equipSlot: 'neck',
+		equip: function(){
+			player.speed += 15;
+		},
+		unequip: function(){
+			player.speed -= 15;
+		}
+	},
+	{
+		name: 'holyAmulet',
+		id: 28,
+		title: 'Holy Amulet',
+		desc: '+25 Armor<br>+25 Resistance',
+		consumable: false,
+		equipSlot: 'neck',
+		equip: function(){
+			player.armor += 25;
+			player.resistance += 25;
+
+		},
+		unequip: function(){
+			player.armor -= 25;
+			player.resistance -= 25;
+		}
+	},
+	{
+		name: 'battleAxe',
+		id: 29,
+		title: 'Battle Axe',
+		desc: '+35 Weapon Damage<br>-12 Speed',
+		consumable: false,
+		equipSlot: 'hand',
+		equip: function(){
+			player.weaponDamage += 35;
+			player.speed -= 12;
+
+		},
+		unequip: function(){
+			player.weaponDamage -= 35;
+			player.speed += 12;
 		}
 	},
 ];

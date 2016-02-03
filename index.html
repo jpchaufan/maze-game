@@ -22,11 +22,18 @@
                         <div class="gameHealthBar">
                             <div class="gameHealthRemaining"></div>
                         </div>
+                        <div class="gameDelayBar">
+                            <div class="gameDelayRemaining"></div>
+                        </div>
                     </div>
                     <div class="gamePic"></div>
                 </div>
                 <div class="playerSide">
-                    <div class="playerPic"></div>
+                    <div class="playerPic">
+                        <div class="playerDelayBar">
+                            <div class="playerDelayRemaining"></div>
+                        </div>
+                    </div>
                     <div class="playerUI">
                         <div class="playerMenu">
 
@@ -41,7 +48,7 @@
                                     <button class="attack">Attack</button>
                                 </div>
                                 <div class="quadrant">
-                                    <button class="Items">Items</button>
+                                    <button class="items">Items</button>
                                 </div>
                                 <div class="quadrant">
                                     <button class="talk">Talk</button>
@@ -64,6 +71,20 @@
                                     <button class="back"><b>Back</b></button>
                                 </div>
                             </div>
+                            <div class="itemsMenu">
+                                <div class="quadrant">
+                                    <button class="useHealthPotion" type="healthPotion"><b>Drink Health Potion</b></button>
+                                </div>
+                                <div class="quadrant">
+                                    <button class="useManaPotion" type="manaPotion"><b>Drink Mana Potion</b></button>
+                                </div>
+                                <div class="quadrant">
+                                    
+                                </div>
+                                <div class="quadrant">
+                                    <button class="back"><b>Back</b></button>
+                                </div>
+                            </div>
                             <div class="weaponAttackMenu">
                                 <div class="quadrant">
                                     <button class="slash"><b>Slash:</b> a powerful attack</button>
@@ -72,7 +93,7 @@
                                     <button class="pierce"><b>Pierce:</b> good against armor</button>
                                 </div>
                                 <div class="quadrant">
-                                    <button class=""><b>nothing yet</b></button>
+                                    <button class="berzerk"><b>Berzerk:</b> can hit really hard, or slow you down</button>
                                 </div>
                                 <div class="quadrant">
                                     <button class="back"><b>Back</b></button>
@@ -83,10 +104,10 @@
                                     <button class="fireball"><b>Fireball</b> basic magical attack</button>
                                 </div>
                                 <div class="quadrant">
-                                    <button class="run"><b>Run</b></button>
+                                    <button class="icebolt"><b>Icebolt</b> slows the enemy</button>
                                 </div>
                                 <div class="quadrant">
-                                    <button class="back"><b>Back</b></button>
+                                    <button class="electrocute"><b>Electrocute</b> has a chance to critically hit</button>
                                 </div>
                                 <div class="quadrant">
                                     <button class="back"><b>Back</b></button>
@@ -100,7 +121,7 @@
                                     <button class="envenom"><b>Envenom</b>: attack with a poisoning blade</button>
                                 </div>
                                 <div class="quadrant">
-                                    <button class="back"><b>Back</b></button>
+                                    <button class="focusEnergy"><b>Focus Energy</b>: gains mana and mana recovery and tactic skill</button>
                                 </div>
                                 <div class="quadrant">
                                     <button class="back"><b>Back</b></button>
@@ -137,6 +158,8 @@
                 </div>
             </div> <!-- Close Battle Screen -->
             <div class="packScreen">
+                <div class="menuLeft">&#9664</div>
+                <div class="menuRight">&#9658</div>
                 <div class="equiptUI">
                     <div class="equipSlots">
                         <div class="equipHat equipSlot" space="0"></div>
@@ -166,20 +189,39 @@
                     </div>
                 </div>
                 <div class="packUI">
-                    <div class="packGrid">
-
-                    </div>
-
+                    <div class="packGrid"></div>
                 </div>
 
-
             </div> <!-- Close pack Screen -->
+            <div class="statsNSkills">
+                <div class="menuLeft">&#9664</div>
+                <div class="menuRight">&#9658</div>
+                <div class="skillsUI"></div>
+                <div class="statsUI">
+                    <div class="statsDisplay">
+                        <p class="ul b">Stats:</p>
+                        <p class="statFightsWon">Fights Won: <span>0</span></p>
+                        <p class="statHealth">Health: <span>100</span></p>
+                        <p class="statMana">Mana: <span>100</span></p>
+                        <p class="statArmor">Armor: <span>100</span></p>
+                        <p class="statResistance">Resistance: <span>100</span></p>
+                        <p class="statSpeed">Speed: <span>100</span></p>
+                        <p class="statWeaponDamage">Weapon Damage: <span>100</span></p>
+                        <p class="statMagicDamage">Magic Damage: <span>100</span></p>
+                        <p class="statTacticSkill">Tactic Skill: <span>100</span></p>
+                    </div>
+                    <div class="activeSkills">
+                        <div class="activeSkillSlot"></div>
+                    </div>
+                </div>
+            </div> <!-- Close statsNSkills -->
         </div> <!-- Close Game Screen -->
 
 
 
        <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script><script type="text/javascript" src="js/jqueryui.js"></script><script type="text/javascript" src="js/items.js"></script>
        <script type="text/javascript" src="js/enemies.js"></script>
+       <script type="text/javascript" src="js/abilities.js"></script>
        <script type="text/javascript" src="js/js.js"></script>
     </body>
 </html>
