@@ -191,17 +191,17 @@ items = [
 		name: 'sickle1',
 		id: 11,
 		title: 'Sickle',
-		desc: '+10 Weapon Damage<br>+10 Tactic Skill<br>+5 Speed',
+		desc: '+5 Weapon Damage<br>+8 Tactic Skill<br>+5 Speed',
 		consumable: false,
 		equipSlot: 'hand',
 		equip: function(){
-			player.weaponDamage += 10;
-			player.tacticSkill +=10;
+			player.weaponDamage += 5;
+			player.tacticSkill +=8;
 			player.speed += 5;
 		},
 		unequip: function(){
-			player.weaponDamage -= 10;
-			player.tacticSkill -=10;
+			player.weaponDamage -= 5;
+			player.tacticSkill -=8;
 			player.speed -= 5;
 		}
 	},
@@ -339,15 +339,18 @@ items = [
 		name: 'hookedSword',
 		id: 20,
 		title: 'Hooked Sword',
-		desc: '+25 weaponDamage',
+		desc: '+10 Weapon Damage<br>+12 Tactic Skill<br>+7 Speed',
 		consumable: false,
 		equipSlot: 'hand',
 		equip: function(){
-			player.weaponDamage += 25;
+			player.weaponDamage += 10;
+			player.tacticSkill +=12;
+			player.speed += 7;
 		},
 		unequip: function(){
-			player.weaponDamage -= 25;
-			
+			player.weaponDamage -= 10;
+			player.tacticSkill -=12;
+			player.speed -= 7;
 		}
 	},
 	{
@@ -493,6 +496,42 @@ items = [
 		unequip: function(){
 			player.weaponDamage -= 35;
 			player.speed += 12;
+		}
+	},
+	{
+		name: 'ringOfMana',
+		id: 30,
+		title: 'Ring Of Mana',
+		desc: '+30 Mana<br>+3 Restore Mana',
+		consumable: false,
+		equipSlot: 'ring',
+		equip: function(){
+			player.mana += 30;
+			player.restoreMana += 3;
+
+		},
+		unequip: function(){
+			player.mana -= 30;
+			player.restoreMana -= 3;
+		}
+	},
+	{
+		name: 'saphireChalice',
+		id: 31,
+		title: 'Saphire Chalice',
+		desc: '+10 Restore Health<br>+8 Restore Mana<br>+40 Resistance',
+		consumable: false,
+		equipSlot: 'hand',
+		equip: function(){
+			player.restoreHealth += 10;
+			player.restoreMana += 8;
+			player.resistance += 40;
+
+		},
+		unequip: function(){
+			player.restoreHealth -= 10;
+			player.restoreMana -= 8;
+			player.resistance -= 40;
 		}
 	},
 ];

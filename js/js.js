@@ -13,6 +13,7 @@ makeGrid();
 	var game = {
 		walls: [],
 		encounters: [],
+		level: 1,
 		enemyName: "",
 		enemyId: 0,
 		maxHealth: 0,
@@ -32,14 +33,20 @@ makeGrid();
 		fighting: false,
 		searchingPack: false,
 		fightsWon: 0,
+		level: 1,
+		exp: 0,
+		skillPoints: 0,
 		pack: [],
 		equip: [],
-		weaponAbilities: ['slash','pierce'],
-		weaponAbilitiesReserve: [],
-		magicAbilities: ['fireball'],
-		magicAbilitiesReserve: [],
-		tacticAbilities: ['safeguard'],
-		tacticAbilitiesReserve: [],
+		weaponAbilities: ['Slash','Pierce', 0],
+		weaponAbilitiesLearned: ['Slash','Pierce'],
+		magicAbilities: ['Fireball', 0, 0],
+		magicAbilitiesLearned: ['Fireball'],
+		tacticAbilities: ['Safeguard', 0, 0],
+		tacticAbilitiesLearned: ['Safeguard'],
+		weaponSkills: [0,0,0,0,0,0,0,0],
+		magicSkills: [0,0,0,0,0,0,0,0],
+		tacticSkills: [0,0,0,0,0,0,0,0],
 		maxHealth: 100,
 		health: 100,
 		maxMana: 100,
@@ -246,6 +253,8 @@ makeGrid();
 		game.speed = enemies[x].speed;
 		game.delay = 100;
 		player.delay = 100;
+		displayDelay();
+		window.clearTimeout(speedCountDown);
 		$('.gamePic').show();
 		$('.gamePic').css('background', 'url("'+enemies[x].img+'")');
 		$('.gamePic').css('background-size', '100% 100%');
@@ -318,6 +327,14 @@ makeGrid();
 			$(".lootReport").html('Nothing...');
 		}
 	}
+	function checkForLevelUp(){
+		var expNeeded = player.level*player.level*100;
+		if (expNeeded <= player.exp){
+			player.level + 1;
+			player.skillPoints += 5;
+			alert('Leveled up! Skill points to spend: '+player.skillPoints);
+		}
+	}
 	function checkForGameDefeat(){
 		if ((game.health <= 0) && !player.wonBattle){
 			player.wonBattle = true;
@@ -331,6 +348,8 @@ makeGrid();
 				$('.playerReport').hide();
 			},200);
 			setTimeout(function(){
+				player.exp += 5 + game.level*5;
+				checkForLevelUp();
 				player.fightsWon += 1;
 				$('.victory').show();
 				getLoot();
@@ -627,6 +646,7 @@ makeGrid();
 			var index = player.pack.indexOf('manaPotion');
 			if (index != -1){
 				items[1].effect(index);
+				$('.itemsMenu').hide();
 			}
 			displayPlayerReport(" You drink a mana potion!");
 		};
@@ -742,16 +762,17 @@ makeGrid();
 	addItem('shield1');
 	addItem('sickle1');
 
-
-	function speedSet(){
-		addItem('darkHood');
-		addItem('scoutsBand');
-		addItem('scoutsBand');
-		addItem('sickle1');
-		addItem('darkTunic');
-		addItem('darkAmulet');
-	}
-	speedSet();
+	
+	// function tacticSet(){
+	// 	addItem('darkHood');
+	// 	addItem('scoutsBand');
+	// 	addItem('scoutsBand');
+	// 	addItem('hookedSword');
+	// 	addItem('hookedSword');
+	// 	addItem('darkTunic');
+	// 	addItem('darkAmulet');
+	// }
+	// tacticSet();
 	
 
 
@@ -1056,7 +1077,253 @@ makeGrid();
 		$('.statMagicDamage span').html(player.magicDamage);
 		$('.statTacticSkill span').html(player.tacticSkill);
 		$('.statFightsWon span').html(player.fightsWon);
+		$('.statLevel span').html(player.level);
+		$('.statExp span').html(player.exp);
+		$('.skillPointsLeft span').html(player.skillPoints);
 	}
+
+
+	
+
+	function addStartingAbilities(){
+	$('.abilitiesMenuWeapon').append('<div class="infoAbility" handle="Slash"><div class="top"><div class="abilityName">Slash</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Attack for 1.25x weapon damage.</div> </div>');
+	$('.abilitiesMenuWeapon').append('<div class="infoAbility" handle="Pierce"><div class="top"><div class="abilityName">Pierce</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Deal 1x weapon damage, but 1/3 of this damage ignores armor</div> </div>');
+
+	$('.abilitiesMenuMagic').append('<div class="infoAbility" handle="Fireball"><div class="top"><div class="abilityName">Fireball</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Attack for 1.4x magic damage.</div> </div>');
+
+	$('.abilitiesMenuTactic').append('<div class="infoAbility" handle="Safeguard"><div class="top"><div class="abilityName">Safeguard</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Improve your health by .25x, health restoration by .1x, and armor by 1x your tactic skill.</div> </div>');
+	}
+	addStartingAbilities();
+
+
+	function updateSkillButtons(){
+		for (var i = 1; i <= player.weaponAbilities.length; i++) {
+			$('.weaponAttackMenu .q'+i).children().remove();
+			
+			for (var k = 0; k < handleToButtonsW.length; k++) {
+				if (player.weaponAbilities[i-1] == handleToButtonsW[k][0]){
+				$('.weaponAttackMenu .q'+i).append(handleToButtonsW[k][1]);
+				$('.activeWeaponSkills p[slot="'+i+'"]').html(handleToButtonsW[k][0]);
+				}			
+			};
+		};
+		for (var i = 1; i <= player.magicAbilities.length; i++) {
+			$('.magicAttackMenu .q'+i).children().remove();
+			
+			for (var k = 0; k < handleToButtonsM.length; k++) {
+				if (player.magicAbilities[i-1] == handleToButtonsM[k][0]){
+				$('.magicAttackMenu .q'+i).append(handleToButtonsM[k][1]);
+				$('.activeMagicSkills p[slot="'+i+'"]').html(handleToButtonsM[k][0]);
+				}			
+			};
+		};
+		for (var i = 1; i <= player.tacticAbilities.length; i++) {
+			$('.tacticAttackMenu .q'+i).children().remove();
+			
+			for (var k = 0; k < handleToButtonsT.length; k++) {
+				if (player.tacticAbilities[i-1] == handleToButtonsT[k][0]){
+				$('.tacticAttackMenu .q'+i).append(handleToButtonsT[k][1]);
+				$('.activeTacticSkills p[slot="'+i+'"]').html(handleToButtonsT[k][0]);
+				}			
+			};
+		};
+	}
+	updateSkillButtons();
+
+
+	//open and close accordions
+	$('.infoAbility').on('click', '.abilityName', function(){
+		$(this).parent().next().toggle();
+	});
+	function handleToButtonW(handle){
+		for (var i = 0; i < handleToButtonsW.length; i++) {
+			if (handleToButtonsW[i][0] == handle){
+				return handleToButtonsW[i][1];
+			}
+		};
+	}
+	function handleToButtonM(handle){
+		for (var i = 0; i < handleToButtonsM.length; i++) {
+			if (handleToButtonsM[i][0] == handle){
+				return handleToButtonsM[i][1];
+			}
+		};
+	}
+	function handleToButtonT(handle){
+		for (var i = 0; i < handleToButtonsT.length; i++) {
+			if (handleToButtonsT[i][0] == handle){
+				return handleToButtonsT[i][1];
+			}
+		};
+	}
+
+	//change active skills
+	//weapon
+	$('.abilitiesMenuWeapon').on('click', '.add', function(){
+		handle = $(this).parent().parent().attr('handle');
+		index = player.weaponAbilities.indexOf(0);
+		if (index == -1){
+			console.log('no space');
+		} else {
+			player.weaponAbilities[index] = handle;
+			var btn = handleToButtonW(handle);
+			$('.weaponAttackMenu .q'+index).append();
+			$('.activeWeaponSkills p[slot="'+(index+1)+'"]').html(handle);
+
+		}
+		updateSkillButtons();
+	});
+	$('.abilitiesMenuWeapon').on('click', '.remove', function(){
+		handle = $(this).parent().parent().attr('handle');
+		index = player.weaponAbilities.indexOf(handle);
+		if (index == -1){
+			console.log('ability not currently active');
+		} else {
+			player.weaponAbilities[index] = 0;
+			$('.weaponAttackMenu .q'+index).children().remove();
+			$('.activeWeaponSkills p[slot="'+(index+1)+'"]').html('');
+
+		}
+		updateSkillButtons();
+	});
+	//magic
+	$('.abilitiesMenuMagic').on('click', '.add', function(){
+		handle = $(this).parent().parent().attr('handle');
+		index = player.magicAbilities.indexOf(0);
+		if (index == -1){
+			console.log('no space');
+		} else {
+			player.magicAbilities[index] = handle;
+			var btn = handleToButtonM(handle);
+			$('.magicAttackMenu .q'+index).append();
+			$('.activeMagicSkills p[slot="'+(index+1)+'"]').html(handle);
+
+		}
+		updateSkillButtons();
+	});
+	$('.abilitiesMenuMagic').on('click', '.remove', function(){
+		handle = $(this).parent().parent().attr('handle');
+		index = player.magicAbilities.indexOf(handle);
+		if (index == -1){
+			console.log('ability not currently active');
+		} else {
+			player.magicAbilities[index] = 0;
+			$('.magicAttackMenu .q'+index).children().remove();
+			$('.activeMagicSkills p[slot="'+(index+1)+'"]').html('');
+
+		}
+		updateSkillButtons();
+	});
+	//tactic
+	$('.abilitiesMenuTactic').on('click', '.add', function(){
+		handle = $(this).parent().parent().attr('handle');
+		index = player.tacticAbilities.indexOf(0);
+		if (index == -1){
+			console.log('no space');
+		} else {
+			player.tacticAbilities[index] = handle;
+			var btn = handleToButtonT(handle);
+			$('.tacticAttackMenu .q'+index).append();
+			$('.activeTacticSkills p[slot="'+(index+1)+'"]').html(handle);
+
+		}
+		updateSkillButtons();
+	});
+	$('.abilitiesMenuTactic').on('click', '.remove', function(){
+		handle = $(this).parent().parent().attr('handle');
+		index = player.tacticAbilities.indexOf(handle);
+		if (index == -1){
+			console.log('ability not currently active');
+		} else {
+			player.tacticAbilities[index] = 0;
+			$('.tacticAttackMenu .q'+index).children().remove();
+			$('.activeTacticSkills p[slot="'+(index+1)+'"]').html('');
+
+		}
+		updateSkillButtons();
+	});
+
+	//switch ability tabs
+	$('.activeSkillsToggle').on('click', '.toggleWeaponSkills', function(){
+		$('.weaponSkillTree').show();
+		$('.magicSkillTree').hide();
+		$('.tacticSkillTree').hide();
+
+		$('.abilitiesMenuWeapon').show();
+		$('.abilitiesMenuMagic').hide();
+		$('.abilitiesMenuTactic').hide();
+
+		$('.activeWeaponSkills').show();
+		$('.activeMagicSkills').hide();
+		$('.activeTacticSkills').hide();
+	});
+	$('.activeSkillsToggle').on('click', '.toggleMagicSkills', function(){
+		$('.weaponSkillTree').hide();
+		$('.magicSkillTree').show();
+		$('.tacticSkillTree').hide();
+
+		$('.abilitiesMenuWeapon').hide();
+		$('.abilitiesMenuMagic').show();
+		$('.abilitiesMenuTactic').hide();
+
+		$('.activeWeaponSkills').hide();
+		$('.activeMagicSkills').show();
+		$('.activeTacticSkills').hide();
+	});
+	$('.activeSkillsToggle').on('click', '.toggleTacticSkills', function(){
+		$('.weaponSkillTree').hide();
+		$('.magicSkillTree').hide();
+		$('.tacticSkillTree').show();
+
+		$('.abilitiesMenuWeapon').hide();
+		$('.abilitiesMenuMagic').hide();
+		$('.abilitiesMenuTactic').show();
+		
+		$('.activeWeaponSkills').hide();
+		$('.activeMagicSkills').hide();
+		$('.activeTacticSkills').show();
+	});
+
+	//switch between skill tabs
+	$('.skillTreeTabs').on('click', '.weaponSkillTab', function(){
+		$('.weaponSkillTree').show();
+		$('.magicSkillTree').hide();
+		$('.tacticSkillTree').hide();
+
+		$('.abilitiesMenuWeapon').show();
+		$('.abilitiesMenuMagic').hide();
+		$('.abilitiesMenuTactic').hide();
+
+		$('.activeWeaponSkills').show();
+		$('.activeMagicSkills').hide();
+		$('.activeTacticSkills').hide();
+	});
+	$('.skillTreeTabs').on('click', '.magicSkillTab', function(){
+		$('.weaponSkillTree').hide();
+		$('.magicSkillTree').show();
+		$('.tacticSkillTree').hide();
+
+		$('.abilitiesMenuWeapon').hide();
+		$('.abilitiesMenuMagic').show();
+		$('.abilitiesMenuTactic').hide();
+
+		$('.activeWeaponSkills').hide();
+		$('.activeMagicSkills').show();
+		$('.activeTacticSkills').hide();
+	});
+	$('.skillTreeTabs').on('click', '.tacticSkillTab', function(){
+		$('.weaponSkillTree').hide();
+		$('.magicSkillTree').hide();
+		$('.tacticSkillTree').show();
+
+		$('.abilitiesMenuWeapon').hide();
+		$('.abilitiesMenuMagic').hide();
+		$('.abilitiesMenuTactic').show();
+		
+		$('.activeWeaponSkills').hide();
+		$('.activeMagicSkills').hide();
+		$('.activeTacticSkills').show();
+	});
 
 	/*****************************************************
 			     	end stats n skills

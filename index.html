@@ -86,42 +86,42 @@
                                 </div>
                             </div>
                             <div class="weaponAttackMenu">
-                                <div class="quadrant">
-                                    <button class="slash"><b>Slash:</b> a powerful attack</button>
+                                <div class="quadrant q1">
+                                    <button class="slash"><b>Slash</b>: a powerful attack</button>
                                 </div>
-                                <div class="quadrant">
-                                    <button class="pierce"><b>Pierce:</b> good against armor</button>
+                                <div class="quadrant q2">
+                                    <button class="pierce"><b>Pierce</b>: good against armor</button>
                                 </div>
-                                <div class="quadrant">
-                                    <button class="berzerk"><b>Berzerk:</b> can hit really hard, or slow you down</button>
+                                <div class="quadrant q3">
+                                    
                                 </div>
                                 <div class="quadrant">
                                     <button class="back"><b>Back</b></button>
                                 </div>                                
                             </div>
                             <div class="magicAttackMenu">
-                                <div class="quadrant">
-                                    <button class="fireball"><b>Fireball</b> basic magical attack</button>
+                                <div class="quadrant q1">
+                                    <button class="fireball"><b>Fireball</b>: basic magical attack</button>
                                 </div>
-                                <div class="quadrant">
-                                    <button class="icebolt"><b>Icebolt</b> slows the enemy</button>
+                                <div class="quadrant q2">
+                                    
                                 </div>
-                                <div class="quadrant">
-                                    <button class="electrocute"><b>Electrocute</b> has a chance to critically hit</button>
+                                <div class="quadrant q3">
+                                    
                                 </div>
                                 <div class="quadrant">
                                     <button class="back"><b>Back</b></button>
                                 </div>
                             </div>
                             <div class="tacticAttackMenu">
-                                <div class="quadrant">
+                                <div class="quadrant q1">
                                     <button class="safeguard"><b>Safeguard</b>: recover health and gain armor</button>
                                 </div>
-                                <div class="quadrant">
-                                    <button class="envenom"><b>Envenom</b>: attack with a poisoning blade</button>
+                                <div class="quadrant q2">
+                                    
                                 </div>
-                                <div class="quadrant">
-                                    <button class="focusEnergy"><b>Focus Energy</b>: gains mana and mana recovery and tactic skill</button>
+                                <div class="quadrant q3">
+                                    
                                 </div>
                                 <div class="quadrant">
                                     <button class="back"><b>Back</b></button>
@@ -196,10 +196,55 @@
             <div class="statsNSkills">
                 <div class="menuLeft">&#9664</div>
                 <div class="menuRight">&#9658</div>
-                <div class="skillsUI"></div>
+                <div class="skillsUI">
+                    <div class="skillTreeTabs">
+                        <div class="weaponSkillTab">W</div>
+                        <div class="magicSkillTab">M</div>
+                        <div class="tacticSkillTab">T</div>
+                    </div>
+                    <div class="weaponSkillTree">
+                        <div class="skillUp-weapon skillRow1 availableSkill tooltip" name="Weapon Mastery"><span class="skillCounter">0</span><span class="tooltiptext">Weapon Mastery:<br> +1 Weapon Damage<br>+5 Health<br>New Skills available every 5 points.</span></div>
+                        <div class="skillUp-weapon skillRow1 tooltip" name="Berserk"><span class="tooltiptext">Beserk:<br> 50% chance to do 2x weapon damage. 50% chance to do 1x damage and lose 20 speed.</span></div>
+                        <div class="skillUp-weapon skillRow2 tooltip" name="Defender"><span class="tooltiptext">Defender:<br> +50 Armor<br> +50 Resistance</span></div>
+                        <div class="skillUp-weapon skillRow2 tooltip" name="Focused Hit"><span class="tooltiptext">Focused Hit:<br>Deal 1x weapon damage, gaining 50% of that damage as armor and resistance.</span></div>
+                        <div class="skillUp-weapon skillRow3 tooltip" name="Hearty"><span class="tooltiptext">Hearty:<br>+100 Health.</span></div>
+                        <div class="skillUp-weapon skillRow3 tooltip" name="Bloody Strike"><span class="tooltiptext">Bloody Strike:<br>Deal 1x weapon damage, healing for 15% of that damage.</span></div>
+                        <div class="skillUp-weapon skillRow4 tooltip" name="Strength"><span class="tooltiptext">Strength:<br>+25 Weapon Damage</span></div>
+                        <div class="skillUp-weapon skillRow4 tooltip" name="Impale"><span class="tooltiptext">Impale:<br>Deal 1x weapon damage, completely bypassing armor.</span></div>
+                        <div class="skillTreeTitle">Weapon Skills</div>
+                        <div class="skillPointsLeft">Skill Points Remaining: <span>0</span></div>
+                    </div>
+                    <div class="magicSkillTree">
+                        <div class="skillUp-magic skillRow1 availableSkill tooltip" name="Magic Mastery"><span class="skillCounter">0</span><span class="tooltiptext">Magic Mastery:<br>+1 Magic Damage<br>+3 Health<br>+2 Mana<br>New Skills available every 5 points.</span></div>
+                        <div class="skillUp-magic skillRow1 tooltip" name="Icebolt"><span class="tooltiptext">Icebolt:<br>Deal 1x magic damage and delay enemy by 25%.</span></div>
+                        <div class="skillUp-magic skillRow2 tooltip" name="Mage Armor"><span class="tooltiptext">Mage Armor:<br>+50 Armor<br>+50 Resistance</span></div>
+                        <div class="skillUp-magic skillRow2 tooltip" name="Channel"><span class="tooltiptext">Channel:<br>Recover 75% of your mana.</span></div>
+                        <div class="skillUp-magic skillRow3 tooltip" name="Surge"><span class="tooltiptext">Surge:<br>-20 Health<br>+40 Magic Damage</span></div>
+                        <div class="skillUp-magic skillRow3 tooltip" name="Electrocute"><span class="tooltiptext">Electrocute:<br>Deal 1.2x magic damage, with a 25% chance to deal 2.5x magic damage.</span></div>
+                        <div class="skillUp-magic skillRow4 tooltip" name="Fast Casting"><span class="tooltiptext">Fast Casting:<br>+10 Speed</span></div>
+                        <div class="skillUp-magic skillRow4 tooltip" name="Magic Missiles"><span class="tooltiptext">Magic Missiles:<br>Fire 1-3 magic missiles, each doing .7x magic damage and lowering enemy resistance by 15.</span></div>
+                        <div class="skillTreeTitle">Magic Skills</div>
+                        <div class="skillPointsLeft">Skill Points Remaining: <span>0</span></div>
+                    </div>
+                    <div class="tacticSkillTree">
+                        <div class="skillUp-tactic skillRow1 availableSkill tooltip" name="Tactic Mastery"><span class="skillCounter">0</span><span class="tooltiptext">Tactic Mastery:<br>+1 Tactic Damage<br>+4 Health<br>+1 Mana<br>New Skills available every 5 points.</span></div>
+                        <div class="skillUp-tactic skillRow1 tooltip" name="Envenom"><span class="tooltiptext">Envenom:<br>Deal .25x weapon Damage, and poison your enemy for 8 turns, dealing .33x tactical damage per turn as magic damage. Can be used multiple times.</span></div>
+                        <div class="skillUp-tactic skillRow2 tooltip" name="Quickness"><span class="tooltiptext">Quickness:<br>+10 Speed</span></div>
+                        <div class="skillUp-tactic skillRow2 tooltip" name="Focus"><span class="tooltiptext">Focus:<br>Gain 33% of tactic skill as mana restoration and resistance.</span></div>
+                        <div class="skillUp-tactic skillRow3 tooltip" name="Recovery"><span class="tooltiptext">Recovery:<br>+10 Restore Health<br>+10 Restore Mana</span></div>
+                        <div class="skillUp-tactic skillRow3 tooltip" name="Weaken"><span class="tooltiptext">Weaken:<br>lowers enemy's armor and magic resist by .5x your tactical skill.</span></div>
+                        <div class="skillUp-tactic skillRow4 tooltip" name="Awareness"><span class="tooltiptext">Awareness:<br>+20 Tactic Skill</span></div>
+                        <div class="skillUp-tactic skillRow4 tooltip" name="Ghost Strike"><span class="tooltiptext">Ghost Strike:<br>Deal .7x tactic skill as weapon damage, and then .7x tactic skills as magic damage.</span></div>
+                        <div class="skillTreeTitle">Tactic Skills</div>
+                        <div class="skillPointsLeft">Skill Points Remaining: <span>0</span></div>
+                    </div>
+
+                </div>
                 <div class="statsUI">
                     <div class="statsDisplay">
                         <p class="ul b">Stats:</p>
+                        <p class="statLevel">Level: <span>1</span></p>
+                        <p class="statExp">Experience: <span>0</span></p>
                         <p class="statFightsWon">Fights Won: <span>0</span></p>
                         <p class="statHealth">Health: <span>100</span></p>
                         <p class="statMana">Mana: <span>100</span></p>
@@ -211,8 +256,35 @@
                         <p class="statTacticSkill">Tactic Skill: <span>100</span></p>
                     </div>
                     <div class="activeSkills">
-                        <div class="activeSkillSlot"></div>
+                        <div class="activeSkillSlot">
+                            <div class="activeSkillsDisplay">
+                                <div class="activeWeaponSkills">
+                                    <p slot="1"></p>
+                                    <p slot="2"></p>
+                                    <p slot="3"></p>
+                                </div>
+                                <div class="activeMagicSkills">
+                                    <p slot="1"></p>
+                                    <p slot="2"></p>
+                                    <p slot="3"></p>
+                                </div>
+                                <div class="activeTacticSkills">
+                                    <p slot="1"></p>
+                                    <p slot="2"></p>
+                                    <p slot="3"></p>
+                                </div>
+                                
+                            </div>
+                            <div class="activeSkillsToggle">
+                                <button class="toggleWeaponSkills">W</button>
+                                <button class="toggleMagicSkills">M</button>
+                                <button class="toggleTacticSkills">T</button>
+                            </div>
+                        </div>
                     </div>
+                    <div class="abilitiesMenuWeapon"></div>
+                    <div class="abilitiesMenuMagic"></div>
+                    <div class="abilitiesMenuTactic"></div>
                 </div>
             </div> <!-- Close statsNSkills -->
         </div> <!-- Close Game Screen -->
@@ -223,6 +295,7 @@
        <script type="text/javascript" src="js/enemies.js"></script>
        <script type="text/javascript" src="js/abilities.js"></script>
        <script type="text/javascript" src="js/js.js"></script>
+       <script type="text/javascript" src="js/skills.js"></script>
     </body>
 </html>
 
