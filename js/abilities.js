@@ -38,7 +38,7 @@ $('.weaponAttackMenu').on('click', '.slash', clickSlash);
 function clickSlash(){
 	if (player.myturn && player.fighting){
 		var damage = calcDamage((player.weaponDamageNow*1.25),'game','weapon');
-		gameIsHit(damage);
+		gameIsHit(damage, 'yellow');
 		displayPlayerReport(" You slash the " + game.enemyName + " with your sword! ");
 	};
 };
@@ -47,7 +47,7 @@ $('.weaponAttackMenu').on('click', '.pierce', clickPierce);
 function clickPierce(){
 	if (player.myturn && player.fighting){
 		var damage = calcDamage((player.weaponDamageNow*0.66),'game','weapon')+(player.weaponDamageNow*0.34);
-		gameIsHit(damage);
+		gameIsHit(damage, 'yellow');
 		displayPlayerReport(" You pierce the " + game.enemyName + "'s gut! ");
 	};
 };
@@ -57,11 +57,11 @@ function clickBerserk(){
 		critical = Math.random()*100+1;
 		if (critical > 50){
 			var damage = calcDamage((player.weaponDamageNow*2),'game','weapon');
-			gameIsHit(damage);
+			gameIsHit(damage, 'yellow');
 			displayPlayerReport(" You swing ruthlessly for massive damage!");
 		} else {
 			var damage = calcDamage((player.weaponDamageNow),'game','weapon');
-			gameIsHit(damage);
+			gameIsHit(damage, 'yellow');
 			player.speedNow -= 20;
 			displayPlayerReport(" You slip, slowing yourself down ");
 		}
@@ -73,7 +73,7 @@ function clickFocusedHit(){
 		var damage = calcDamage((player.weaponDamageNow),'game','weapon');
 			player.armorNow += damage*0.5;
 			player.resistanceNow += damage*0.5;
-			gameIsHit(damage);
+			gameIsHit(damage, 'yellow');
 			displayPlayerReport("You hit with focus, gaining armor and resistance.");
 	};
 };
@@ -85,7 +85,7 @@ function clickBloodyStrike(){
 			if (player.health > player.maxHealth){
 				player.health = player.maxHealth;
 			}
-			gameIsHit(damage);
+			gameIsHit(damage, 'red');
 			displayPlayerHealth();
 			displayPlayerReport("You strike, and heal part of the damage.");
 	};
@@ -94,7 +94,7 @@ $('.weaponAttackMenu').on('click', '.impale', clickImpale);
 function clickImpale(){
 	if (player.myturn && player.fighting){
 		var damage = player.weaponDamageNow;
-		gameIsHit(damage);
+		gameIsHit(damage, 'yellow');
 		displayPlayerReport(" You impalethe " + game.enemyName + "'s gut! ");
 	};
 };
@@ -119,7 +119,7 @@ function clickFireball(){
 			player.mana -= 15;
 			displayPlayerMana();
 			var damage = calcDamage((player.magicDamageNow*1.4),'game','magic');
-			gameIsHit(damage);
+			gameIsHit(damage, 'red');
 			displayPlayerReport(" You launch a fireball at " + game.enemyName + "!");
 		} else {
 			notEnoughMana();
@@ -135,7 +135,7 @@ function clickIcebolt(){
 			var damage = calcDamage((player.magicDamageNow),'game','magic');
 			game.delay += 25;
 			displayDelay();
-			gameIsHit(damage);
+			gameIsHit(damage, 'blue');
 			displayPlayerReport(" You launch an icebolt at " + game.enemyName + "!");
 		} else {
 			notEnoughMana();
@@ -171,11 +171,11 @@ function clickElectrocute(){
 			var critical = Math.random()*100+1;
 			if (critical > 75) {
 				var damage = calcDamage((player.magicDamageNow*2.5),'game','magic');
-				gameIsHit(damage);
+				gameIsHit(damage, 'yellow');
 				displayPlayerReport(" You electrocute " + game.enemyName + "!");
 			} else {
 				var damage = calcDamage((player.magicDamageNow*1.2),'game','magic');
-				gameIsHit(damage);
+				gameIsHit(damage, 'yellow');
 				displayPlayerReport(" Great lightning surges from your hands! Critical Damage!");
 			}
 			
@@ -200,18 +200,18 @@ function clickMagicMissiles(){
 			}
 
 			var damage = calcDamage((player.magicDamageNow*.7),'game','magic');
-			gameIsHit(damage);
+			gameIsHit(damage, 'purple');
 			game.resistance -= 15;
 			$('.magicAttackMenu').hide();
 			if (hits >= 2){
 				setTimeout(function(){
-					gameIsHit(damage);
+					gameIsHit(damage, 'purple');
 				game.resistance -= 15;
 				}, 400);
 			}
 			if (hits >= 3){
 				setTimeout(function(){
-					gameIsHit(damage);
+					gameIsHit(damage, 'purple');
 				game.resistance -= 15;
 				}, 800);
 			}
@@ -272,7 +272,7 @@ function clickEnvenom(){
 					}
 				}
 			);
-			gameIsHit(damage);
+			gameIsHit(damage, 'green');
 			displayPlayerReport("You strike with a hidden blade, poisoning your foe!");
 		} else {
 			notEnoughMana();
@@ -312,11 +312,11 @@ function clickGhostStrike(){
 			player.mana -= 30;
 			displayPlayerMana();
 			var damage = calcDamage((player.tacticSkillNow*0.6),'game','weapon');
-			gameIsHit(damage);
+			gameIsHit(damage, 'yellow');
 			$('.tacticAttackMenu').hide();
 			setTimeout(function(){
 				var damage = calcDamage((player.tacticSkillNow*0.6),'game','magic');
-				gameIsHit(damage);
+				gameIsHit(damage, 'blue');
 				displayPlayerReport("You strike "+game.enemyName+", dealing weapon and magic damage!");
 			},400);
 			

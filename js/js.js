@@ -13,6 +13,7 @@ makeGrid();
 	var game = {
 		walls: [],
 		encounters: [],
+		traps: [],
 		level: 1,
 		enemyName: "",
 		enemyId: 0,
@@ -35,7 +36,7 @@ makeGrid();
 		fightsWon: 0,
 		level: 1,
 		exp: 0,
-		skillPoints: 0,
+		skillPoints: 100,
 		pack: [],
 		equip: [],
 		weaponAbilities: ['Slash','Pierce', 0],
@@ -104,7 +105,7 @@ makeGrid();
 				};
 			};
 			for (var i = 1; i <= 20; i++) {  //row 14
-				if ((i!=6) && (i!=12) && (i!=19)){
+				if ((i!=4) && (i!=6) && (i!=12) && (i!=19)){
 					$('.mazeSq[row="14"][col="'+i+'"]').addClass('wallBlock');
 					game.walls.push([i, 14]);
 				};
@@ -226,7 +227,6 @@ makeGrid();
 	function encounterCheck(){
 		for (var i = 0; i < game.encounters.length; i++) {
 			if ((game.encounters[i][0] == player.xpos) && (game.encounters[i][1] == player.ypos)){
-				var index = game.encounters.indexOf([player.xpos, player.ypos]);
 				game.encounters.splice(i, 1);
 				$('.mazeSq[col="'+player.xpos+'"][row="'+player.ypos+'"]').removeClass('encounter');
 				encounterBattle();			
@@ -234,7 +234,79 @@ makeGrid();
 		};
 	};
 
+	/*****************************************************
+				Traps
+	*****************************************************/
+	function createTraps() {
+		xpos = Math.floor(Math.random()*18+2);
+		ypos = Math.floor(Math.random()*18+2);
+		// re-choose positions near player starting point
+		if ((ypos >= 17) && (xpos >= 7) && (xpos <= 13)){ 
+			createTraps();
+			return;
+		};
+		// re-choose positions on walls
+		for (var i = 0; i < game.walls.length; i++) {
+			if ((game.walls[i][0] == xpos) && (game.walls[i][1] == ypos)){
+				createTraps();
+				return;
+			};
+		};
+		// re-choose positions on encounters
+		for (var i = 0; i < game.encounters.length; i++) {
+			if ((game.encounters[i][0] == xpos) && (game.encounters[i][1] == ypos)){
+				createTraps();
+				return;
+			};
+		};
+		// re-choose positions on pre-existing traps
+		for (var i = 0; i < game.traps.length; i++) {
+			if ((game.traps[i][0] == xpos) && (game.traps[i][1] == ypos)){
+				createTraps();
+				return;
+			};
+		};
+		game.traps.push([xpos, ypos]);
+		$('.mazeSq[row="'+ypos+'"][col="'+xpos+'"]').addClass('trap');
+	};
+	//make some traps
+	for (var i = 0; i < 10; i++) {
+		createTraps();	
+	};
+	function springTrap(){
+		// 1/3 chance of each:
+			// encounter
+			// take damage
+			// find item
 
+		var roll = Math.random()*100+1;
+		if (roll >= 66.6){
+			alert('Ambush!');
+			$('.runInitial').hide();
+			encounterBattle();
+		} else if (roll >= 33.3){
+			var damage = player.health * 0.15;
+			alert('Trap! took '+damage+' damage...');
+			player.health -= damage;
+			if (player.health <= 0){
+				player.health = 1;
+			}
+		} else {
+			alert('found an item!');
+			getLoot();
+		}
+
+	}
+
+	function trapCheck(){
+		for (var i = 0; i < game.traps.length; i++) {
+			if ((game.traps[i][0] == player.xpos) && (game.traps[i][1] == player.ypos)){
+				game.traps.splice(i, 1);
+				$('.mazeSq[col="'+player.xpos+'"][row="'+player.ypos+'"]').removeClass('trap');
+				springTrap();			
+			};
+		};
+	};
 	/*****************************************************
 				encounter resolution functions
 	*****************************************************/
@@ -253,6 +325,7 @@ makeGrid();
 		game.speed = enemies[x].speed;
 		game.delay = 100;
 		player.delay = 100;
+
 		displayDelay();
 		window.clearTimeout(speedCountDown);
 		$('.gamePic').show();
@@ -451,9 +524,31 @@ makeGrid();
 			width: value
 		}, 400);
 	}
-	function gameIsHit(x){
+	function hitAnimation(color){
+		console.log(color);
+		if (color == 'yellow'){
+			console.log('test2');
+			$('.hitImg').css("background", "url('imgs/misc/hit-yellow.png')");
+		}
+		if (color == 'red'){
+			$('.hitImg').css('background', "url('imgs/misc/hit-red.png')");
+		}
+		if (color == 'blue'){
+			$('.hitImg').css('background', "url('imgs/misc/hit-blue.png')");
+		}
+		if (color == 'green'){
+			$('.hitImg').css('background', "url('imgs/misc/hit-green.png')");
+		}
+		if (color == 'purple'){
+			$('.hitImg').css('background', "url('imgs/misc/hit-purple.png')");
+		}
+		$('.hitImg').css('background-size', "100% 100%");
+		$('.hitImg').fadeIn(150).fadeOut(150);
+	}
+	function gameIsHit(x, color){
 		game.health -= x;
 		displayGameHealth();
+		hitAnimation(color);
 		$('.gameHealthBar').fadeOut().fadeIn();
 	}
 
@@ -557,6 +652,7 @@ makeGrid();
 	function clickFight(){
 		if (player.myturn && player.fighting){
 			$('.encounterMsg').hide();
+			$('.runInitial').show();
 			game.delayTimerRunning = true;
 			delayTimer();
 		};
@@ -1365,6 +1461,7 @@ makeGrid();
 			} else if (((e.keyCode == '40') || (e.keyCode == '83')) && !wallCollision((player.xpos), player.ypos+1)){
 				player.ypos += 1; // down
 			};
+			trapCheck();
 			encounterCheck();
 			fogAdjust();
 			redrawPlayer();
