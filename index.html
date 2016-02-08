@@ -14,6 +14,25 @@
     <body>
         
         <div class="gameScreen">
+            <div class="introScreen">
+                <div class="gameName">Liberatus</div>
+                <div class="introMenu"><p class="newGame">New Game</p><p class="loadGame">Load Game</p></div>
+                <div class="instructions"><p>How to Play:
+                    <ul>
+                        <li>Traverse the maze, find the stairs down</li>
+                        <li>Fight enemies and handle traps</li>
+                        <li>SPACE for menu</li>
+                        <li>arrow keys or wasd to move</li>
+                    </ul>
+                    <button class="playButton">Play!</button>
+                </div>
+                <div class="loadMenu">
+                    <p class="save save_1">Save 1</p>
+                    <p class="save save_2">Save 2</p>
+                    <p class="save save_3">Save 3</p>
+                    <p class="save return">Go Back</p>
+                </div>
+            </div>
         	<div class="mazeScreen"></div><div class="fog"></div>
 
             <div class="battleScreen">
@@ -87,10 +106,10 @@
                             </div>
                             <div class="weaponAttackMenu">
                                 <div class="quadrant q1">
-                                    <button class="slash"><b>Slash</b>: a powerful attack</button>
+                                    <button class="skillBtn slash"><b>Slash</b>: a powerful attack</button>
                                 </div>
                                 <div class="quadrant q2">
-                                    <button class="pierce"><b>Pierce</b>: good against armor</button>
+                                    <button class="skillBtn pierce"><b>Pierce</b>: good against armor</button>
                                 </div>
                                 <div class="quadrant q3">
                                     
@@ -101,7 +120,7 @@
                             </div>
                             <div class="magicAttackMenu">
                                 <div class="quadrant q1">
-                                    <button class="fireball"><b>Fireball</b>: basic magical attack</button>
+                                    <button class="skillBtn fireball"><b>Fireball</b>: basic magical attack</button>
                                 </div>
                                 <div class="quadrant q2">
                                     
@@ -115,7 +134,7 @@
                             </div>
                             <div class="tacticAttackMenu">
                                 <div class="quadrant q1">
-                                    <button class="safeguard"><b>Safeguard</b>: recover health and gain armor</button>
+                                    <button class="skillBtn safeguard"><b>Safeguard</b>: recover health and gain armor</button>
                                 </div>
                                 <div class="quadrant q2">
                                     
@@ -171,7 +190,7 @@
                         <div class="equipRightRing equipSlot" space="6"></div>
                     </div>
                     <div class="itemControls">
-                        consume selected item: z<br>
+                        drink selected potion: z<br>
                         delete selected item: x
                     </div>
                     <div class="itemInfo">
@@ -203,38 +222,38 @@
                         <div class="tacticSkillTab">T</div>
                     </div>
                     <div class="weaponSkillTree">
-                        <div class="skillUp-weapon skillRow1 availableSkill tooltip" name="Weapon Mastery"><span class="skillCounter">0</span><span class="tooltiptext">Weapon Mastery:<br> +1 Weapon Damage<br>+5 Health<br>New Skills available every 5 points.</span></div>
-                        <div class="skillUp-weapon skillRow1 tooltip" name="Berserk"><span class="tooltiptext">Beserk:<br> 50% chance to do 2x weapon damage. 50% chance to do 1x damage and lose 20 speed.</span></div>
-                        <div class="skillUp-weapon skillRow2 tooltip" name="Defender"><span class="tooltiptext">Defender:<br> +50 Armor<br> +50 Resistance</span></div>
-                        <div class="skillUp-weapon skillRow2 tooltip" name="Focused Hit"><span class="tooltiptext">Focused Hit:<br>Deal 1x weapon damage, gaining 50% of that damage as armor and resistance.</span></div>
-                        <div class="skillUp-weapon skillRow3 tooltip" name="Hearty"><span class="tooltiptext">Hearty:<br>+100 Health.</span></div>
-                        <div class="skillUp-weapon skillRow3 tooltip" name="Bloody Strike"><span class="tooltiptext">Bloody Strike:<br>Deal 1x weapon damage, healing for 15% of that damage.</span></div>
-                        <div class="skillUp-weapon skillRow4 tooltip" name="Strength"><span class="tooltiptext">Strength:<br>+25 Weapon Damage</span></div>
-                        <div class="skillUp-weapon skillRow4 tooltip" name="Impale"><span class="tooltiptext">Impale:<br>Deal 1x weapon damage, completely bypassing armor.</span></div>
+                        <div skillNum='0' class="masterySkill skillUp-weapon skillRow1 availableSkill tooltip" name="Weapon Mastery"><span class="skillCounter">0</span><span class="tooltiptext">Weapon Mastery:<br> +1 Weapon Damage<br>+5 Health<br>New Skills available every 5 points.</span></div>
+                        <div skillNum='1' class="skillUp-weapon skillRow1 tooltip" name="Berserk"><span class="tooltiptext">Beserk:<br> 50% chance to do 2x weapon damage. 50% chance to do 1x damage and lose 20 speed.</span></div>
+                        <div skillNum='2' class="skillUp-weapon skillRow2 tooltip" name="Defender"><span class="tooltiptext">Defender:<br> +50 Armor<br> +50 Resistance</span></div>
+                        <div skillNum='3' class="skillUp-weapon skillRow2 tooltip" name="Focused Hit"><span class="tooltiptext">Focused Hit:<br>Deal 1x weapon damage, gaining 50% of that damage as armor and resistance.</span></div>
+                        <div skillNum='4' class="skillUp-weapon skillRow3 tooltip" name="Hearty"><span class="tooltiptext">Hearty:<br>+100 Health.</span></div>
+                        <div skillNum='5' class="skillUp-weapon skillRow3 tooltip" name="Bloody Strike"><span class="tooltiptext">Bloody Strike:<br>Deal 1x weapon damage, healing for 15% of that damage.</span></div>
+                        <div skillNum='6' class="skillUp-weapon skillRow4 tooltip" name="Strength"><span class="tooltiptext">Strength:<br>+25 Weapon Damage</span></div>
+                        <div skillNum='7' class="skillUp-weapon skillRow4 tooltip" name="Impale"><span class="tooltiptext">Impale:<br>Deal 1x weapon damage, completely bypassing armor.</span></div>
                         <div class="skillTreeTitle">Weapon Skills</div>
                         <div class="skillPointsLeft">Skill Points Remaining: <span>0</span></div>
                     </div>
                     <div class="magicSkillTree">
-                        <div class="skillUp-magic skillRow1 availableSkill tooltip" name="Magic Mastery"><span class="skillCounter">0</span><span class="tooltiptext">Magic Mastery:<br>+1 Magic Damage<br>+3 Health<br>+2 Mana<br>New Skills available every 5 points.</span></div>
-                        <div class="skillUp-magic skillRow1 tooltip" name="Icebolt"><span class="tooltiptext">Icebolt:<br>Deal 1x magic damage and delay enemy by 25%.</span></div>
-                        <div class="skillUp-magic skillRow2 tooltip" name="Mage Armor"><span class="tooltiptext">Mage Armor:<br>+50 Armor<br>+50 Resistance</span></div>
-                        <div class="skillUp-magic skillRow2 tooltip" name="Channel"><span class="tooltiptext">Channel:<br>Recover 75% of your mana.</span></div>
-                        <div class="skillUp-magic skillRow3 tooltip" name="Surge"><span class="tooltiptext">Surge:<br>-20 Health<br>+40 Magic Damage</span></div>
-                        <div class="skillUp-magic skillRow3 tooltip" name="Electrocute"><span class="tooltiptext">Electrocute:<br>Deal 1.2x magic damage, with a 25% chance to deal 2.5x magic damage.</span></div>
-                        <div class="skillUp-magic skillRow4 tooltip" name="Fast Casting"><span class="tooltiptext">Fast Casting:<br>+10 Speed</span></div>
-                        <div class="skillUp-magic skillRow4 tooltip" name="Magic Missiles"><span class="tooltiptext">Magic Missiles:<br>Fire 1-3 magic missiles, each doing .7x magic damage and lowering enemy resistance by 15.</span></div>
+                        <div skillNum='0' class="masterySkill skillUp-magic skillRow1 availableSkill tooltip" name="Magic Mastery"><span class="skillCounter">0</span><span class="tooltiptext">Magic Mastery:<br>+1 Magic Damage<br>+3 Health<br>+2 Mana<br>New Skills available every 5 points.</span></div>
+                        <div skillNum='1' class="skillUp-magic skillRow1 tooltip" name="Icebolt"><span class="tooltiptext">Icebolt:<br>Deal 1x magic damage and delay enemy by 25%.</span></div>
+                        <div skillNum='2' class="skillUp-magic skillRow2 tooltip" name="Mage Armor"><span class="tooltiptext">Mage Armor:<br>+50 Armor<br>+50 Resistance</span></div>
+                        <div skillNum='3' class="skillUp-magic skillRow2 tooltip" name="Channel"><span class="tooltiptext">Channel:<br>Recover 75% of your mana.</span></div>
+                        <div skillNum='4' class="skillUp-magic skillRow3 tooltip" name="Surge"><span class="tooltiptext">Surge:<br>-20 Health<br>+40 Magic Damage</span></div>
+                        <div skillNum='5' class="skillUp-magic skillRow3 tooltip" name="Electrocute"><span class="tooltiptext">Electrocute:<br>Deal 1.2x magic damage, with a 25% chance to deal 2.5x magic damage.</span></div>
+                        <div skillNum='6' class="skillUp-magic skillRow4 tooltip" name="Fast Casting"><span class="tooltiptext">Fast Casting:<br>+10 Speed</span></div>
+                        <div skillNum='7' class="skillUp-magic skillRow4 tooltip" name="Magic Missiles"><span class="tooltiptext">Magic Missiles:<br>Fire 1-3 magic missiles, each doing .7x magic damage and lowering enemy resistance by 15.</span></div>
                         <div class="skillTreeTitle">Magic Skills</div>
                         <div class="skillPointsLeft">Skill Points Remaining: <span>0</span></div>
                     </div>
                     <div class="tacticSkillTree">
-                        <div class="skillUp-tactic skillRow1 availableSkill tooltip" name="Tactic Mastery"><span class="skillCounter">0</span><span class="tooltiptext">Tactic Mastery:<br>+1 Tactic Damage<br>+4 Health<br>+1 Mana<br>New Skills available every 5 points.</span></div>
-                        <div class="skillUp-tactic skillRow1 tooltip" name="Envenom"><span class="tooltiptext">Envenom:<br>Deal .25x weapon Damage, and poison your enemy for 8 turns, dealing .33x tactical damage per turn as magic damage. Can be used multiple times.</span></div>
-                        <div class="skillUp-tactic skillRow2 tooltip" name="Quickness"><span class="tooltiptext">Quickness:<br>+10 Speed</span></div>
-                        <div class="skillUp-tactic skillRow2 tooltip" name="Focus"><span class="tooltiptext">Focus:<br>Gain 33% of tactic skill as mana restoration and resistance.</span></div>
-                        <div class="skillUp-tactic skillRow3 tooltip" name="Recovery"><span class="tooltiptext">Recovery:<br>+10 Restore Health<br>+10 Restore Mana</span></div>
-                        <div class="skillUp-tactic skillRow3 tooltip" name="Weaken"><span class="tooltiptext">Weaken:<br>lowers enemy's armor and magic resist by .5x your tactical skill.</span></div>
-                        <div class="skillUp-tactic skillRow4 tooltip" name="Awareness"><span class="tooltiptext">Awareness:<br>+20 Tactic Skill</span></div>
-                        <div class="skillUp-tactic skillRow4 tooltip" name="Ghost Strike"><span class="tooltiptext">Ghost Strike:<br>Deal .7x tactic skill as weapon damage, and then .7x tactic skills as magic damage.</span></div>
+                        <div skillNum='0' class="masterySkill skillUp-tactic skillRow1 availableSkill tooltip" name="Tactic Mastery"><span class="skillCounter">0</span><span class="tooltiptext">Tactic Mastery:<br>+1 Tactic Damage<br>+4 Health<br>+1 Mana<br>New Skills available every 5 points.</span></div>
+                        <div skillNum='1' class="skillUp-tactic skillRow1 tooltip" name="Envenom"><span class="tooltiptext">Envenom:<br>Deal .25x weapon Damage, and poison your enemy for 8 turns, dealing .33x tactical damage per turn as magic damage. Can be used multiple times.</span></div>
+                        <div skillNum='2' class="skillUp-tactic skillRow2 tooltip" name="Quickness"><span class="tooltiptext">Quickness:<br>+10 Speed</span></div>
+                        <div skillNum='3' class="skillUp-tactic skillRow2 tooltip" name="Focus"><span class="tooltiptext">Focus:<br>Gain 33% of tactic skill as mana restoration and resistance.</span></div>
+                        <div skillNum='4' class="skillUp-tactic skillRow3 tooltip" name="Recovery"><span class="tooltiptext">Recovery:<br>+10 Restore Health<br>+10 Restore Mana</span></div>
+                        <div skillNum='5' class="skillUp-tactic skillRow3 tooltip" name="Weaken"><span class="tooltiptext">Weaken:<br>lowers enemy's armor and magic resist by .5x your tactical skill.</span></div>
+                        <div skillNum='6' class="skillUp-tactic skillRow4 tooltip" name="Awareness"><span class="tooltiptext">Awareness:<br>+20 Tactic Skill</span></div>
+                        <div skillNum='7' class="skillUp-tactic skillRow4 tooltip" name="Ghost Strike"><span class="tooltiptext">Ghost Strike:<br>Deal .7x tactic skill as weapon damage, and then .7x tactic skills as magic damage.</span></div>
                         <div class="skillTreeTitle">Tactic Skills</div>
                         <div class="skillPointsLeft">Skill Points Remaining: <span>0</span></div>
                     </div>
@@ -287,6 +306,21 @@
                     <div class="abilitiesMenuTactic"></div>
                 </div>
             </div> <!-- Close statsNSkills -->
+            <div class="saveNLoad">
+               <div class="menuLeft">&#9664</div>
+                <div class="menuRight">&#9658</div>
+                <div class="action"><p></p></div>
+                <div class="saveNLoadMenu">
+                    <div class="saveCurrentGame">Save</div>
+                    <div class="loadCurrentGame">Load</div>
+                </div>  
+                <div class="saveNLoadMenuB">
+                    <p class="save_1">Save 1</p>
+                    <p class="save_2">Save 2</p>
+                    <p class="save_3">Save 3</p>
+                    <p class="returnToSLM">Back</p>
+                </div> 
+            </div>
         </div> <!-- Close Game Screen -->
 
 
@@ -298,6 +332,20 @@
        <script type="text/javascript" src="js/skills.js"></script>
     </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

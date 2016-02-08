@@ -11,7 +11,14 @@ makeGrid();
 
 
 	var game = {
+		/* enemies bot and top are used to set the enemies that can show up on a given level.
+		for example, if enemies bot and top are 0 and 5, then enemies with id 0 to 4 will be available.
+		to make enemies 5 to 9 be available, set bot and top to 5 and 10.
+		*/
+		enemiesBot: 0,
+		enemiesTop: 5,
 		walls: [],
+		stairs: 0,
 		encounters: [],
 		traps: [],
 		level: 1,
@@ -28,6 +35,7 @@ makeGrid();
 		delayTimerRunning: false
 	};
 	var player = {
+		started: false,
 		xpos: 10,
 		ypos: 19,
 		wonBattle: false,
@@ -36,7 +44,7 @@ makeGrid();
 		fightsWon: 0,
 		level: 1,
 		exp: 0,
-		skillPoints: 100,
+		skillPoints: 10,
 		pack: [],
 		equip: [],
 		weaponAbilities: ['Slash','Pierce', 0],
@@ -73,7 +81,7 @@ makeGrid();
 		
 	};
 	function makeWalls(){
-		function addOuterWalls20x20(){
+		function addOuterWalls(){
 			for (var i = 1; i <= 20; i++) { //left side
 				$('.mazeSq[row="'+i+'"][col="1"]').addClass('wallBlock');
 				game.walls.push([1, i]);
@@ -91,7 +99,9 @@ makeGrid();
 				game.walls.push([i, 20]);
 			};
 		};
-		function addInnerWalls20x20(){
+		function addInnerWalls_1(){
+			$('.mazeSq[col="2"][row="3"]').addClass('stairs');
+			game.stairs = [2, 3];
 			for (var i = 1; i <= 20; i++) {  //row 18
 				if ((i!=2) && (i!=6) && (i!=8) && (i!=16) && (i!=19)){
 					$('.mazeSq[row="18"][col="'+i+'"]').addClass('wallBlock');
@@ -191,15 +201,1367 @@ makeGrid();
 			$('.mazeSq[row="2"][col="19"]').addClass('wallBlock'); // col 19, row 2
 			game.walls.push([19, 2]);
 		};
-		addOuterWalls20x20();
-		addInnerWalls20x20();
+		function addInnerWalls_2() {
+			$('.mazeSq[col="3"][row="3"]').addClass('stairs');
+			game.stairs = [3, 3];
+			$('.mazeSq[col="10"][row="18"]').addClass('wallBlock');
+			game.walls.push([10, 18]);
+			$('.mazeSq[col="9"][row="18"]').addClass('wallBlock');
+			game.walls.push([9, 18]);
+			$('.mazeSq[col="8"][row="18"]').addClass('wallBlock');
+			game.walls.push([8, 18]);
+			$('.mazeSq[col="7"][row="18"]').addClass('wallBlock');
+			game.walls.push([7, 18]);
+			$('.mazeSq[col="6"][row="18"]').addClass('wallBlock');
+			game.walls.push([6, 18]);
+			$('.mazeSq[col="6"][row="19"]').addClass('wallBlock');
+			game.walls.push([6, 19]);
+			$('.mazeSq[col="11"][row="18"]').addClass('wallBlock')
+			;game.walls.push([11, 18]);
+			$('.mazeSq[col="13"][row="18"]').addClass('wallBlock')
+			;game.walls.push([13, 18]);
+			$('.mazeSq[col="14"][row="18"]').addClass('wallBlock')
+			;game.walls.push([14, 18]);
+			$('.mazeSq[col="15"][row="18"]').addClass('wallBlock')
+			;game.walls.push([15, 18]);
+			$('.mazeSq[col="17"][row="18"]').addClass('wallBlock')
+			;game.walls.push([17, 18]);
+			$('.mazeSq[col="18"][row="18"]').addClass('wallBlock')
+			;game.walls.push([18, 18]);
+			$('.mazeSq[col="18"][row="17"]').addClass('wallBlock')
+			;game.walls.push([18, 17]);
+			$('.mazeSq[col="18"][row="16"]').addClass('wallBlock')
+			;game.walls.push([18, 16]);
+			$('.mazeSq[col="18"][row="15"]').addClass('wallBlock')
+			;game.walls.push([18, 15]);
+			$('.mazeSq[col="19"][row="13"]').addClass('wallBlock')
+			;game.walls.push([19, 13]);
+			$('.mazeSq[col="18"][row="13"]').addClass('wallBlock')
+			;game.walls.push([18, 13]);
+			$('.mazeSq[col="16"][row="14"]').addClass('wallBlock')
+			;game.walls.push([16, 14]);
+			$('.mazeSq[col="16"][row="13"]').addClass('wallBlock')
+			;game.walls.push([16, 13]);
+			$('.mazeSq[col="16"][row="15"]').addClass('wallBlock')
+			;game.walls.push([16, 15]);
+			$('.mazeSq[col="16"][row="16"]').addClass('wallBlock')
+			;game.walls.push([16, 16]);
+			$('.mazeSq[col="18"][row="11"]').addClass('wallBlock')
+			;game.walls.push([18, 11]);
+			$('.mazeSq[col="17"][row="11"]').addClass('wallBlock')
+			;game.walls.push([17, 11]);
+			$('.mazeSq[col="16"][row="11"]').addClass('wallBlock')
+			;game.walls.push([16, 11]);
+			$('.mazeSq[col="15"][row="11"]').addClass('wallBlock')
+			;game.walls.push([15, 11]);
+			$('.mazeSq[col="14"][row="11"]').addClass('wallBlock')
+			;game.walls.push([14, 11]);
+			$('.mazeSq[col="14"][row="12"]').addClass('wallBlock')
+			;game.walls.push([14, 12]);
+			$('.mazeSq[col="14"][row="13"]').addClass('wallBlock')
+			;game.walls.push([14, 13]);
+			$('.mazeSq[col="14"][row="14"]').addClass('wallBlock')
+			;game.walls.push([14, 14]);
+			$('.mazeSq[col="14"][row="16"]').addClass('wallBlock')
+			;game.walls.push([14, 16]);
+			$('.mazeSq[col="14"][row="17"]').addClass('wallBlock')
+			;game.walls.push([14, 17]);
+			$('.mazeSq[col="12"][row="16"]').addClass('wallBlock')
+			;game.walls.push([12, 16]);
+			$('.mazeSq[col="12"][row="15"]').addClass('wallBlock')
+			;game.walls.push([12, 15]);
+			$('.mazeSq[col="12"][row="14"]').addClass('wallBlock')
+			;game.walls.push([12, 14]);
+			$('.mazeSq[col="12"][row="13"]').addClass('wallBlock')
+			;game.walls.push([12, 13]);
+			$('.mazeSq[col="12"][row="12"]').addClass('wallBlock')
+			;game.walls.push([12, 12]);
+			$('.mazeSq[col="12"][row="11"]').addClass('wallBlock')
+			;game.walls.push([12, 11]);
+			$('.mazeSq[col="11"][row="16"]').addClass('wallBlock')
+			;game.walls.push([11, 16]);
+			$('.mazeSq[col="10"][row="16"]').addClass('wallBlock')
+			;game.walls.push([10, 16]);
+			$('.mazeSq[col="9"][row="16"]').addClass('wallBlock');
+			game.walls.push([9, 16]);
+			$('.mazeSq[col="8"][row="16"]').addClass('wallBlock');
+			game.walls.push([8, 16]);
+			$('.mazeSq[col="6"][row="16"]').addClass('wallBlock');
+			game.walls.push([6, 16]);
+			$('.mazeSq[col="5"][row="16"]').addClass('wallBlock');
+			game.walls.push([5, 16]);
+			$('.mazeSq[col="4"][row="16"]').addClass('wallBlock');
+			game.walls.push([4, 16]);
+			$('.mazeSq[col="4"][row="17"]').addClass('wallBlock');
+			game.walls.push([4, 17]);
+			$('.mazeSq[col="4"][row="18"]').addClass('wallBlock');
+			game.walls.push([4, 18]);
+			$('.mazeSq[col="3"][row="18"]').addClass('wallBlock');
+			game.walls.push([3, 18]);
+			$('.mazeSq[col="2"][row="16"]').addClass('wallBlock');
+			game.walls.push([2, 16]);
+			$('.mazeSq[col="3"][row="14"]').addClass('wallBlock');
+			game.walls.push([3, 14]);
+			$('.mazeSq[col="4"][row="14"]').addClass('wallBlock');
+			game.walls.push([4, 14]);
+			$('.mazeSq[col="5"][row="14"]').addClass('wallBlock');
+			game.walls.push([5, 14]);
+			$('.mazeSq[col="7"][row="14"]').addClass('wallBlock');
+			game.walls.push([7, 14]);
+			$('.mazeSq[col="7"][row="13"]').addClass('wallBlock');
+			game.walls.push([7, 13]);
+			$('.mazeSq[col="8"][row="13"]').addClass('wallBlock');
+			game.walls.push([8, 13]);
+			$('.mazeSq[col="9"][row="15"]').addClass('wallBlock');
+			game.walls.push([9, 15]);
+			$('.mazeSq[col="10"][row="13"]').addClass('wallBlock');
+			game.walls.push([10, 13]);
+			$('.mazeSq[col="10"][row="15"]').addClass('wallBlock');
+			game.walls.push([10, 15]);
+			$('.mazeSq[col="11"][row="15"]').addClass('wallBlock');
+			game.walls.push([11, 15]);
+			$('.mazeSq[col="10"][row="12"]').addClass('wallBlock');
+			game.walls.push([10, 12]);
+			$('.mazeSq[col="10"][row="11"]').addClass('wallBlock');
+			game.walls.push([10, 11]);
+			$('.mazeSq[col="10"][row="10"]').addClass('wallBlock');
+			game.walls.push([10, 10]);
+			$('.mazeSq[col="11"][row="9"]').addClass('wallBlock');
+			game.walls.push([11, 9]);
+			$('.mazeSq[col="12"][row="9"]').addClass('wallBlock');
+			game.walls.push([12, 9]);
+			$('.mazeSq[col="14"][row="9"]').addClass('wallBlock');
+			game.walls.push([14, 9]);
+			$('.mazeSq[col="15"][row="9"]').addClass('wallBlock');
+			game.walls.push([15, 9]);
+			$('.mazeSq[col="16"][row="9"]').addClass('wallBlock');
+			game.walls.push([16, 9]);
+			$('.mazeSq[col="17"][row="9"]').addClass('wallBlock');
+			game.walls.push([17, 9]);
+			$('.mazeSq[col="18"][row="9"]').addClass('wallBlock');
+			game.walls.push([18, 9]);
+			$('.mazeSq[col="19"][row="9"]').addClass('wallBlock');
+			game.walls.push([19, 9]);
+			$('.mazeSq[col="14"][row="7"]').addClass('wallBlock');
+			game.walls.push([14, 7]);
+			$('.mazeSq[col="15"][row="7"]').addClass('wallBlock');
+			game.walls.push([15, 7]);
+			$('.mazeSq[col="12"][row="7"]').addClass('wallBlock');
+			game.walls.push([12, 7]);
+			$('.mazeSq[col="11"][row="7"]').addClass('wallBlock');
+			game.walls.push([11, 7]);
+			$('.mazeSq[col="10"][row="7"]').addClass('wallBlock');
+			game.walls.push([10, 7]);
+			$('.mazeSq[col="9"][row="8"]').addClass('wallBlock');
+			game.walls.push([9, 8]);
+			$('.mazeSq[col="8"][row="9"]').addClass('wallBlock');
+			game.walls.push([8, 9]);
+			$('.mazeSq[col="8"][row="11"]').addClass('wallBlock');
+			game.walls.push([8, 11]);
+			$('.mazeSq[col="7"][row="11"]').addClass('wallBlock');
+			game.walls.push([7, 11]);
+			$('.mazeSq[col="6"][row="11"]').addClass('wallBlock');
+			game.walls.push([6, 11]);
+			$('.mazeSq[col="5"][row="11"]').addClass('wallBlock');
+			game.walls.push([5, 11]);
+			$('.mazeSq[col="5"][row="12"]').addClass('wallBlock');
+			game.walls.push([5, 12]);
+			$('.mazeSq[col="3"][row="12"]').addClass('wallBlock');
+			game.walls.push([3, 12]);
+			$('.mazeSq[col="3"][row="13"]').addClass('wallBlock');
+			game.walls.push([3, 13]);
+			$('.mazeSq[col="4"][row="10"]').addClass('wallBlock');
+			game.walls.push([4, 10]);
+			$('.mazeSq[col="3"][row="10"]').addClass('wallBlock');
+			game.walls.push([3, 10]);
+			$('.mazeSq[col="2"][row="10"]').addClass('wallBlock');
+			game.walls.push([2, 10]);
+			$('.mazeSq[col="6"][row="9"]').addClass('wallBlock');
+			game.walls.push([6, 9]);
+			$('.mazeSq[col="7"][row="9"]').addClass('wallBlock');
+			game.walls.push([7, 9]);
+			$('.mazeSq[col="5"][row="8"]').addClass('wallBlock');
+			game.walls.push([5, 8]);
+			$('.mazeSq[col="3"][row="9"]').addClass('wallBlock');
+			game.walls.push([3, 9]);
+			$('.mazeSq[col="3"][row="8"]').addClass('wallBlock');
+			game.walls.push([3, 8]);
+			$('.mazeSq[col="4"][row="6"]').addClass('wallBlock');
+			game.walls.push([4, 6]);
+			$('.mazeSq[col="3"][row="6"]').addClass('wallBlock');
+			game.walls.push([3, 6]);
+			$('.mazeSq[col="2"][row="6"]').addClass('wallBlock');
+			game.walls.push([2, 6]);
+			$('.mazeSq[col="6"][row="7"]').addClass('wallBlock');
+			game.walls.push([6, 7]);
+			$('.mazeSq[col="5"][row="5"]').addClass('wallBlock');
+			game.walls.push([5, 5]);
+			$('.mazeSq[col="7"][row="6"]').addClass('wallBlock');
+			game.walls.push([7, 6]);
+			$('.mazeSq[col="7"][row="5"]').addClass('wallBlock');
+			game.walls.push([7, 5]);
+			$('.mazeSq[col="6"][row="3"]').addClass('wallBlock');
+			game.walls.push([6, 3]);
+			$('.mazeSq[col="5"][row="3"]').addClass('wallBlock');
+			game.walls.push([5, 3]);
+			$('.mazeSq[col="4"][row="3"]').addClass('wallBlock');
+			game.walls.push([4, 3]);
+			$('.mazeSq[col="3"][row="4"]').addClass('wallBlock');
+			game.walls.push([3, 4]);
+			$('.mazeSq[col="2"][row="2"]').addClass('wallBlock');
+			game.walls.push([2, 2]);
+			$('.mazeSq[col="8"][row="2"]').addClass('wallBlock');
+			game.walls.push([8, 2]);
+			$('.mazeSq[col="8"][row="4"]').addClass('wallBlock');
+			game.walls.push([8, 4]);
+			$('.mazeSq[col="8"][row="8"]').addClass('wallBlock');
+			game.walls.push([8, 8]);
+			$('.mazeSq[col="9"][row="7"]').addClass('wallBlock');
+			game.walls.push([9, 7]);
+			$('.mazeSq[col="8"][row="5"]').addClass('wallBlock');
+			game.walls.push([8, 5]);
+			$('.mazeSq[col="10"][row="5"]').addClass('wallBlock');
+			game.walls.push([10, 5]);
+			$('.mazeSq[col="10"][row="4"]').addClass('wallBlock');
+			game.walls.push([10, 4]);
+			$('.mazeSq[col="10"][row="3"]').addClass('wallBlock');
+			game.walls.push([10, 3]);
+			$('.mazeSq[col="12"][row="2"]').addClass('wallBlock');
+			game.walls.push([12, 2]);
+			$('.mazeSq[col="12"][row="3"]').addClass('wallBlock');
+			game.walls.push([12, 3]);
+			$('.mazeSq[col="12"][row="4"]').addClass('wallBlock');
+			game.walls.push([12, 4]);
+			$('.mazeSq[col="12"][row="6"]').addClass('wallBlock');
+			game.walls.push([12, 6]);
+			$('.mazeSq[col="14"][row="5"]').addClass('wallBlock');
+			game.walls.push([14, 5]);
+			$('.mazeSq[col="14"][row="4"]').addClass('wallBlock');
+			game.walls.push([14, 4]);
+			$('.mazeSq[col="14"][row="3"]').addClass('wallBlock');
+			game.walls.push([14, 3]);
+			$('.mazeSq[col="16"][row="2"]').addClass('wallBlock');
+			game.walls.push([16, 2]);
+			$('.mazeSq[col="16"][row="3"]').addClass('wallBlock');
+			game.walls.push([16, 3]);
+			$('.mazeSq[col="15"][row="5"]').addClass('wallBlock');
+			game.walls.push([15, 5]);
+			$('.mazeSq[col="16"][row="5"]').addClass('wallBlock');
+			game.walls.push([16, 5]);
+			$('.mazeSq[col="17"][row="5"]').addClass('wallBlock');
+			game.walls.push([17, 5]);
+			$('.mazeSq[col="18"][row="4"]').addClass('wallBlock');
+			game.walls.push([18, 4]);
+			$('.mazeSq[col="18"][row="3"]').addClass('wallBlock');
+			game.walls.push([18, 3]);
+			$('.mazeSq[col="19"][row="6"]').addClass('wallBlock');
+			game.walls.push([19, 6]);
+			$('.mazeSq[col="17"][row="6"]').addClass('wallBlock');
+			game.walls.push([17, 6]);
+			$('.mazeSq[col="17"][row="7"]').addClass('wallBlock');
+			game.walls.push([17, 7]);
+			$('.mazeSq[col="19"][row="7"]').addClass('wallBlock');
+			game.walls.push([19, 7]);
+			$('.mazeSq[col="19"][row="8"]').addClass('wallBlock');
+			game.walls.push([19, 8]);
+		}
+
+		function addInnerWalls_3(){
+			$('.mazeSq[col="18"][row="2"]').addClass('stairs');
+			game.stairs = [18, 2];
+			$('.mazeSq[col="10"][row="18"]').addClass('wallBlock');game.walls.push([10, 18]);
+			$('.mazeSq[col="11"][row="18"]').addClass('wallBlock');game.walls.push([11, 18]);
+			$('.mazeSq[col="9"][row="18"]').addClass('wallBlock');game.walls.push([9, 18]);
+			$('.mazeSq[col="7"][row="18"]').addClass('wallBlock');game.walls.push([7, 18]);
+			$('.mazeSq[col="6"][row="18"]').addClass('wallBlock');game.walls.push([6, 18]);
+			$('.mazeSq[col="5"][row="18"]').addClass('wallBlock');game.walls.push([5, 18]);
+			$('.mazeSq[col="3"][row="18"]').addClass('wallBlock');game.walls.push([3, 18]);
+			$('.mazeSq[col="3"][row="17"]').addClass('wallBlock');game.walls.push([3, 17]);
+			$('.mazeSq[col="3"][row="16"]').addClass('wallBlock');game.walls.push([3, 16]);
+			$('.mazeSq[col="3"][row="14"]').addClass('wallBlock');game.walls.push([3, 14]);
+			$('.mazeSq[col="2"][row="14"]').addClass('wallBlock');game.walls.push([2, 14]);
+			$('.mazeSq[col="4"][row="14"]').addClass('wallBlock');game.walls.push([4, 14]);
+			$('.mazeSq[col="5"][row="14"]').addClass('wallBlock');game.walls.push([5, 14]);
+			$('.mazeSq[col="4"][row="16"]').addClass('wallBlock');game.walls.push([4, 16]);
+			$('.mazeSq[col="5"][row="16"]').addClass('wallBlock');game.walls.push([5, 16]);
+			$('.mazeSq[col="6"][row="16"]').addClass('wallBlock');game.walls.push([6, 16]);
+			$('.mazeSq[col="7"][row="16"]').addClass('wallBlock');game.walls.push([7, 16]);
+			$('.mazeSq[col="7"][row="15"]').addClass('wallBlock');game.walls.push([7, 15]);
+			$('.mazeSq[col="7"][row="14"]').addClass('wallBlock');game.walls.push([7, 14]);
+			$('.mazeSq[col="7"][row="13"]').addClass('wallBlock');game.walls.push([7, 13]);
+			$('.mazeSq[col="7"][row="12"]').addClass('wallBlock');game.walls.push([7, 12]);
+			$('.mazeSq[col="9"][row="16"]').addClass('wallBlock');game.walls.push([9, 16]);
+			$('.mazeSq[col="10"][row="16"]').addClass('wallBlock');game.walls.push([10, 16]);
+			$('.mazeSq[col="9"][row="15"]').addClass('wallBlock');game.walls.push([9, 15]);
+			$('.mazeSq[col="9"][row="14"]').addClass('wallBlock');game.walls.push([9, 14]);
+			$('.mazeSq[col="9"][row="12"]').addClass('wallBlock');game.walls.push([9, 12]);
+			$('.mazeSq[col="9"][row="11"]').addClass('wallBlock');game.walls.push([9, 11]);
+			$('.mazeSq[col="7"][row="10"]').addClass('wallBlock');game.walls.push([7, 10]);
+			$('.mazeSq[col="6"][row="10"]').addClass('wallBlock');game.walls.push([6, 10]);
+			$('.mazeSq[col="6"][row="12"]').addClass('wallBlock');game.walls.push([6, 12]);
+			$('.mazeSq[col="5"][row="12"]').addClass('wallBlock');game.walls.push([5, 12]);
+			$('.mazeSq[col="4"][row="12"]').addClass('wallBlock');game.walls.push([4, 12]);
+			$('.mazeSq[col="3"][row="12"]').addClass('wallBlock');game.walls.push([3, 12]);
+			$('.mazeSq[col="5"][row="10"]').addClass('wallBlock');game.walls.push([5, 10]);
+			$('.mazeSq[col="3"][row="10"]').addClass('wallBlock');game.walls.push([3, 10]);
+			$('.mazeSq[col="2"][row="10"]').addClass('wallBlock');game.walls.push([2, 10]);
+			$('.mazeSq[col="3"][row="8"]').addClass('wallBlock');game.walls.push([3, 8]);
+			$('.mazeSq[col="4"][row="8"]').addClass('wallBlock');game.walls.push([4, 8]);
+			$('.mazeSq[col="5"][row="8"]').addClass('wallBlock');game.walls.push([5, 8]);
+			$('.mazeSq[col="6"][row="8"]').addClass('wallBlock');game.walls.push([6, 8]);
+			$('.mazeSq[col="8"][row="9"]').addClass('wallBlock');game.walls.push([8, 9]);
+			$('.mazeSq[col="8"][row="8"]').addClass('wallBlock');game.walls.push([8, 8]);
+			$('.mazeSq[col="8"][row="7"]').addClass('wallBlock');game.walls.push([8, 7]);
+			$('.mazeSq[col="7"][row="6"]').addClass('wallBlock');game.walls.push([7, 6]);
+			$('.mazeSq[col="3"][row="6"]').addClass('wallBlock');game.walls.push([3, 6]);
+			$('.mazeSq[col="2"][row="6"]').addClass('wallBlock');game.walls.push([2, 6]);
+			$('.mazeSq[col="5"][row="6"]').addClass('wallBlock');game.walls.push([5, 6]);
+			$('.mazeSq[col="6"][row="4"]').addClass('wallBlock');game.walls.push([6, 4]);
+			$('.mazeSq[col="5"][row="4"]').addClass('wallBlock');game.walls.push([5, 4]);
+			$('.mazeSq[col="4"][row="4"]').addClass('wallBlock');game.walls.push([4, 4]);
+			$('.mazeSq[col="3"][row="4"]').addClass('wallBlock');game.walls.push([3, 4]);
+			$('.mazeSq[col="3"][row="3"]').addClass('wallBlock');game.walls.push([3, 3]);
+			$('.mazeSq[col="5"][row="2"]').addClass('wallBlock');game.walls.push([5, 2]);
+			$('.mazeSq[col="7"][row="3"]').addClass('wallBlock');game.walls.push([7, 3]);
+			$('.mazeSq[col="9"][row="2"]').addClass('wallBlock');game.walls.push([9, 2]);
+			$('.mazeSq[col="9"][row="4"]').addClass('wallBlock');game.walls.push([9, 4]);
+			$('.mazeSq[col="8"][row="5"]').addClass('wallBlock');game.walls.push([8, 5]);
+			$('.mazeSq[col="9"][row="7"]').addClass('wallBlock');game.walls.push([9, 7]);
+			$('.mazeSq[col="10"][row="6"]').addClass('wallBlock');game.walls.push([10, 6]);
+			$('.mazeSq[col="11"][row="5"]').addClass('wallBlock');game.walls.push([11, 5]);
+			$('.mazeSq[col="11"][row="4"]').addClass('wallBlock');game.walls.push([11, 4]);
+			$('.mazeSq[col="11"][row="3"]').addClass('wallBlock');game.walls.push([11, 3]);
+			$('.mazeSq[col="13"][row="2"]').addClass('wallBlock');game.walls.push([13, 2]);
+			$('.mazeSq[col="13"][row="3"]').addClass('wallBlock');game.walls.push([13, 3]);
+			$('.mazeSq[col="15"][row="3"]').addClass('wallBlock');game.walls.push([15, 3]);
+			$('.mazeSq[col="15"][row="4"]').addClass('wallBlock');game.walls.push([15, 4]);
+			$('.mazeSq[col="14"][row="5"]').addClass('wallBlock');game.walls.push([14, 5]);
+			$('.mazeSq[col="13"][row="5"]').addClass('wallBlock');game.walls.push([13, 5]);
+			$('.mazeSq[col="12"][row="5"]').addClass('wallBlock');game.walls.push([12, 5]);
+			$('.mazeSq[col="17"][row="2"]').addClass('wallBlock');game.walls.push([17, 2]);
+			$('.mazeSq[col="17"][row="3"]').addClass('wallBlock');game.walls.push([17, 3]);
+			$('.mazeSq[col="16"][row="5"]').addClass('wallBlock');game.walls.push([16, 5]);
+			$('.mazeSq[col="17"][row="5"]').addClass('wallBlock');game.walls.push([17, 5]);
+			$('.mazeSq[col="18"][row="5"]').addClass('wallBlock');game.walls.push([18, 5]);
+			$('.mazeSq[col="19"][row="5"]').addClass('wallBlock');game.walls.push([19, 5]);
+			$('.mazeSq[col="10"][row="9"]').addClass('wallBlock');game.walls.push([10, 9]);
+			$('.mazeSq[col="11"][row="8"]').addClass('wallBlock');game.walls.push([11, 8]);
+			$('.mazeSq[col="12"][row="7"]').addClass('wallBlock');game.walls.push([12, 7]);
+			$('.mazeSq[col="14"][row="6"]').addClass('wallBlock');game.walls.push([14, 6]);
+			$('.mazeSq[col="14"][row="7"]').addClass('wallBlock');game.walls.push([14, 7]);
+			$('.mazeSq[col="13"][row="9"]').addClass('wallBlock');game.walls.push([13, 9]);
+			$('.mazeSq[col="12"][row="10"]').addClass('wallBlock');game.walls.push([12, 10]);
+			$('.mazeSq[col="11"][row="11"]').addClass('wallBlock');game.walls.push([11, 11]);
+			$('.mazeSq[col="11"][row="12"]').addClass('wallBlock');game.walls.push([11, 12]);
+			$('.mazeSq[col="11"][row="13"]').addClass('wallBlock');game.walls.push([11, 13]);
+			$('.mazeSq[col="11"][row="15"]').addClass('wallBlock');game.walls.push([11, 15]);
+			$('.mazeSq[col="12"][row="17"]').addClass('wallBlock');game.walls.push([12, 17]);
+			$('.mazeSq[col="14"][row="18"]').addClass('wallBlock');game.walls.push([14, 18]);
+			$('.mazeSq[col="13"][row="16"]').addClass('wallBlock');game.walls.push([13, 16]);
+			$('.mazeSq[col="15"][row="17"]').addClass('wallBlock');game.walls.push([15, 17]);
+			$('.mazeSq[col="17"][row="18"]').addClass('wallBlock');game.walls.push([17, 18]);
+			$('.mazeSq[col="15"][row="18"]').addClass('wallBlock');game.walls.push([15, 18]);
+			$('.mazeSq[col="16"][row="16"]').addClass('wallBlock');game.walls.push([16, 16]);
+			$('.mazeSq[col="17"][row="16"]').addClass('wallBlock');game.walls.push([17, 16]);
+			$('.mazeSq[col="17"][row="19"]').addClass('wallBlock');game.walls.push([17, 19]);
+			$('.mazeSq[col="19"][row="18"]').addClass('wallBlock');game.walls.push([19, 18]);
+			$('.mazeSq[col="19"][row="17"]').addClass('wallBlock');game.walls.push([19, 17]);
+			$('.mazeSq[col="19"][row="16"]').addClass('wallBlock');game.walls.push([19, 16]);
+			$('.mazeSq[col="17"][row="15"]').addClass('wallBlock');game.walls.push([17, 15]);
+			$('.mazeSq[col="18"][row="14"]').addClass('wallBlock');game.walls.push([18, 14]);
+			$('.mazeSq[col="18"][row="13"]').addClass('wallBlock');game.walls.push([18, 13]);
+			$('.mazeSq[col="18"][row="12"]').addClass('wallBlock');game.walls.push([18, 12]);
+			$('.mazeSq[col="18"][row="11"]').addClass('wallBlock');game.walls.push([18, 11]);
+			$('.mazeSq[col="18"][row="10"]').addClass('wallBlock');game.walls.push([18, 10]);
+			$('.mazeSq[col="18"][row="8"]').addClass('wallBlock');game.walls.push([18, 8]);
+			$('.mazeSq[col="18"][row="7"]').addClass('wallBlock');game.walls.push([18, 7]);
+			$('.mazeSq[col="17"][row="8"]').addClass('wallBlock');game.walls.push([17, 8]);
+			$('.mazeSq[col="16"][row="8"]').addClass('wallBlock');game.walls.push([16, 8]);
+			$('.mazeSq[col="16"][row="9"]').addClass('wallBlock');game.walls.push([16, 9]);
+			$('.mazeSq[col="16"][row="10"]').addClass('wallBlock');game.walls.push([16, 10]);
+			$('.mazeSq[col="14"][row="15"]').addClass('wallBlock');game.walls.push([14, 15]);
+			$('.mazeSq[col="15"][row="14"]').addClass('wallBlock');game.walls.push([15, 14]);
+			$('.mazeSq[col="17"][row="13"]').addClass('wallBlock');game.walls.push([17, 13]);
+			$('.mazeSq[col="17"][row="14"]').addClass('wallBlock');game.walls.push([17, 14]);
+			$('.mazeSq[col="16"][row="12"]').addClass('wallBlock');game.walls.push([16, 12]);
+			$('.mazeSq[col="17"][row="12"]').addClass('wallBlock');game.walls.push([17, 12]);
+			$('.mazeSq[col="15"][row="12"]').addClass('wallBlock');game.walls.push([15, 12]);
+			$('.mazeSq[col="14"][row="12"]').addClass('wallBlock');game.walls.push([14, 12]);
+			$('.mazeSq[col="13"][row="13"]').addClass('wallBlock');game.walls.push([13, 13]);
+			$('.mazeSq[col="12"][row="11"]').addClass('wallBlock');game.walls.push([12, 11]);
+			$('.mazeSq[col="13"][row="10"]').addClass('wallBlock');game.walls.push([13, 10]);
+			$('.mazeSq[col="16"][row="6"]').addClass('wallBlock');game.walls.push([16, 6]);
+			$('.mazeSq[col="15"][row="5"]').addClass('wallBlock');game.walls.push([15, 5]);
+			$('.mazeSq[col="15"][row="6"]').addClass('wallBlock');game.walls.push([15, 6]);
+			$('.mazeSq[col="15"][row="9"]').addClass('wallBlock');game.walls.push([15, 9]);
+			$('.mazeSq[col="15"][row="10"]').addClass('wallBlock');game.walls.push([15, 10]);
+			$('.mazeSq[col="8"][row="14"]').addClass('wallBlock');game.walls.push([8, 14]);
+			$('.mazeSq[col="10"][row="10"]').addClass('wallBlock');game.walls.push([10, 10]);
+			$('.mazeSq[col="13"][row="15"]').addClass('wallBlock');game.walls.push([13, 15]);
+			$('.mazeSq[col="12"][row="18"]').addClass('wallBlock');game.walls.push([12, 18]);
+			$('.mazeSq[col="18"][row="3"]').addClass('wallBlock');game.walls.push([18, 3]);
+		}
+		function addInnerWalls_4(){
+			$('.mazeSq[col="19"][row="3"]').addClass('stairs');
+			game.stairs = [19, 3];
+			$('.mazeSq[col="11"][row="18"]').addClass('wallBlock');game.walls.push([11, 18]);
+			$('.mazeSq[col="10"][row="18"]').addClass('wallBlock');game.walls.push([10, 18]);
+			$('.mazeSq[col="8"][row="18"]').addClass('wallBlock');game.walls.push([8, 18]);
+			$('.mazeSq[col="7"][row="18"]').addClass('wallBlock');game.walls.push([7, 18]);
+			$('.mazeSq[col="6"][row="18"]').addClass('wallBlock');game.walls.push([6, 18]);
+			$('.mazeSq[col="4"][row="18"]').addClass('wallBlock');game.walls.push([4, 18]);
+			$('.mazeSq[col="3"][row="18"]').addClass('wallBlock');game.walls.push([3, 18]);
+			$('.mazeSq[col="13"][row="18"]').addClass('wallBlock');game.walls.push([13, 18]);
+			$('.mazeSq[col="14"][row="18"]').addClass('wallBlock');game.walls.push([14, 18]);
+			$('.mazeSq[col="15"][row="18"]').addClass('wallBlock');game.walls.push([15, 18]);
+			$('.mazeSq[col="16"][row="18"]').addClass('wallBlock');game.walls.push([16, 18]);
+			$('.mazeSq[col="18"][row="18"]').addClass('wallBlock');game.walls.push([18, 18]);
+			$('.mazeSq[col="17"][row="18"]').addClass('wallBlock');game.walls.push([17, 18]);
+			$('.mazeSq[col="19"][row="16"]').addClass('wallBlock');game.walls.push([19, 16]);
+			$('.mazeSq[col="18"][row="16"]').addClass('wallBlock');game.walls.push([18, 16]);
+			$('.mazeSq[col="17"][row="16"]').addClass('wallBlock');game.walls.push([17, 16]);
+			$('.mazeSq[col="15"][row="17"]').addClass('wallBlock');game.walls.push([15, 17]);
+			$('.mazeSq[col="15"][row="16"]').addClass('wallBlock');game.walls.push([15, 16]);
+			$('.mazeSq[col="14"][row="16"]').addClass('wallBlock');game.walls.push([14, 16]);
+			$('.mazeSq[col="12"][row="16"]').addClass('wallBlock');game.walls.push([12, 16]);
+			$('.mazeSq[col="14"][row="17"]').addClass('wallBlock');game.walls.push([14, 17]);
+			$('.mazeSq[col="11"][row="16"]').addClass('wallBlock');game.walls.push([11, 16]);
+			$('.mazeSq[col="10"][row="17"]').addClass('wallBlock');game.walls.push([10, 17]);
+			$('.mazeSq[col="10"][row="16"]').addClass('wallBlock');game.walls.push([10, 16]);
+			$('.mazeSq[col="9"][row="16"]').addClass('wallBlock');game.walls.push([9, 16]);
+			$('.mazeSq[col="8"][row="16"]').addClass('wallBlock');game.walls.push([8, 16]);
+			$('.mazeSq[col="7"][row="16"]').addClass('wallBlock');game.walls.push([7, 16]);
+			$('.mazeSq[col="6"][row="16"]').addClass('wallBlock');game.walls.push([6, 16]);
+			$('.mazeSq[col="4"][row="16"]').addClass('wallBlock');game.walls.push([4, 16]);
+			$('.mazeSq[col="3"][row="16"]').addClass('wallBlock');game.walls.push([3, 16]);
+			$('.mazeSq[col="2"][row="16"]').addClass('wallBlock');game.walls.push([2, 16]);
+			$('.mazeSq[col="16"][row="14"]').addClass('wallBlock');game.walls.push([16, 14]);
+			$('.mazeSq[col="17"][row="14"]').addClass('wallBlock');game.walls.push([17, 14]);
+			$('.mazeSq[col="18"][row="14"]').addClass('wallBlock');game.walls.push([18, 14]);
+			$('.mazeSq[col="19"][row="14"]').addClass('wallBlock');game.walls.push([19, 14]);
+			$('.mazeSq[col="14"][row="14"]').addClass('wallBlock');game.walls.push([14, 14]);
+			$('.mazeSq[col="14"][row="15"]').addClass('wallBlock');game.walls.push([14, 15]);
+			$('.mazeSq[col="18"][row="19"]').addClass('wallBlock');game.walls.push([18, 19]);
+			$('.mazeSq[col="13"][row="14"]').addClass('wallBlock');game.walls.push([13, 14]);
+			$('.mazeSq[col="11"][row="14"]').addClass('wallBlock');game.walls.push([11, 14]);
+			$('.mazeSq[col="10"][row="14"]').addClass('wallBlock');game.walls.push([10, 14]);
+			$('.mazeSq[col="9"][row="14"]').addClass('wallBlock');game.walls.push([9, 14]);
+			$('.mazeSq[col="7"][row="14"]').addClass('wallBlock');game.walls.push([7, 14]);
+			$('.mazeSq[col="6"][row="14"]').addClass('wallBlock');game.walls.push([6, 14]);
+			$('.mazeSq[col="5"][row="14"]').addClass('wallBlock');game.walls.push([5, 14]);
+			$('.mazeSq[col="4"][row="14"]').addClass('wallBlock');game.walls.push([4, 14]);
+			$('.mazeSq[col="3"][row="14"]').addClass('wallBlock');game.walls.push([3, 14]);
+			$('.mazeSq[col="2"][row="12"]').addClass('wallBlock');game.walls.push([2, 12]);
+			$('.mazeSq[col="3"][row="12"]').addClass('wallBlock');game.walls.push([3, 12]);
+			$('.mazeSq[col="5"][row="12"]').addClass('wallBlock');game.walls.push([5, 12]);
+			$('.mazeSq[col="5"][row="13"]').addClass('wallBlock');game.walls.push([5, 13]);
+			$('.mazeSq[col="5"][row="10"]').addClass('wallBlock');game.walls.push([5, 10]);
+			$('.mazeSq[col="5"][row="11"]').addClass('wallBlock');game.walls.push([5, 11]);
+			$('.mazeSq[col="4"][row="10"]').addClass('wallBlock');game.walls.push([4, 10]);
+			$('.mazeSq[col="3"][row="10"]').addClass('wallBlock');game.walls.push([3, 10]);
+			$('.mazeSq[col="7"][row="12"]').addClass('wallBlock');game.walls.push([7, 12]);
+			$('.mazeSq[col="8"][row="12"]').addClass('wallBlock');game.walls.push([8, 12]);
+			$('.mazeSq[col="9"][row="12"]').addClass('wallBlock');game.walls.push([9, 12]);
+			$('.mazeSq[col="11"][row="13"]').addClass('wallBlock');game.walls.push([11, 13]);
+			$('.mazeSq[col="11"][row="12"]').addClass('wallBlock');game.walls.push([11, 12]);
+			$('.mazeSq[col="12"][row="12"]').addClass('wallBlock');game.walls.push([12, 12]);
+			$('.mazeSq[col="14"][row="13"]').addClass('wallBlock');game.walls.push([14, 13]);
+			$('.mazeSq[col="14"][row="12"]').addClass('wallBlock');game.walls.push([14, 12]);
+			$('.mazeSq[col="15"][row="12"]').addClass('wallBlock');game.walls.push([15, 12]);
+			$('.mazeSq[col="17"][row="12"]').addClass('wallBlock');game.walls.push([17, 12]);
+			$('.mazeSq[col="18"][row="12"]').addClass('wallBlock');game.walls.push([18, 12]);
+			$('.mazeSq[col="18"][row="11"]').addClass('wallBlock');game.walls.push([18, 11]);
+			$('.mazeSq[col="18"][row="10"]').addClass('wallBlock');game.walls.push([18, 10]);
+			$('.mazeSq[col="14"][row="11"]').addClass('wallBlock');game.walls.push([14, 11]);
+			$('.mazeSq[col="14"][row="10"]').addClass('wallBlock');game.walls.push([14, 10]);
+			$('.mazeSq[col="13"][row="10"]').addClass('wallBlock');game.walls.push([13, 10]);
+			$('.mazeSq[col="12"][row="10"]').addClass('wallBlock');game.walls.push([12, 10]);
+			$('.mazeSq[col="11"][row="10"]').addClass('wallBlock');game.walls.push([11, 10]);
+			$('.mazeSq[col="10"][row="10"]').addClass('wallBlock');game.walls.push([10, 10]);
+			$('.mazeSq[col="11"][row="11"]').addClass('wallBlock');game.walls.push([11, 11]);
+			$('.mazeSq[col="9"][row="10"]').addClass('wallBlock');game.walls.push([9, 10]);
+			$('.mazeSq[col="7"][row="10"]').addClass('wallBlock');game.walls.push([7, 10]);
+			$('.mazeSq[col="7"][row="9"]').addClass('wallBlock');game.walls.push([7, 9]);
+			$('.mazeSq[col="7"][row="8"]').addClass('wallBlock');game.walls.push([7, 8]);
+			$('.mazeSq[col="6"][row="8"]').addClass('wallBlock');game.walls.push([6, 8]);
+			$('.mazeSq[col="4"][row="8"]').addClass('wallBlock');game.walls.push([4, 8]);
+			$('.mazeSq[col="3"][row="8"]').addClass('wallBlock');game.walls.push([3, 8]);
+			$('.mazeSq[col="2"][row="8"]').addClass('wallBlock');game.walls.push([2, 8]);
+			$('.mazeSq[col="5"][row="6"]').addClass('wallBlock');game.walls.push([5, 6]);
+			$('.mazeSq[col="4"][row="6"]').addClass('wallBlock');game.walls.push([4, 6]);
+			$('.mazeSq[col="3"][row="6"]').addClass('wallBlock');game.walls.push([3, 6]);
+			$('.mazeSq[col="3"][row="4"]').addClass('wallBlock');game.walls.push([3, 4]);
+			$('.mazeSq[col="2"][row="4"]').addClass('wallBlock');game.walls.push([2, 4]);
+			$('.mazeSq[col="5"][row="4"]').addClass('wallBlock');game.walls.push([5, 4]);
+			$('.mazeSq[col="3"][row="2"]').addClass('wallBlock');game.walls.push([3, 2]);
+			$('.mazeSq[col="4"][row="2"]').addClass('wallBlock');game.walls.push([4, 2]);
+			$('.mazeSq[col="5"][row="2"]').addClass('wallBlock');game.walls.push([5, 2]);
+			$('.mazeSq[col="6"][row="6"]').addClass('wallBlock');game.walls.push([6, 6]);
+			$('.mazeSq[col="8"][row="8"]').addClass('wallBlock');game.walls.push([8, 8]);
+			$('.mazeSq[col="9"][row="8"]').addClass('wallBlock');game.walls.push([9, 8]);
+			$('.mazeSq[col="11"][row="8"]').addClass('wallBlock');game.walls.push([11, 8]);
+			$('.mazeSq[col="12"][row="8"]').addClass('wallBlock');game.walls.push([12, 8]);
+			$('.mazeSq[col="11"][row="6"]').addClass('wallBlock');game.walls.push([11, 6]);
+			$('.mazeSq[col="10"][row="6"]').addClass('wallBlock');game.walls.push([10, 6]);
+			$('.mazeSq[col="8"][row="6"]').addClass('wallBlock');game.walls.push([8, 6]);
+			$('.mazeSq[col="8"][row="5"]').addClass('wallBlock');game.walls.push([8, 5]);
+			$('.mazeSq[col="6"][row="4"]').addClass('wallBlock');game.walls.push([6, 4]);
+			$('.mazeSq[col="7"][row="3"]').addClass('wallBlock');game.walls.push([7, 3]);
+			$('.mazeSq[col="9"][row="2"]').addClass('wallBlock');game.walls.push([9, 2]);
+			$('.mazeSq[col="9"][row="3"]').addClass('wallBlock');game.walls.push([9, 3]);
+			$('.mazeSq[col="10"][row="5"]').addClass('wallBlock');game.walls.push([10, 5]);
+			$('.mazeSq[col="11"][row="5"]').addClass('wallBlock');game.walls.push([11, 5]);
+			$('.mazeSq[col="11"][row="3"]').addClass('wallBlock');game.walls.push([11, 3]);
+			$('.mazeSq[col="12"][row="3"]').addClass('wallBlock');game.walls.push([12, 3]);
+			$('.mazeSq[col="13"][row="4"]').addClass('wallBlock');game.walls.push([13, 4]);
+			$('.mazeSq[col="13"][row="5"]').addClass('wallBlock');game.walls.push([13, 5]);
+			$('.mazeSq[col="13"][row="7"]').addClass('wallBlock');game.walls.push([13, 7]);
+			$('.mazeSq[col="14"][row="9"]').addClass('wallBlock');game.walls.push([14, 9]);
+			$('.mazeSq[col="16"][row="10"]').addClass('wallBlock');game.walls.push([16, 10]);
+			$('.mazeSq[col="15"][row="8"]').addClass('wallBlock');game.walls.push([15, 8]);
+			$('.mazeSq[col="16"][row="8"]').addClass('wallBlock');game.walls.push([16, 8]);
+			$('.mazeSq[col="17"][row="8"]').addClass('wallBlock');game.walls.push([17, 8]);
+			$('.mazeSq[col="19"][row="8"]').addClass('wallBlock');game.walls.push([19, 8]);
+			$('.mazeSq[col="18"][row="6"]').addClass('wallBlock');game.walls.push([18, 6]);
+			$('.mazeSq[col="17"][row="6"]').addClass('wallBlock');game.walls.push([17, 6]);
+			$('.mazeSq[col="16"][row="6"]').addClass('wallBlock');game.walls.push([16, 6]);
+			$('.mazeSq[col="15"][row="7"]').addClass('wallBlock');game.walls.push([15, 7]);
+			$('.mazeSq[col="15"][row="6"]').addClass('wallBlock');game.walls.push([15, 6]);
+			$('.mazeSq[col="19"][row="4"]').addClass('wallBlock');game.walls.push([19, 4]);
+			$('.mazeSq[col="18"][row="4"]').addClass('wallBlock');game.walls.push([18, 4]);
+			$('.mazeSq[col="17"][row="4"]').addClass('wallBlock');game.walls.push([17, 4]);
+			$('.mazeSq[col="18"][row="3"]').addClass('wallBlock');game.walls.push([18, 3]);
+			$('.mazeSq[col="16"][row="2"]').addClass('wallBlock');game.walls.push([16, 2]);
+			$('.mazeSq[col="14"][row="3"]').addClass('wallBlock');game.walls.push([14, 3]);
+			$('.mazeSq[col="16"][row="4"]').addClass('wallBlock');game.walls.push([16, 4]);
+			$('.mazeSq[col="15"][row="4"]').addClass('wallBlock');game.walls.push([15, 4]);
+			$('.mazeSq[col="14"][row="4"]').addClass('wallBlock');game.walls.push([14, 4]);
+			$('.mazeSq[col="13"][row="3"]').addClass('wallBlock');game.walls.push([13, 3]);
+		}
+
+		function addInnerWalls_5(){
+			$('.mazeSq[col="2"][row="7"]').addClass('stairs');
+			game.stairs = [2, 7];
+			$('.mazeSq[col="11"][row="18"]').addClass('wallBlock');game.walls.push([11, 18]);
+			$('.mazeSq[col="12"][row="18"]').addClass('wallBlock');game.walls.push([12, 18]);
+			$('.mazeSq[col="13"][row="18"]').addClass('wallBlock');game.walls.push([13, 18]);
+			$('.mazeSq[col="14"][row="18"]').addClass('wallBlock');game.walls.push([14, 18]);
+			$('.mazeSq[col="15"][row="18"]').addClass('wallBlock');game.walls.push([15, 18]);
+			$('.mazeSq[col="17"][row="18"]').addClass('wallBlock');game.walls.push([17, 18]);
+			$('.mazeSq[col="18"][row="18"]').addClass('wallBlock');game.walls.push([18, 18]);
+			$('.mazeSq[col="9"][row="18"]').addClass('wallBlock');game.walls.push([9, 18]);
+			$('.mazeSq[col="8"][row="18"]').addClass('wallBlock');game.walls.push([8, 18]);
+			$('.mazeSq[col="14"][row="19"]').addClass('wallBlock');game.walls.push([14, 19]);
+			$('.mazeSq[col="6"][row="18"]').addClass('wallBlock');game.walls.push([6, 18]);
+			$('.mazeSq[col="5"][row="18"]').addClass('wallBlock');game.walls.push([5, 18]);
+			$('.mazeSq[col="3"][row="18"]').addClass('wallBlock');game.walls.push([3, 18]);
+			$('.mazeSq[col="2"][row="16"]').addClass('wallBlock');game.walls.push([2, 16]);
+			$('.mazeSq[col="4"][row="18"]').addClass('wallBlock');game.walls.push([4, 18]);
+			$('.mazeSq[col="4"][row="16"]').addClass('wallBlock');game.walls.push([4, 16]);
+			$('.mazeSq[col="5"][row="16"]').addClass('wallBlock');game.walls.push([5, 16]);
+			$('.mazeSq[col="8"][row="16"]').addClass('wallBlock');game.walls.push([8, 16]);
+			$('.mazeSq[col="7"][row="16"]').addClass('wallBlock');game.walls.push([7, 16]);
+			$('.mazeSq[col="6"][row="16"]').addClass('wallBlock');game.walls.push([6, 16]);
+			$('.mazeSq[col="9"][row="16"]').addClass('wallBlock');game.walls.push([9, 16]);
+			$('.mazeSq[col="10"][row="16"]').addClass('wallBlock');game.walls.push([10, 16]);
+			$('.mazeSq[col="11"][row="15"]').addClass('wallBlock');game.walls.push([11, 15]);
+			$('.mazeSq[col="12"][row="17"]').addClass('wallBlock');game.walls.push([12, 17]);
+			$('.mazeSq[col="13"][row="15"]').addClass('wallBlock');game.walls.push([13, 15]);
+			$('.mazeSq[col="13"][row="14"]').addClass('wallBlock');game.walls.push([13, 14]);
+			$('.mazeSq[col="12"][row="13"]').addClass('wallBlock');game.walls.push([12, 13]);
+			$('.mazeSq[col="11"][row="13"]').addClass('wallBlock');game.walls.push([11, 13]);
+			$('.mazeSq[col="10"][row="13"]').addClass('wallBlock');game.walls.push([10, 13]);
+			$('.mazeSq[col="9"][row="14"]').addClass('wallBlock');game.walls.push([9, 14]);
+			$('.mazeSq[col="8"][row="14"]').addClass('wallBlock');game.walls.push([8, 14]);
+			$('.mazeSq[col="7"][row="14"]').addClass('wallBlock');game.walls.push([7, 14]);
+			$('.mazeSq[col="6"][row="14"]').addClass('wallBlock');game.walls.push([6, 14]);
+			$('.mazeSq[col="5"][row="14"]').addClass('wallBlock');game.walls.push([5, 14]);
+			$('.mazeSq[col="4"][row="15"]').addClass('wallBlock');game.walls.push([4, 15]);
+			$('.mazeSq[col="3"][row="14"]').addClass('wallBlock');game.walls.push([3, 14]);
+			$('.mazeSq[col="3"][row="12"]').addClass('wallBlock');game.walls.push([3, 12]);
+			$('.mazeSq[col="2"][row="12"]').addClass('wallBlock');game.walls.push([2, 12]);
+			$('.mazeSq[col="4"][row="14"]').addClass('wallBlock');game.walls.push([4, 14]);
+			$('.mazeSq[col="14"][row="16"]').addClass('wallBlock');game.walls.push([14, 16]);
+			$('.mazeSq[col="15"][row="16"]').addClass('wallBlock');game.walls.push([15, 16]);
+			$('.mazeSq[col="16"][row="16"]').addClass('wallBlock');game.walls.push([16, 16]);
+			$('.mazeSq[col="17"][row="16"]').addClass('wallBlock');game.walls.push([17, 16]);
+			$('.mazeSq[col="18"][row="16"]').addClass('wallBlock');game.walls.push([18, 16]);
+			$('.mazeSq[col="15"][row="19"]').addClass('wallBlock');game.walls.push([15, 19]);
+			$('.mazeSq[col="18"][row="15"]').addClass('wallBlock');game.walls.push([18, 15]);
+			$('.mazeSq[col="18"][row="14"]').addClass('wallBlock');game.walls.push([18, 14]);
+			$('.mazeSq[col="16"][row="13"]').addClass('wallBlock');game.walls.push([16, 13]);
+			$('.mazeSq[col="16"][row="14"]').addClass('wallBlock');game.walls.push([16, 14]);
+			$('.mazeSq[col="16"][row="12"]').addClass('wallBlock');game.walls.push([16, 12]);
+			$('.mazeSq[col="17"][row="11"]').addClass('wallBlock');game.walls.push([17, 11]);
+			$('.mazeSq[col="17"][row="12"]').addClass('wallBlock');game.walls.push([17, 12]);
+			$('.mazeSq[col="19"][row="12"]').addClass('wallBlock');game.walls.push([19, 12]);
+			$('.mazeSq[col="18"][row="10"]').addClass('wallBlock');game.walls.push([18, 10]);
+			$('.mazeSq[col="18"][row="8"]').addClass('wallBlock');game.walls.push([18, 8]);
+			$('.mazeSq[col="17"][row="8"]').addClass('wallBlock');game.walls.push([17, 8]);
+			$('.mazeSq[col="16"][row="8"]').addClass('wallBlock');game.walls.push([16, 8]);
+			$('.mazeSq[col="16"][row="9"]').addClass('wallBlock');game.walls.push([16, 9]);
+			$('.mazeSq[col="15"][row="10"]').addClass('wallBlock');game.walls.push([15, 10]);
+			$('.mazeSq[col="18"][row="7"]').addClass('wallBlock');game.walls.push([18, 7]);
+			$('.mazeSq[col="19"][row="5"]').addClass('wallBlock');game.walls.push([19, 5]);
+			$('.mazeSq[col="18"][row="5"]').addClass('wallBlock');game.walls.push([18, 5]);
+			$('.mazeSq[col="16"][row="5"]').addClass('wallBlock');game.walls.push([16, 5]);
+			$('.mazeSq[col="16"][row="6"]').addClass('wallBlock');game.walls.push([16, 6]);
+			$('.mazeSq[col="16"][row="7"]').addClass('wallBlock');game.walls.push([16, 7]);
+			$('.mazeSq[col="17"][row="7"]').addClass('wallBlock');game.walls.push([17, 7]);
+			$('.mazeSq[col="18"][row="3"]').addClass('wallBlock');game.walls.push([18, 3]);
+			$('.mazeSq[col="17"][row="3"]').addClass('wallBlock');game.walls.push([17, 3]);
+			$('.mazeSq[col="16"][row="4"]').addClass('wallBlock');game.walls.push([16, 4]);
+			$('.mazeSq[col="5"][row="13"]').addClass('wallBlock');game.walls.push([5, 13]);
+			$('.mazeSq[col="5"][row="12"]').addClass('wallBlock');game.walls.push([5, 12]);
+			$('.mazeSq[col="5"][row="11"]').addClass('wallBlock');game.walls.push([5, 11]);
+			$('.mazeSq[col="4"][row="10"]').addClass('wallBlock');game.walls.push([4, 10]);
+			$('.mazeSq[col="3"][row="10"]').addClass('wallBlock');game.walls.push([3, 10]);
+			$('.mazeSq[col="3"][row="8"]').addClass('wallBlock');game.walls.push([3, 8]);
+			$('.mazeSq[col="2"][row="8"]').addClass('wallBlock');game.walls.push([2, 8]);
+			$('.mazeSq[col="5"][row="9"]').addClass('wallBlock');game.walls.push([5, 9]);
+			$('.mazeSq[col="9"][row="7"]').addClass('wallBlock');game.walls.push([9, 7]);
+			$('.mazeSq[col="9"][row="8"]').addClass('wallBlock');game.walls.push([9, 8]);
+			$('.mazeSq[col="9"][row="9"]').addClass('wallBlock');game.walls.push([9, 9]);
+			$('.mazeSq[col="10"][row="9"]').addClass('wallBlock');game.walls.push([10, 9]);
+			$('.mazeSq[col="11"][row="9"]').addClass('wallBlock');game.walls.push([11, 9]);
+			$('.mazeSq[col="10"][row="6"]').addClass('wallBlock');game.walls.push([10, 6]);
+			$('.mazeSq[col="11"][row="6"]').addClass('wallBlock');game.walls.push([11, 6]);
+			$('.mazeSq[col="12"][row="6"]').addClass('wallBlock');game.walls.push([12, 6]);
+			$('.mazeSq[col="12"][row="7"]').addClass('wallBlock');game.walls.push([12, 7]);
+			$('.mazeSq[col="14"][row="11"]').addClass('wallBlock');game.walls.push([14, 11]);
+			$('.mazeSq[col="14"][row="12"]').addClass('wallBlock');game.walls.push([14, 12]);
+			$('.mazeSq[col="15"][row="14"]').addClass('wallBlock');game.walls.push([15, 14]);
+			$('.mazeSq[col="13"][row="11"]').addClass('wallBlock');game.walls.push([13, 11]);
+			$('.mazeSq[col="12"][row="11"]').addClass('wallBlock');game.walls.push([12, 11]);
+			$('.mazeSq[col="11"][row="11"]').addClass('wallBlock');game.walls.push([11, 11]);
+			$('.mazeSq[col="9"][row="11"]').addClass('wallBlock');game.walls.push([9, 11]);
+			$('.mazeSq[col="8"][row="12"]').addClass('wallBlock');game.walls.push([8, 12]);
+			$('.mazeSq[col="7"][row="12"]').addClass('wallBlock');game.walls.push([7, 12]);
+			$('.mazeSq[col="7"][row="10"]').addClass('wallBlock');game.walls.push([7, 10]);
+			$('.mazeSq[col="6"][row="9"]').addClass('wallBlock');game.walls.push([6, 9]);
+			$('.mazeSq[col="12"][row="9"]').addClass('wallBlock');game.walls.push([12, 9]);
+			$('.mazeSq[col="13"][row="9"]').addClass('wallBlock');game.walls.push([13, 9]);
+			$('.mazeSq[col="14"][row="8"]').addClass('wallBlock');game.walls.push([14, 8]);
+			$('.mazeSq[col="14"][row="7"]').addClass('wallBlock');game.walls.push([14, 7]);
+			$('.mazeSq[col="14"][row="6"]').addClass('wallBlock');game.walls.push([14, 6]);
+			$('.mazeSq[col="14"][row="5"]').addClass('wallBlock');game.walls.push([14, 5]);
+			$('.mazeSq[col="14"][row="4"]').addClass('wallBlock');game.walls.push([14, 4]);
+			$('.mazeSq[col="14"][row="3"]').addClass('wallBlock');game.walls.push([14, 3]);
+			$('.mazeSq[col="13"][row="4"]').addClass('wallBlock');game.walls.push([13, 4]);
+			$('.mazeSq[col="12"][row="4"]').addClass('wallBlock');game.walls.push([12, 4]);
+			$('.mazeSq[col="12"][row="2"]').addClass('wallBlock');game.walls.push([12, 2]);
+			$('.mazeSq[col="11"][row="4"]').addClass('wallBlock');game.walls.push([11, 4]);
+			$('.mazeSq[col="10"][row="4"]').addClass('wallBlock');game.walls.push([10, 4]);
+			$('.mazeSq[col="9"][row="4"]').addClass('wallBlock');game.walls.push([9, 4]);
+			$('.mazeSq[col="8"][row="5"]').addClass('wallBlock');game.walls.push([8, 5]);
+			$('.mazeSq[col="7"][row="6"]').addClass('wallBlock');game.walls.push([7, 6]);
+			$('.mazeSq[col="7"][row="8"]').addClass('wallBlock');game.walls.push([7, 8]);
+			$('.mazeSq[col="8"][row="8"]').addClass('wallBlock');game.walls.push([8, 8]);
+			$('.mazeSq[col="5"][row="7"]').addClass('wallBlock');game.walls.push([5, 7]);
+			$('.mazeSq[col="6"][row="8"]').addClass('wallBlock');game.walls.push([6, 8]);
+			$('.mazeSq[col="10"][row="3"]').addClass('wallBlock');game.walls.push([10, 3]);
+			$('.mazeSq[col="8"][row="2"]').addClass('wallBlock');game.walls.push([8, 2]);
+			$('.mazeSq[col="8"][row="4"]').addClass('wallBlock');game.walls.push([8, 4]);
+			$('.mazeSq[col="7"][row="4"]').addClass('wallBlock');game.walls.push([7, 4]);
+			$('.mazeSq[col="6"][row="3"]').addClass('wallBlock');game.walls.push([6, 3]);
+			$('.mazeSq[col="5"][row="4"]').addClass('wallBlock');game.walls.push([5, 4]);
+			$('.mazeSq[col="4"][row="5"]').addClass('wallBlock');game.walls.push([4, 5]);
+			$('.mazeSq[col="3"][row="6"]').addClass('wallBlock');game.walls.push([3, 6]);
+			$('.mazeSq[col="3"][row="7"]').addClass('wallBlock');game.walls.push([3, 7]);
+			$('.mazeSq[col="4"][row="2"]').addClass('wallBlock');game.walls.push([4, 2]);
+			$('.mazeSq[col="3"][row="3"]').addClass('wallBlock');game.walls.push([3, 3]);
+			$('.mazeSq[col="3"][row="5"]').addClass('wallBlock');game.walls.push([3, 5]);
+			$('.mazeSq[col="6"][row="4"]').addClass('wallBlock');game.walls.push([6, 4]);
+			$('.mazeSq[col="7"][row="5"]').addClass('wallBlock');game.walls.push([7, 5]);
+			$('.mazeSq[col="6"][row="5"]').addClass('wallBlock');game.walls.push([6, 5]);
+			$('.mazeSq[col="5"][row="5"]').addClass('wallBlock');game.walls.push([5, 5]);
+		}
+		function addInnerWalls_6(){
+			$('.mazeSq[col="17"][row="3"]').addClass('stairs');
+			game.stairs = [17, 3];
+			$('.mazeSq[col="10"][row="18"]').addClass('wallBlock');game.walls.push([10, 18]);
+			$('.mazeSq[col="11"][row="18"]').addClass('wallBlock');game.walls.push([11, 18]);
+			$('.mazeSq[col="12"][row="18"]').addClass('wallBlock');game.walls.push([12, 18]);
+			$('.mazeSq[col="13"][row="18"]').addClass('wallBlock');game.walls.push([13, 18]);
+			$('.mazeSq[col="9"][row="18"]').addClass('wallBlock');game.walls.push([9, 18]);
+			$('.mazeSq[col="8"][row="18"]').addClass('wallBlock');game.walls.push([8, 18]);
+			$('.mazeSq[col="6"][row="18"]').addClass('wallBlock');game.walls.push([6, 18]);
+			$('.mazeSq[col="6"][row="17"]').addClass('wallBlock');game.walls.push([6, 17]);
+			$('.mazeSq[col="14"][row="18"]').addClass('wallBlock');game.walls.push([14, 18]);
+			$('.mazeSq[col="15"][row="19"]').addClass('wallBlock');game.walls.push([15, 19]);
+			$('.mazeSq[col="15"][row="18"]').addClass('wallBlock');game.walls.push([15, 18]);
+			$('.mazeSq[col="4"][row="18"]').addClass('wallBlock');game.walls.push([4, 18]);
+			$('.mazeSq[col="3"][row="18"]').addClass('wallBlock');game.walls.push([3, 18]);
+			$('.mazeSq[col="3"][row="16"]').addClass('wallBlock');game.walls.push([3, 16]);
+			$('.mazeSq[col="4"][row="15"]').addClass('wallBlock');game.walls.push([4, 15]);
+			$('.mazeSq[col="6"][row="16"]').addClass('wallBlock');game.walls.push([6, 16]);
+			$('.mazeSq[col="6"][row="14"]').addClass('wallBlock');game.walls.push([6, 14]);
+			$('.mazeSq[col="7"][row="14"]').addClass('wallBlock');game.walls.push([7, 14]);
+			$('.mazeSq[col="8"][row="16"]').addClass('wallBlock');game.walls.push([8, 16]);
+			$('.mazeSq[col="9"][row="16"]').addClass('wallBlock');game.walls.push([9, 16]);
+			$('.mazeSq[col="11"][row="16"]').addClass('wallBlock');game.walls.push([11, 16]);
+			$('.mazeSq[col="12"][row="16"]').addClass('wallBlock');game.walls.push([12, 16]);
+			$('.mazeSq[col="9"][row="14"]').addClass('wallBlock');game.walls.push([9, 14]);
+			$('.mazeSq[col="10"][row="14"]').addClass('wallBlock');game.walls.push([10, 14]);
+			$('.mazeSq[col="11"][row="14"]').addClass('wallBlock');game.walls.push([11, 14]);
+			$('.mazeSq[col="13"][row="14"]').addClass('wallBlock');game.walls.push([13, 14]);
+			$('.mazeSq[col="14"][row="14"]').addClass('wallBlock');game.walls.push([14, 14]);
+			$('.mazeSq[col="14"][row="15"]').addClass('wallBlock');game.walls.push([14, 15]);
+			$('.mazeSq[col="14"][row="17"]').addClass('wallBlock');game.walls.push([14, 17]);
+			$('.mazeSq[col="15"][row="15"]').addClass('wallBlock');game.walls.push([15, 15]);
+			$('.mazeSq[col="16"][row="15"]').addClass('wallBlock');game.walls.push([16, 15]);
+			$('.mazeSq[col="18"][row="15"]').addClass('wallBlock');game.walls.push([18, 15]);
+			$('.mazeSq[col="19"][row="15"]').addClass('wallBlock');game.walls.push([19, 15]);
+			$('.mazeSq[col="17"][row="17"]').addClass('wallBlock');game.walls.push([17, 17]);
+			$('.mazeSq[col="17"][row="18"]').addClass('wallBlock');game.walls.push([17, 18]);
+			$('.mazeSq[col="18"][row="17"]').addClass('wallBlock');game.walls.push([18, 17]);
+			$('.mazeSq[col="15"][row="17"]').addClass('wallBlock');game.walls.push([15, 17]);
+			$('.mazeSq[col="19"][row="19"]').addClass('wallBlock');game.walls.push([19, 19]);
+			$('.mazeSq[col="18"][row="13"]').addClass('wallBlock');game.walls.push([18, 13]);
+			$('.mazeSq[col="17"][row="13"]').addClass('wallBlock');game.walls.push([17, 13]);
+			$('.mazeSq[col="16"][row="13"]').addClass('wallBlock');game.walls.push([16, 13]);
+			$('.mazeSq[col="14"][row="12"]').addClass('wallBlock');game.walls.push([14, 12]);
+			$('.mazeSq[col="13"][row="12"]').addClass('wallBlock');game.walls.push([13, 12]);
+			$('.mazeSq[col="11"][row="12"]').addClass('wallBlock');game.walls.push([11, 12]);
+			$('.mazeSq[col="10"][row="12"]').addClass('wallBlock');game.walls.push([10, 12]);
+			$('.mazeSq[col="9"][row="12"]').addClass('wallBlock');game.walls.push([9, 12]);
+			$('.mazeSq[col="7"][row="12"]').addClass('wallBlock');game.walls.push([7, 12]);
+			$('.mazeSq[col="6"][row="12"]').addClass('wallBlock');game.walls.push([6, 12]);
+			$('.mazeSq[col="4"][row="12"]').addClass('wallBlock');game.walls.push([4, 12]);
+			$('.mazeSq[col="3"][row="13"]').addClass('wallBlock');game.walls.push([3, 13]);
+			$('.mazeSq[col="3"][row="15"]').addClass('wallBlock');game.walls.push([3, 15]);
+			$('.mazeSq[col="3"][row="12"]').addClass('wallBlock');game.walls.push([3, 12]);
+			$('.mazeSq[col="4"][row="13"]').addClass('wallBlock');game.walls.push([4, 13]);
+			$('.mazeSq[col="3"][row="10"]').addClass('wallBlock');game.walls.push([3, 10]);
+			$('.mazeSq[col="4"][row="10"]').addClass('wallBlock');game.walls.push([4, 10]);
+			$('.mazeSq[col="2"][row="12"]').addClass('wallBlock');game.walls.push([2, 12]);
+			$('.mazeSq[col="2"][row="13"]').addClass('wallBlock');game.walls.push([2, 13]);
+			$('.mazeSq[col="5"][row="10"]').addClass('wallBlock');game.walls.push([5, 10]);
+			$('.mazeSq[col="7"][row="10"]').addClass('wallBlock');game.walls.push([7, 10]);
+			$('.mazeSq[col="8"][row="10"]').addClass('wallBlock');game.walls.push([8, 10]);
+			$('.mazeSq[col="9"][row="10"]').addClass('wallBlock');game.walls.push([9, 10]);
+			$('.mazeSq[col="11"][row="10"]').addClass('wallBlock');game.walls.push([11, 10]);
+			$('.mazeSq[col="12"][row="10"]').addClass('wallBlock');game.walls.push([12, 10]);
+			$('.mazeSq[col="13"][row="10"]').addClass('wallBlock');game.walls.push([13, 10]);
+			$('.mazeSq[col="15"][row="10"]').addClass('wallBlock');game.walls.push([15, 10]);
+			$('.mazeSq[col="16"][row="10"]').addClass('wallBlock');game.walls.push([16, 10]);
+			$('.mazeSq[col="17"][row="10"]').addClass('wallBlock');game.walls.push([17, 10]);
+			$('.mazeSq[col="19"][row="10"]').addClass('wallBlock');game.walls.push([19, 10]);
+			$('.mazeSq[col="16"][row="11"]').addClass('wallBlock');game.walls.push([16, 11]);
+			$('.mazeSq[col="18"][row="12"]').addClass('wallBlock');game.walls.push([18, 12]);
+			$('.mazeSq[col="19"][row="8"]').addClass('wallBlock');game.walls.push([19, 8]);
+			$('.mazeSq[col="18"][row="8"]').addClass('wallBlock');game.walls.push([18, 8]);
+			$('.mazeSq[col="17"][row="8"]').addClass('wallBlock');game.walls.push([17, 8]);
+			$('.mazeSq[col="16"][row="8"]').addClass('wallBlock');game.walls.push([16, 8]);
+			$('.mazeSq[col="14"][row="8"]').addClass('wallBlock');game.walls.push([14, 8]);
+			$('.mazeSq[col="13"][row="8"]').addClass('wallBlock');game.walls.push([13, 8]);
+			$('.mazeSq[col="12"][row="8"]').addClass('wallBlock');game.walls.push([12, 8]);
+			$('.mazeSq[col="11"][row="8"]').addClass('wallBlock');game.walls.push([11, 8]);
+			$('.mazeSq[col="9"][row="8"]').addClass('wallBlock');game.walls.push([9, 8]);
+			$('.mazeSq[col="8"][row="8"]').addClass('wallBlock');game.walls.push([8, 8]);
+			$('.mazeSq[col="7"][row="8"]').addClass('wallBlock');game.walls.push([7, 8]);
+			$('.mazeSq[col="6"][row="8"]').addClass('wallBlock');game.walls.push([6, 8]);
+			$('.mazeSq[col="4"][row="8"]').addClass('wallBlock');game.walls.push([4, 8]);
+			$('.mazeSq[col="3"][row="8"]').addClass('wallBlock');game.walls.push([3, 8]);
+			$('.mazeSq[col="2"][row="8"]').addClass('wallBlock');game.walls.push([2, 8]);
+			$('.mazeSq[col="3"][row="6"]').addClass('wallBlock');game.walls.push([3, 6]);
+			$('.mazeSq[col="4"][row="6"]').addClass('wallBlock');game.walls.push([4, 6]);
+			$('.mazeSq[col="5"][row="6"]').addClass('wallBlock');game.walls.push([5, 6]);
+			$('.mazeSq[col="7"][row="6"]').addClass('wallBlock');game.walls.push([7, 6]);
+			$('.mazeSq[col="8"][row="6"]').addClass('wallBlock');game.walls.push([8, 6]);
+			$('.mazeSq[col="9"][row="6"]').addClass('wallBlock');game.walls.push([9, 6]);
+			$('.mazeSq[col="11"][row="6"]').addClass('wallBlock');game.walls.push([11, 6]);
+			$('.mazeSq[col="10"][row="6"]').addClass('wallBlock');game.walls.push([10, 6]);
+			$('.mazeSq[col="12"][row="6"]').addClass('wallBlock');game.walls.push([12, 6]);
+			$('.mazeSq[col="14"][row="6"]').addClass('wallBlock');game.walls.push([14, 6]);
+			$('.mazeSq[col="15"][row="6"]').addClass('wallBlock');game.walls.push([15, 6]);
+			$('.mazeSq[col="16"][row="6"]').addClass('wallBlock');game.walls.push([16, 6]);
+			$('.mazeSq[col="18"][row="6"]').addClass('wallBlock');game.walls.push([18, 6]);
+			$('.mazeSq[col="18"][row="5"]').addClass('wallBlock');game.walls.push([18, 5]);
+			$('.mazeSq[col="18"][row="4"]').addClass('wallBlock');game.walls.push([18, 4]);
+			$('.mazeSq[col="18"][row="3"]').addClass('wallBlock');game.walls.push([18, 3]);
+			$('.mazeSq[col="17"][row="4"]').addClass('wallBlock');game.walls.push([17, 4]);
+			$('.mazeSq[col="16"][row="4"]').addClass('wallBlock');game.walls.push([16, 4]);
+			$('.mazeSq[col="15"][row="4"]').addClass('wallBlock');game.walls.push([15, 4]);
+			$('.mazeSq[col="13"][row="4"]').addClass('wallBlock');game.walls.push([13, 4]);
+			$('.mazeSq[col="12"][row="4"]').addClass('wallBlock');game.walls.push([12, 4]);
+			$('.mazeSq[col="11"][row="4"]').addClass('wallBlock');game.walls.push([11, 4]);
+			$('.mazeSq[col="10"][row="5"]').addClass('wallBlock');game.walls.push([10, 5]);
+			$('.mazeSq[col="10"][row="4"]').addClass('wallBlock');game.walls.push([10, 4]);
+			$('.mazeSq[col="9"][row="4"]').addClass('wallBlock');game.walls.push([9, 4]);
+			$('.mazeSq[col="8"][row="4"]').addClass('wallBlock');game.walls.push([8, 4]);
+			$('.mazeSq[col="6"][row="4"]').addClass('wallBlock');game.walls.push([6, 4]);
+			$('.mazeSq[col="5"][row="4"]').addClass('wallBlock');game.walls.push([5, 4]);
+			$('.mazeSq[col="4"][row="4"]').addClass('wallBlock');game.walls.push([4, 4]);
+			$('.mazeSq[col="3"][row="4"]').addClass('wallBlock');game.walls.push([3, 4]);
+			$('.mazeSq[col="3"][row="3"]').addClass('wallBlock');game.walls.push([3, 3]);
+			$('.mazeSq[col="5"][row="2"]').addClass('wallBlock');game.walls.push([5, 2]);
+			$('.mazeSq[col="6"][row="2"]').addClass('wallBlock');game.walls.push([6, 2]);
+			$('.mazeSq[col="7"][row="2"]').addClass('wallBlock');game.walls.push([7, 2]);
+			$('.mazeSq[col="8"][row="2"]').addClass('wallBlock');game.walls.push([8, 2]);
+			$('.mazeSq[col="10"][row="3"]').addClass('wallBlock');game.walls.push([10, 3]);
+			$('.mazeSq[col="12"][row="2"]').addClass('wallBlock');game.walls.push([12, 2]);
+			$('.mazeSq[col="13"][row="2"]').addClass('wallBlock');game.walls.push([13, 2]);
+			$('.mazeSq[col="14"][row="2"]').addClass('wallBlock');game.walls.push([14, 2]);
+			$('.mazeSq[col="15"][row="2"]').addClass('wallBlock');game.walls.push([15, 2]);
+			$('.mazeSq[col="16"][row="2"]').addClass('wallBlock');game.walls.push([16, 2]);
+			$('.mazeSq[col="16"][row="7"]').addClass('wallBlock');game.walls.push([16, 7]);
+			$('.mazeSq[col="16"][row="3"]').addClass('wallBlock');game.walls.push([16, 3]);
+			$('.mazeSq[col="15"][row="3"]').addClass('wallBlock');game.walls.push([15, 3]);
+		}
+		function addInnerWalls_7(){
+			$('.mazeSq[col="2"][row="11"]').addClass('stairs');
+			game.stairs = [2, 11];
+			$('.mazeSq[col="10"][row="18"]').addClass('wallBlock');game.walls.push([10, 18]);
+			$('.mazeSq[col="9"][row="18"]').addClass('wallBlock');game.walls.push([9, 18]);
+			$('.mazeSq[col="7"][row="18"]').addClass('wallBlock');game.walls.push([7, 18]);
+			$('.mazeSq[col="6"][row="18"]').addClass('wallBlock');game.walls.push([6, 18]);
+			$('.mazeSq[col="4"][row="18"]').addClass('wallBlock');game.walls.push([4, 18]);
+			$('.mazeSq[col="3"][row="18"]').addClass('wallBlock');game.walls.push([3, 18]);
+			$('.mazeSq[col="12"][row="18"]').addClass('wallBlock');game.walls.push([12, 18]);
+			$('.mazeSq[col="13"][row="18"]').addClass('wallBlock');game.walls.push([13, 18]);
+			$('.mazeSq[col="15"][row="18"]').addClass('wallBlock');game.walls.push([15, 18]);
+			$('.mazeSq[col="16"][row="18"]').addClass('wallBlock');game.walls.push([16, 18]);
+			$('.mazeSq[col="18"][row="18"]').addClass('wallBlock');game.walls.push([18, 18]);
+			$('.mazeSq[col="19"][row="18"]').addClass('wallBlock');game.walls.push([19, 18]);
+			$('.mazeSq[col="18"][row="16"]').addClass('wallBlock');game.walls.push([18, 16]);
+			$('.mazeSq[col="17"][row="16"]').addClass('wallBlock');game.walls.push([17, 16]);
+			$('.mazeSq[col="15"][row="16"]').addClass('wallBlock');game.walls.push([15, 16]);
+			$('.mazeSq[col="14"][row="16"]').addClass('wallBlock');game.walls.push([14, 16]);
+			$('.mazeSq[col="12"][row="16"]').addClass('wallBlock');game.walls.push([12, 16]);
+			$('.mazeSq[col="11"][row="16"]').addClass('wallBlock');game.walls.push([11, 16]);
+			$('.mazeSq[col="9"][row="16"]').addClass('wallBlock');game.walls.push([9, 16]);
+			$('.mazeSq[col="8"][row="16"]').addClass('wallBlock');game.walls.push([8, 16]);
+			$('.mazeSq[col="6"][row="16"]').addClass('wallBlock');game.walls.push([6, 16]);
+			$('.mazeSq[col="5"][row="16"]').addClass('wallBlock');game.walls.push([5, 16]);
+			$('.mazeSq[col="3"][row="16"]').addClass('wallBlock');game.walls.push([3, 16]);
+			$('.mazeSq[col="2"][row="16"]').addClass('wallBlock');game.walls.push([2, 16]);
+			$('.mazeSq[col="3"][row="14"]').addClass('wallBlock');game.walls.push([3, 14]);
+			$('.mazeSq[col="4"][row="14"]').addClass('wallBlock');game.walls.push([4, 14]);
+			$('.mazeSq[col="6"][row="14"]').addClass('wallBlock');game.walls.push([6, 14]);
+			$('.mazeSq[col="7"][row="14"]').addClass('wallBlock');game.walls.push([7, 14]);
+			$('.mazeSq[col="9"][row="14"]').addClass('wallBlock');game.walls.push([9, 14]);
+			$('.mazeSq[col="10"][row="14"]').addClass('wallBlock');game.walls.push([10, 14]);
+			$('.mazeSq[col="12"][row="14"]').addClass('wallBlock');game.walls.push([12, 14]);
+			$('.mazeSq[col="13"][row="14"]').addClass('wallBlock');game.walls.push([13, 14]);
+			$('.mazeSq[col="15"][row="14"]').addClass('wallBlock');game.walls.push([15, 14]);
+			$('.mazeSq[col="16"][row="14"]').addClass('wallBlock');game.walls.push([16, 14]);
+			$('.mazeSq[col="18"][row="14"]').addClass('wallBlock');game.walls.push([18, 14]);
+			$('.mazeSq[col="19"][row="14"]').addClass('wallBlock');game.walls.push([19, 14]);
+			$('.mazeSq[col="18"][row="12"]').addClass('wallBlock');game.walls.push([18, 12]);
+			$('.mazeSq[col="17"][row="12"]').addClass('wallBlock');game.walls.push([17, 12]);
+			$('.mazeSq[col="15"][row="12"]').addClass('wallBlock');game.walls.push([15, 12]);
+			$('.mazeSq[col="14"][row="12"]').addClass('wallBlock');game.walls.push([14, 12]);
+			$('.mazeSq[col="12"][row="12"]').addClass('wallBlock');game.walls.push([12, 12]);
+			$('.mazeSq[col="11"][row="12"]').addClass('wallBlock');game.walls.push([11, 12]);
+			$('.mazeSq[col="9"][row="12"]').addClass('wallBlock');game.walls.push([9, 12]);
+			$('.mazeSq[col="8"][row="12"]').addClass('wallBlock');game.walls.push([8, 12]);
+			$('.mazeSq[col="6"][row="12"]').addClass('wallBlock');game.walls.push([6, 12]);
+			$('.mazeSq[col="5"][row="12"]').addClass('wallBlock');game.walls.push([5, 12]);
+			$('.mazeSq[col="3"][row="12"]').addClass('wallBlock');game.walls.push([3, 12]);
+			$('.mazeSq[col="2"][row="12"]').addClass('wallBlock');game.walls.push([2, 12]);
+			$('.mazeSq[col="3"][row="10"]').addClass('wallBlock');game.walls.push([3, 10]);
+			$('.mazeSq[col="4"][row="10"]').addClass('wallBlock');game.walls.push([4, 10]);
+			$('.mazeSq[col="6"][row="10"]').addClass('wallBlock');game.walls.push([6, 10]);
+			$('.mazeSq[col="7"][row="10"]').addClass('wallBlock');game.walls.push([7, 10]);
+			$('.mazeSq[col="9"][row="10"]').addClass('wallBlock');game.walls.push([9, 10]);
+			$('.mazeSq[col="10"][row="10"]').addClass('wallBlock');game.walls.push([10, 10]);
+			$('.mazeSq[col="12"][row="10"]').addClass('wallBlock');game.walls.push([12, 10]);
+			$('.mazeSq[col="13"][row="10"]').addClass('wallBlock');game.walls.push([13, 10]);
+			$('.mazeSq[col="15"][row="10"]').addClass('wallBlock');game.walls.push([15, 10]);
+			$('.mazeSq[col="16"][row="10"]').addClass('wallBlock');game.walls.push([16, 10]);
+			$('.mazeSq[col="18"][row="10"]').addClass('wallBlock');game.walls.push([18, 10]);
+			$('.mazeSq[col="19"][row="10"]').addClass('wallBlock');game.walls.push([19, 10]);
+			$('.mazeSq[col="18"][row="8"]').addClass('wallBlock');game.walls.push([18, 8]);
+			$('.mazeSq[col="17"][row="8"]').addClass('wallBlock');game.walls.push([17, 8]);
+			$('.mazeSq[col="15"][row="8"]').addClass('wallBlock');game.walls.push([15, 8]);
+			$('.mazeSq[col="14"][row="8"]').addClass('wallBlock');game.walls.push([14, 8]);
+			$('.mazeSq[col="12"][row="8"]').addClass('wallBlock');game.walls.push([12, 8]);
+			$('.mazeSq[col="11"][row="8"]').addClass('wallBlock');game.walls.push([11, 8]);
+			$('.mazeSq[col="9"][row="8"]').addClass('wallBlock');game.walls.push([9, 8]);
+			$('.mazeSq[col="8"][row="8"]').addClass('wallBlock');game.walls.push([8, 8]);
+			$('.mazeSq[col="6"][row="8"]').addClass('wallBlock');game.walls.push([6, 8]);
+			$('.mazeSq[col="5"][row="8"]').addClass('wallBlock');game.walls.push([5, 8]);
+			$('.mazeSq[col="3"][row="8"]').addClass('wallBlock');game.walls.push([3, 8]);
+			$('.mazeSq[col="2"][row="8"]').addClass('wallBlock');game.walls.push([2, 8]);
+			$('.mazeSq[col="3"][row="6"]').addClass('wallBlock');game.walls.push([3, 6]);
+			$('.mazeSq[col="4"][row="6"]').addClass('wallBlock');game.walls.push([4, 6]);
+			$('.mazeSq[col="6"][row="6"]').addClass('wallBlock');game.walls.push([6, 6]);
+			$('.mazeSq[col="7"][row="6"]').addClass('wallBlock');game.walls.push([7, 6]);
+			$('.mazeSq[col="9"][row="6"]').addClass('wallBlock');game.walls.push([9, 6]);
+			$('.mazeSq[col="10"][row="6"]').addClass('wallBlock');game.walls.push([10, 6]);
+			$('.mazeSq[col="12"][row="6"]').addClass('wallBlock');game.walls.push([12, 6]);
+			$('.mazeSq[col="13"][row="6"]').addClass('wallBlock');game.walls.push([13, 6]);
+			$('.mazeSq[col="15"][row="6"]').addClass('wallBlock');game.walls.push([15, 6]);
+			$('.mazeSq[col="16"][row="6"]').addClass('wallBlock');game.walls.push([16, 6]);
+			$('.mazeSq[col="18"][row="6"]').addClass('wallBlock');game.walls.push([18, 6]);
+			$('.mazeSq[col="19"][row="6"]').addClass('wallBlock');game.walls.push([19, 6]);
+			$('.mazeSq[col="18"][row="4"]').addClass('wallBlock');game.walls.push([18, 4]);
+			$('.mazeSq[col="17"][row="4"]').addClass('wallBlock');game.walls.push([17, 4]);
+			$('.mazeSq[col="15"][row="4"]').addClass('wallBlock');game.walls.push([15, 4]);
+			$('.mazeSq[col="14"][row="4"]').addClass('wallBlock');game.walls.push([14, 4]);
+			$('.mazeSq[col="12"][row="4"]').addClass('wallBlock');game.walls.push([12, 4]);
+			$('.mazeSq[col="10"][row="4"]').addClass('wallBlock');game.walls.push([10, 4]);
+			$('.mazeSq[col="8"][row="4"]').addClass('wallBlock');game.walls.push([8, 4]);
+			$('.mazeSq[col="7"][row="4"]').addClass('wallBlock');game.walls.push([7, 4]);
+			$('.mazeSq[col="5"][row="4"]').addClass('wallBlock');game.walls.push([5, 4]);
+			$('.mazeSq[col="4"][row="4"]').addClass('wallBlock');game.walls.push([4, 4]);
+			$('.mazeSq[col="2"][row="4"]').addClass('wallBlock');game.walls.push([2, 4]);
+			$('.mazeSq[col="3"][row="2"]').addClass('wallBlock');game.walls.push([3, 2]);
+			$('.mazeSq[col="4"][row="2"]').addClass('wallBlock');game.walls.push([4, 2]);
+			$('.mazeSq[col="6"][row="2"]').addClass('wallBlock');game.walls.push([6, 2]);
+			$('.mazeSq[col="7"][row="2"]').addClass('wallBlock');game.walls.push([7, 2]);
+			$('.mazeSq[col="9"][row="2"]').addClass('wallBlock');game.walls.push([9, 2]);
+			$('.mazeSq[col="10"][row="2"]').addClass('wallBlock');game.walls.push([10, 2]);
+			$('.mazeSq[col="10"][row="3"]').addClass('wallBlock');game.walls.push([10, 3]);
+			$('.mazeSq[col="12"][row="2"]').addClass('wallBlock');game.walls.push([12, 2]);
+			$('.mazeSq[col="13"][row="2"]').addClass('wallBlock');game.walls.push([13, 2]);
+			$('.mazeSq[col="15"][row="2"]').addClass('wallBlock');game.walls.push([15, 2]);
+			$('.mazeSq[col="16"][row="2"]').addClass('wallBlock');game.walls.push([16, 2]);
+			$('.mazeSq[col="18"][row="3"]').addClass('wallBlock');game.walls.push([18, 3]);
+			$('.mazeSq[col="12"][row="9"]').addClass('wallBlock');game.walls.push([12, 9]);
+			$('.mazeSq[col="9"][row="15"]').addClass('wallBlock');game.walls.push([9, 15]);
+			$('.mazeSq[col="15"][row="17"]').addClass('wallBlock');game.walls.push([15, 17]);
+			$('.mazeSq[col="3"][row="17"]').addClass('wallBlock');game.walls.push([3, 17]);
+			$('.mazeSq[col="6"][row="13"]').addClass('wallBlock');game.walls.push([6, 13]);
+			$('.mazeSq[col="3"][row="11"]').addClass('wallBlock');game.walls.push([3, 11]);
+			$('.mazeSq[col="6"][row="7"]').addClass('wallBlock');game.walls.push([6, 7]);
+			$('.mazeSq[col="12"][row="7"]').addClass('wallBlock');game.walls.push([12, 7]);
+			$('.mazeSq[col="16"][row="7"]').addClass('wallBlock');game.walls.push([16, 7]);
+			$('.mazeSq[col="16"][row="8"]').addClass('wallBlock');game.walls.push([16, 8]);
+			$('.mazeSq[col="15"][row="7"]').addClass('wallBlock');game.walls.push([15, 7]);
+			$('.mazeSq[col="4"][row="5"]').addClass('wallBlock');game.walls.push([4, 5]);
+			$('.mazeSq[col="7"][row="3"]').addClass('wallBlock');game.walls.push([7, 3]);
+			$('.mazeSq[col="6"][row="17"]').addClass('wallBlock');game.walls.push([6, 17]);
+			$('.mazeSq[col="12"][row="13"]').addClass('wallBlock');game.walls.push([12, 13]);
+			$('.mazeSq[col="15"][row="9"]').addClass('wallBlock');game.walls.push([15, 9]);
+			$('.mazeSq[col="16"][row="19"]').addClass('wallBlock');game.walls.push([16, 19]);
+			$('.mazeSq[col="7"][row="19"]').addClass('wallBlock');game.walls.push([7, 19]);
+			$('.mazeSq[col="6"][row="19"]').addClass('wallBlock');game.walls.push([6, 19]);
+		}
+		function addInnerWalls_8(){
+			$('.mazeSq[col="19"][row="7"]').addClass('stairs');
+			game.stairs = [19, 7];
+		$('.mazeSq[col="10"][row="18"]').addClass('wallBlock');game.walls.push([10, 18]);
+			$('.mazeSq[col="9"][row="18"]').addClass('wallBlock');game.walls.push([9, 18]);
+			$('.mazeSq[col="8"][row="18"]').addClass('wallBlock');game.walls.push([8, 18]);
+			$('.mazeSq[col="12"][row="18"]').addClass('wallBlock');game.walls.push([12, 18]);
+			$('.mazeSq[col="13"][row="18"]').addClass('wallBlock');game.walls.push([13, 18]);
+			$('.mazeSq[col="14"][row="18"]').addClass('wallBlock');game.walls.push([14, 18]);
+			$('.mazeSq[col="16"][row="18"]').addClass('wallBlock');game.walls.push([16, 18]);
+			$('.mazeSq[col="17"][row="18"]').addClass('wallBlock');game.walls.push([17, 18]);
+			$('.mazeSq[col="18"][row="18"]').addClass('wallBlock');game.walls.push([18, 18]);
+			$('.mazeSq[col="6"][row="18"]').addClass('wallBlock');game.walls.push([6, 18]);
+			$('.mazeSq[col="5"][row="18"]').addClass('wallBlock');game.walls.push([5, 18]);
+			$('.mazeSq[col="4"][row="18"]').addClass('wallBlock');game.walls.push([4, 18]);
+			$('.mazeSq[col="2"][row="18"]').addClass('wallBlock');game.walls.push([2, 18]);
+			$('.mazeSq[col="3"][row="16"]').addClass('wallBlock');game.walls.push([3, 16]);
+			$('.mazeSq[col="4"][row="16"]').addClass('wallBlock');game.walls.push([4, 16]);
+			$('.mazeSq[col="5"][row="16"]').addClass('wallBlock');game.walls.push([5, 16]);
+			$('.mazeSq[col="7"][row="16"]').addClass('wallBlock');game.walls.push([7, 16]);
+			$('.mazeSq[col="8"][row="16"]').addClass('wallBlock');game.walls.push([8, 16]);
+			$('.mazeSq[col="10"][row="16"]').addClass('wallBlock');game.walls.push([10, 16]);
+			$('.mazeSq[col="11"][row="16"]').addClass('wallBlock');game.walls.push([11, 16]);
+			$('.mazeSq[col="12"][row="16"]').addClass('wallBlock');game.walls.push([12, 16]);
+			$('.mazeSq[col="14"][row="16"]').addClass('wallBlock');game.walls.push([14, 16]);
+			$('.mazeSq[col="15"][row="16"]').addClass('wallBlock');game.walls.push([15, 16]);
+			$('.mazeSq[col="17"][row="16"]').addClass('wallBlock');game.walls.push([17, 16]);
+			$('.mazeSq[col="18"][row="16"]').addClass('wallBlock');game.walls.push([18, 16]);
+			$('.mazeSq[col="19"][row="16"]').addClass('wallBlock');game.walls.push([19, 16]);
+			$('.mazeSq[col="18"][row="14"]').addClass('wallBlock');game.walls.push([18, 14]);
+			$('.mazeSq[col="16"][row="14"]').addClass('wallBlock');game.walls.push([16, 14]);
+			$('.mazeSq[col="14"][row="14"]').addClass('wallBlock');game.walls.push([14, 14]);
+			$('.mazeSq[col="12"][row="14"]').addClass('wallBlock');game.walls.push([12, 14]);
+			$('.mazeSq[col="10"][row="14"]').addClass('wallBlock');game.walls.push([10, 14]);
+			$('.mazeSq[col="8"][row="14"]').addClass('wallBlock');game.walls.push([8, 14]);
+			$('.mazeSq[col="6"][row="14"]').addClass('wallBlock');game.walls.push([6, 14]);
+			$('.mazeSq[col="4"][row="14"]').addClass('wallBlock');game.walls.push([4, 14]);
+			$('.mazeSq[col="2"][row="14"]').addClass('wallBlock');game.walls.push([2, 14]);
+			$('.mazeSq[col="3"][row="12"]').addClass('wallBlock');game.walls.push([3, 12]);
+			$('.mazeSq[col="4"][row="12"]').addClass('wallBlock');game.walls.push([4, 12]);
+			$('.mazeSq[col="5"][row="12"]').addClass('wallBlock');game.walls.push([5, 12]);
+			$('.mazeSq[col="6"][row="12"]').addClass('wallBlock');game.walls.push([6, 12]);
+			$('.mazeSq[col="8"][row="12"]').addClass('wallBlock');game.walls.push([8, 12]);
+			$('.mazeSq[col="9"][row="12"]').addClass('wallBlock');game.walls.push([9, 12]);
+			$('.mazeSq[col="10"][row="12"]').addClass('wallBlock');game.walls.push([10, 12]);
+			$('.mazeSq[col="11"][row="12"]').addClass('wallBlock');game.walls.push([11, 12]);
+			$('.mazeSq[col="13"][row="12"]').addClass('wallBlock');game.walls.push([13, 12]);
+			$('.mazeSq[col="14"][row="12"]').addClass('wallBlock');game.walls.push([14, 12]);
+			$('.mazeSq[col="15"][row="12"]').addClass('wallBlock');game.walls.push([15, 12]);
+			$('.mazeSq[col="16"][row="12"]').addClass('wallBlock');game.walls.push([16, 12]);
+			$('.mazeSq[col="18"][row="12"]').addClass('wallBlock');game.walls.push([18, 12]);
+			$('.mazeSq[col="18"][row="11"]').addClass('wallBlock');game.walls.push([18, 11]);
+			$('.mazeSq[col="18"][row="10"]').addClass('wallBlock');game.walls.push([18, 10]);
+			$('.mazeSq[col="16"][row="9"]').addClass('wallBlock');game.walls.push([16, 9]);
+			$('.mazeSq[col="16"][row="10"]').addClass('wallBlock');game.walls.push([16, 10]);
+			$('.mazeSq[col="18"][row="8"]').addClass('wallBlock');game.walls.push([18, 8]);
+			$('.mazeSq[col="18"][row="7"]').addClass('wallBlock');game.walls.push([18, 7]);
+			$('.mazeSq[col="16"][row="7"]').addClass('wallBlock');game.walls.push([16, 7]);
+			$('.mazeSq[col="16"][row="6"]').addClass('wallBlock');game.walls.push([16, 6]);
+			$('.mazeSq[col="18"][row="5"]').addClass('wallBlock');game.walls.push([18, 5]);
+			$('.mazeSq[col="16"][row="4"]').addClass('wallBlock');game.walls.push([16, 4]);
+			$('.mazeSq[col="16"][row="3"]').addClass('wallBlock');game.walls.push([16, 3]);
+			$('.mazeSq[col="18"][row="3"]').addClass('wallBlock');game.walls.push([18, 3]);
+			$('.mazeSq[col="18"][row="2"]').addClass('wallBlock');game.walls.push([18, 2]);
+			$('.mazeSq[col="14"][row="2"]').addClass('wallBlock');game.walls.push([14, 2]);
+			$('.mazeSq[col="14"][row="3"]').addClass('wallBlock');game.walls.push([14, 3]);
+			$('.mazeSq[col="14"][row="4"]').addClass('wallBlock');game.walls.push([14, 4]);
+			$('.mazeSq[col="14"][row="6"]').addClass('wallBlock');game.walls.push([14, 6]);
+			$('.mazeSq[col="14"][row="7"]').addClass('wallBlock');game.walls.push([14, 7]);
+			$('.mazeSq[col="14"][row="8"]').addClass('wallBlock');game.walls.push([14, 8]);
+			$('.mazeSq[col="14"][row="10"]').addClass('wallBlock');game.walls.push([14, 10]);
+			$('.mazeSq[col="14"][row="11"]').addClass('wallBlock');game.walls.push([14, 11]);
+			$('.mazeSq[col="12"][row="10"]').addClass('wallBlock');game.walls.push([12, 10]);
+			$('.mazeSq[col="12"][row="9"]').addClass('wallBlock');game.walls.push([12, 9]);
+			$('.mazeSq[col="12"][row="7"]').addClass('wallBlock');game.walls.push([12, 7]);
+			$('.mazeSq[col="12"][row="6"]').addClass('wallBlock');game.walls.push([12, 6]);
+			$('.mazeSq[col="12"][row="4"]').addClass('wallBlock');game.walls.push([12, 4]);
+			$('.mazeSq[col="11"][row="4"]').addClass('wallBlock');game.walls.push([11, 4]);
+			$('.mazeSq[col="11"][row="3"]').addClass('wallBlock');game.walls.push([11, 3]);
+			$('.mazeSq[col="9"][row="2"]').addClass('wallBlock');game.walls.push([9, 2]);
+			$('.mazeSq[col="3"][row="3"]').addClass('wallBlock');game.walls.push([3, 3]);
+			$('.mazeSq[col="3"][row="4"]').addClass('wallBlock');game.walls.push([3, 4]);
+			$('.mazeSq[col="4"][row="5"]').addClass('wallBlock');game.walls.push([4, 5]);
+			$('.mazeSq[col="3"][row="7"]').addClass('wallBlock');game.walls.push([3, 7]);
+			$('.mazeSq[col="3"][row="5"]').addClass('wallBlock');game.walls.push([3, 5]);
+			$('.mazeSq[col="3"][row="8"]').addClass('wallBlock');game.walls.push([3, 8]);
+			$('.mazeSq[col="3"][row="9"]').addClass('wallBlock');game.walls.push([3, 9]);
+			$('.mazeSq[col="3"][row="10"]').addClass('wallBlock');game.walls.push([3, 10]);
+			$('.mazeSq[col="5"][row="6"]').addClass('wallBlock');game.walls.push([5, 6]);
+			$('.mazeSq[col="5"][row="7"]').addClass('wallBlock');game.walls.push([5, 7]);
+			$('.mazeSq[col="5"][row="9"]').addClass('wallBlock');game.walls.push([5, 9]);
+			$('.mazeSq[col="5"][row="10"]').addClass('wallBlock');game.walls.push([5, 10]);
+			$('.mazeSq[col="5"][row="11"]').addClass('wallBlock');game.walls.push([5, 11]);
+			$('.mazeSq[col="7"][row="10"]').addClass('wallBlock');game.walls.push([7, 10]);
+			$('.mazeSq[col="7"][row="9"]').addClass('wallBlock');game.walls.push([7, 9]);
+			$('.mazeSq[col="7"][row="8"]').addClass('wallBlock');game.walls.push([7, 8]);
+			$('.mazeSq[col="8"][row="8"]').addClass('wallBlock');game.walls.push([8, 8]);
+			$('.mazeSq[col="9"][row="8"]').addClass('wallBlock');game.walls.push([9, 8]);
+			$('.mazeSq[col="10"][row="8"]').addClass('wallBlock');game.walls.push([10, 8]);
+			$('.mazeSq[col="10"][row="10"]').addClass('wallBlock');game.walls.push([10, 10]);
+			$('.mazeSq[col="9"][row="10"]').addClass('wallBlock');game.walls.push([9, 10]);
+			$('.mazeSq[col="10"][row="6"]').addClass('wallBlock');game.walls.push([10, 6]);
+			$('.mazeSq[col="9"][row="4"]').addClass('wallBlock');game.walls.push([9, 4]);
+			$('.mazeSq[col="8"][row="4"]').addClass('wallBlock');game.walls.push([8, 4]);
+			$('.mazeSq[col="7"][row="3"]').addClass('wallBlock');game.walls.push([7, 3]);
+			$('.mazeSq[col="7"][row="4"]').addClass('wallBlock');game.walls.push([7, 4]);
+			$('.mazeSq[col="5"][row="3"]').addClass('wallBlock');game.walls.push([5, 3]);
+			$('.mazeSq[col="5"][row="2"]').addClass('wallBlock');game.walls.push([5, 2]);
+			$('.mazeSq[col="5"][row="5"]').addClass('wallBlock');game.walls.push([5, 5]);
+			$('.mazeSq[col="7"][row="6"]').addClass('wallBlock');game.walls.push([7, 6]);
+			$('.mazeSq[col="8"][row="6"]').addClass('wallBlock');game.walls.push([8, 6]);
+			$('.mazeSq[col="8"][row="5"]').addClass('wallBlock');game.walls.push([8, 5]);
+			$('.mazeSq[col="10"][row="7"]').addClass('wallBlock');game.walls.push([10, 7]);
+			$('.mazeSq[col="12"][row="5"]').addClass('wallBlock');game.walls.push([12, 5]);
+			$('.mazeSq[col="10"][row="13"]').addClass('wallBlock');game.walls.push([10, 13]);
+			$('.mazeSq[col="12"][row="15"]').addClass('wallBlock');game.walls.push([12, 15]);
+			$('.mazeSq[col="16"][row="13"]').addClass('wallBlock');game.walls.push([16, 13]);
+			$('.mazeSq[col="19"][row="12"]').addClass('wallBlock');game.walls.push([19, 12]);
+			$('.mazeSq[col="4"][row="15"]').addClass('wallBlock');game.walls.push([4, 15]);
+			$('.mazeSq[col="4"][row="17"]').addClass('wallBlock');game.walls.push([4, 17]);
+			$('.mazeSq[col="8"][row="17"]').addClass('wallBlock');game.walls.push([8, 17]);
+			$('.mazeSq[col="14"][row="17"]').addClass('wallBlock');game.walls.push([14, 17]);
+			$('.mazeSq[col="14"][row="13"]').addClass('wallBlock');game.walls.push([14, 13]);
+			$('.mazeSq[col="6"][row="19"]').addClass('wallBlock');game.walls.push([6, 19]);
+			$('.mazeSq[col="15"][row="6"]').addClass('wallBlock');game.walls.push([15, 6]);
+			$('.mazeSq[col="19"][row="8"]').addClass('wallBlock');game.walls.push([19, 8]);
+			$('.mazeSq[col="17"][row="3"]').addClass('wallBlock');game.walls.push([17, 3]);
+			$('.mazeSq[col="2"][row="19"]').addClass('wallBlock');game.walls.push([2, 19]);	
+		}
+		function addInnerWalls_9(){
+			$('.mazeSq[col="19"][row="19"]').addClass('stairs');
+			game.stairs = [19, 19];
+			$('.mazeSq[col="11"][row="18"]').addClass('wallBlock');game.walls.push([11, 18]);
+			$('.mazeSq[col="9"][row="18"]').addClass('wallBlock');game.walls.push([9, 18]);
+			$('.mazeSq[col="7"][row="18"]').addClass('wallBlock');game.walls.push([7, 18]);
+			$('.mazeSq[col="5"][row="18"]').addClass('wallBlock');game.walls.push([5, 18]);
+			$('.mazeSq[col="3"][row="18"]').addClass('wallBlock');game.walls.push([3, 18]);
+			$('.mazeSq[col="13"][row="18"]').addClass('wallBlock');game.walls.push([13, 18]);
+			$('.mazeSq[col="15"][row="18"]').addClass('wallBlock');game.walls.push([15, 18]);
+			$('.mazeSq[col="17"][row="18"]').addClass('wallBlock');game.walls.push([17, 18]);
+			$('.mazeSq[col="19"][row="18"]').addClass('wallBlock');game.walls.push([19, 18]);
+			$('.mazeSq[col="18"][row="16"]').addClass('wallBlock');game.walls.push([18, 16]);
+			$('.mazeSq[col="16"][row="16"]').addClass('wallBlock');game.walls.push([16, 16]);
+			$('.mazeSq[col="14"][row="16"]').addClass('wallBlock');game.walls.push([14, 16]);
+			$('.mazeSq[col="12"][row="16"]').addClass('wallBlock');game.walls.push([12, 16]);
+			$('.mazeSq[col="10"][row="16"]').addClass('wallBlock');game.walls.push([10, 16]);
+			$('.mazeSq[col="8"][row="16"]').addClass('wallBlock');game.walls.push([8, 16]);
+			$('.mazeSq[col="6"][row="16"]').addClass('wallBlock');game.walls.push([6, 16]);
+			$('.mazeSq[col="4"][row="16"]').addClass('wallBlock');game.walls.push([4, 16]);
+			$('.mazeSq[col="2"][row="16"]').addClass('wallBlock');game.walls.push([2, 16]);
+			$('.mazeSq[col="3"][row="14"]').addClass('wallBlock');game.walls.push([3, 14]);
+			$('.mazeSq[col="5"][row="14"]').addClass('wallBlock');game.walls.push([5, 14]);
+			$('.mazeSq[col="7"][row="14"]').addClass('wallBlock');game.walls.push([7, 14]);
+			$('.mazeSq[col="9"][row="14"]').addClass('wallBlock');game.walls.push([9, 14]);
+			$('.mazeSq[col="11"][row="14"]').addClass('wallBlock');game.walls.push([11, 14]);
+			$('.mazeSq[col="13"][row="14"]').addClass('wallBlock');game.walls.push([13, 14]);
+			$('.mazeSq[col="15"][row="14"]').addClass('wallBlock');game.walls.push([15, 14]);
+			$('.mazeSq[col="17"][row="14"]').addClass('wallBlock');game.walls.push([17, 14]);
+			$('.mazeSq[col="19"][row="14"]').addClass('wallBlock');game.walls.push([19, 14]);
+			$('.mazeSq[col="18"][row="12"]').addClass('wallBlock');game.walls.push([18, 12]);
+			$('.mazeSq[col="16"][row="12"]').addClass('wallBlock');game.walls.push([16, 12]);
+			$('.mazeSq[col="14"][row="12"]').addClass('wallBlock');game.walls.push([14, 12]);
+			$('.mazeSq[col="12"][row="12"]').addClass('wallBlock');game.walls.push([12, 12]);
+			$('.mazeSq[col="10"][row="12"]').addClass('wallBlock');game.walls.push([10, 12]);
+			$('.mazeSq[col="8"][row="12"]').addClass('wallBlock');game.walls.push([8, 12]);
+			$('.mazeSq[col="6"][row="12"]').addClass('wallBlock');game.walls.push([6, 12]);
+			$('.mazeSq[col="4"][row="12"]').addClass('wallBlock');game.walls.push([4, 12]);
+			$('.mazeSq[col="2"][row="12"]').addClass('wallBlock');game.walls.push([2, 12]);
+			$('.mazeSq[col="3"][row="10"]').addClass('wallBlock');game.walls.push([3, 10]);
+			$('.mazeSq[col="5"][row="10"]').addClass('wallBlock');game.walls.push([5, 10]);
+			$('.mazeSq[col="7"][row="10"]').addClass('wallBlock');game.walls.push([7, 10]);
+			$('.mazeSq[col="9"][row="10"]').addClass('wallBlock');game.walls.push([9, 10]);
+			$('.mazeSq[col="11"][row="10"]').addClass('wallBlock');game.walls.push([11, 10]);
+			$('.mazeSq[col="13"][row="10"]').addClass('wallBlock');game.walls.push([13, 10]);
+			$('.mazeSq[col="15"][row="10"]').addClass('wallBlock');game.walls.push([15, 10]);
+			$('.mazeSq[col="17"][row="10"]').addClass('wallBlock');game.walls.push([17, 10]);
+			$('.mazeSq[col="19"][row="10"]').addClass('wallBlock');game.walls.push([19, 10]);
+			$('.mazeSq[col="18"][row="8"]').addClass('wallBlock');game.walls.push([18, 8]);
+			$('.mazeSq[col="16"][row="8"]').addClass('wallBlock');game.walls.push([16, 8]);
+			$('.mazeSq[col="14"][row="8"]').addClass('wallBlock');game.walls.push([14, 8]);
+			$('.mazeSq[col="12"][row="8"]').addClass('wallBlock');game.walls.push([12, 8]);
+			$('.mazeSq[col="10"][row="8"]').addClass('wallBlock');game.walls.push([10, 8]);
+			$('.mazeSq[col="8"][row="8"]').addClass('wallBlock');game.walls.push([8, 8]);
+			$('.mazeSq[col="6"][row="8"]').addClass('wallBlock');game.walls.push([6, 8]);
+			$('.mazeSq[col="4"][row="8"]').addClass('wallBlock');game.walls.push([4, 8]);
+			$('.mazeSq[col="2"][row="8"]').addClass('wallBlock');game.walls.push([2, 8]);
+			$('.mazeSq[col="3"][row="6"]').addClass('wallBlock');game.walls.push([3, 6]);
+			$('.mazeSq[col="5"][row="6"]').addClass('wallBlock');game.walls.push([5, 6]);
+			$('.mazeSq[col="7"][row="6"]').addClass('wallBlock');game.walls.push([7, 6]);
+			$('.mazeSq[col="9"][row="6"]').addClass('wallBlock');game.walls.push([9, 6]);
+			$('.mazeSq[col="11"][row="6"]').addClass('wallBlock');game.walls.push([11, 6]);
+			$('.mazeSq[col="13"][row="6"]').addClass('wallBlock');game.walls.push([13, 6]);
+			$('.mazeSq[col="15"][row="6"]').addClass('wallBlock');game.walls.push([15, 6]);
+			$('.mazeSq[col="17"][row="6"]').addClass('wallBlock');game.walls.push([17, 6]);
+			$('.mazeSq[col="19"][row="6"]').addClass('wallBlock');game.walls.push([19, 6]);
+			$('.mazeSq[col="18"][row="4"]').addClass('wallBlock');game.walls.push([18, 4]);
+			$('.mazeSq[col="16"][row="4"]').addClass('wallBlock');game.walls.push([16, 4]);
+			$('.mazeSq[col="14"][row="4"]').addClass('wallBlock');game.walls.push([14, 4]);
+			$('.mazeSq[col="12"][row="4"]').addClass('wallBlock');game.walls.push([12, 4]);
+			$('.mazeSq[col="10"][row="4"]').addClass('wallBlock');game.walls.push([10, 4]);
+			$('.mazeSq[col="8"][row="4"]').addClass('wallBlock');game.walls.push([8, 4]);
+			$('.mazeSq[col="6"][row="4"]').addClass('wallBlock');game.walls.push([6, 4]);
+			$('.mazeSq[col="4"][row="4"]').addClass('wallBlock');game.walls.push([4, 4]);
+			$('.mazeSq[col="2"][row="4"]').addClass('wallBlock');game.walls.push([2, 4]);
+			$('.mazeSq[col="3"][row="2"]').addClass('wallBlock');game.walls.push([3, 2]);
+			$('.mazeSq[col="5"][row="2"]').addClass('wallBlock');game.walls.push([5, 2]);
+			$('.mazeSq[col="7"][row="2"]').addClass('wallBlock');game.walls.push([7, 2]);
+			$('.mazeSq[col="9"][row="2"]').addClass('wallBlock');game.walls.push([9, 2]);
+			$('.mazeSq[col="11"][row="2"]').addClass('wallBlock');game.walls.push([11, 2]);
+			$('.mazeSq[col="13"][row="2"]').addClass('wallBlock');game.walls.push([13, 2]);
+			$('.mazeSq[col="15"][row="2"]').addClass('wallBlock');game.walls.push([15, 2]);
+			$('.mazeSq[col="17"][row="2"]').addClass('wallBlock');game.walls.push([17, 2]);
+			$('.mazeSq[col="19"][row="2"]').addClass('wallBlock');game.walls.push([19, 2]);
+			$('.mazeSq[col="4"][row="17"]').addClass('wallBlock');game.walls.push([4, 17]);
+			$('.mazeSq[col="7"][row="15"]').addClass('wallBlock');game.walls.push([7, 15]);
+			$('.mazeSq[col="11"][row="13"]').addClass('wallBlock');game.walls.push([11, 13]);
+			$('.mazeSq[col="15"][row="11"]').addClass('wallBlock');game.walls.push([15, 11]);
+			$('.mazeSq[col="17"][row="7"]').addClass('wallBlock');game.walls.push([17, 7]);
+			$('.mazeSq[col="19"][row="3"]').addClass('wallBlock');game.walls.push([19, 3]);
+			$('.mazeSq[col="16"][row="17"]').addClass('wallBlock');game.walls.push([16, 17]);
+			$('.mazeSq[col="15"][row="15"]').addClass('wallBlock');game.walls.push([15, 15]);
+			$('.mazeSq[col="13"][row="13"]').addClass('wallBlock');game.walls.push([13, 13]);
+			$('.mazeSq[col="12"][row="10"]').addClass('wallBlock');game.walls.push([12, 10]);
+			$('.mazeSq[col="9"][row="9"]').addClass('wallBlock');game.walls.push([9, 9]);
+			$('.mazeSq[col="8"][row="7"]').addClass('wallBlock');game.walls.push([8, 7]);
+			$('.mazeSq[col="6"][row="5"]').addClass('wallBlock');game.walls.push([6, 5]);
+			$('.mazeSq[col="4"][row="3"]').addClass('wallBlock');game.walls.push([4, 3]);
+			$('.mazeSq[col="4"][row="9"]').addClass('wallBlock');game.walls.push([4, 9]);
+			$('.mazeSq[col="6"][row="7"]').addClass('wallBlock');game.walls.push([6, 7]);
+			$('.mazeSq[col="12"][row="5"]').addClass('wallBlock');game.walls.push([12, 5]);
+			$('.mazeSq[col="15"][row="3"]').addClass('wallBlock');game.walls.push([15, 3]);
+			$('.mazeSq[col="6"][row="19"]').addClass('wallBlock');game.walls.push([6, 19]);
+			$('.mazeSq[col="11"][row="17"]').addClass('wallBlock');game.walls.push([11, 17]);
+			$('.mazeSq[col="6"][row="13"]').addClass('wallBlock');game.walls.push([6, 13]);
+			$('.mazeSq[col="3"][row="11"]').addClass('wallBlock');game.walls.push([3, 11]);
+			$('.mazeSq[col="15"][row="19"]').addClass('wallBlock');game.walls.push([15, 19]);
+			$('.mazeSq[col="16"][row="9"]').addClass('wallBlock');game.walls.push([16, 9]);
+			$('.mazeSq[col="9"][row="3"]').addClass('wallBlock');game.walls.push([9, 3]);
+			$('.mazeSq[col="8"][row="13"]').addClass('wallBlock');game.walls.push([8, 13]);
+			$('.mazeSq[col="13"][row="7"]').addClass('wallBlock');game.walls.push([13, 7]);
+		}
+		function addInnerWalls_10(){
+			$('.mazeSq[col="4"][row="5"]').addClass('stairs');
+			game.stairs = [4, 5];
+			$('.mazeSq[col="7"][row="19"]').addClass('wallBlock');game.walls.push([7, 19]);
+			$('.mazeSq[col="13"][row="19"]').addClass('wallBlock');game.walls.push([13, 19]);
+			$('.mazeSq[col="13"][row="18"]').addClass('wallBlock');game.walls.push([13, 18]);
+			$('.mazeSq[col="13"][row="17"]').addClass('wallBlock');game.walls.push([13, 17]);
+			$('.mazeSq[col="7"][row="18"]').addClass('wallBlock');game.walls.push([7, 18]);
+			$('.mazeSq[col="7"][row="17"]').addClass('wallBlock');game.walls.push([7, 17]);
+			$('.mazeSq[col="8"][row="16"]').addClass('wallBlock');game.walls.push([8, 16]);
+			$('.mazeSq[col="9"][row="16"]').addClass('wallBlock');game.walls.push([9, 16]);
+			$('.mazeSq[col="11"][row="16"]').addClass('wallBlock');game.walls.push([11, 16]);
+			$('.mazeSq[col="12"][row="16"]').addClass('wallBlock');game.walls.push([12, 16]);
+			$('.mazeSq[col="10"][row="14"]').addClass('wallBlock');game.walls.push([10, 14]);
+			$('.mazeSq[col="9"][row="14"]').addClass('wallBlock');game.walls.push([9, 14]);
+			$('.mazeSq[col="8"][row="14"]').addClass('wallBlock');game.walls.push([8, 14]);
+			$('.mazeSq[col="11"][row="14"]').addClass('wallBlock');game.walls.push([11, 14]);
+			$('.mazeSq[col="12"][row="14"]').addClass('wallBlock');game.walls.push([12, 14]);
+			$('.mazeSq[col="7"][row="14"]').addClass('wallBlock');game.walls.push([7, 14]);
+			$('.mazeSq[col="6"][row="15"]').addClass('wallBlock');game.walls.push([6, 15]);
+			$('.mazeSq[col="5"][row="16"]').addClass('wallBlock');game.walls.push([5, 16]);
+			$('.mazeSq[col="5"][row="17"]').addClass('wallBlock');game.walls.push([5, 17]);
+			$('.mazeSq[col="5"][row="18"]').addClass('wallBlock');game.walls.push([5, 18]);
+			$('.mazeSq[col="13"][row="14"]').addClass('wallBlock');game.walls.push([13, 14]);
+			$('.mazeSq[col="14"][row="15"]').addClass('wallBlock');game.walls.push([14, 15]);
+			$('.mazeSq[col="15"][row="16"]').addClass('wallBlock');game.walls.push([15, 16]);
+			$('.mazeSq[col="15"][row="17"]').addClass('wallBlock');game.walls.push([15, 17]);
+			$('.mazeSq[col="15"][row="18"]').addClass('wallBlock');game.walls.push([15, 18]);
+			$('.mazeSq[col="17"][row="19"]').addClass('wallBlock');game.walls.push([17, 19]);
+			$('.mazeSq[col="17"][row="18"]').addClass('wallBlock');game.walls.push([17, 18]);
+			$('.mazeSq[col="17"][row="17"]').addClass('wallBlock');game.walls.push([17, 17]);
+			$('.mazeSq[col="17"][row="16"]').addClass('wallBlock');game.walls.push([17, 16]);
+			$('.mazeSq[col="17"][row="15"]').addClass('wallBlock');game.walls.push([17, 15]);
+			$('.mazeSq[col="3"][row="19"]').addClass('wallBlock');game.walls.push([3, 19]);
+			$('.mazeSq[col="3"][row="18"]').addClass('wallBlock');game.walls.push([3, 18]);
+			$('.mazeSq[col="3"][row="17"]').addClass('wallBlock');game.walls.push([3, 17]);
+			$('.mazeSq[col="3"][row="16"]').addClass('wallBlock');game.walls.push([3, 16]);
+			$('.mazeSq[col="3"][row="15"]').addClass('wallBlock');game.walls.push([3, 15]);
+			$('.mazeSq[col="4"][row="14"]').addClass('wallBlock');game.walls.push([4, 14]);
+			$('.mazeSq[col="5"][row="13"]').addClass('wallBlock');game.walls.push([5, 13]);
+			$('.mazeSq[col="6"][row="12"]').addClass('wallBlock');game.walls.push([6, 12]);
+			$('.mazeSq[col="7"][row="12"]').addClass('wallBlock');game.walls.push([7, 12]);
+			$('.mazeSq[col="8"][row="12"]').addClass('wallBlock');game.walls.push([8, 12]);
+			$('.mazeSq[col="9"][row="12"]').addClass('wallBlock');game.walls.push([9, 12]);
+			$('.mazeSq[col="11"][row="12"]').addClass('wallBlock');game.walls.push([11, 12]);
+			$('.mazeSq[col="12"][row="12"]').addClass('wallBlock');game.walls.push([12, 12]);
+			$('.mazeSq[col="13"][row="12"]').addClass('wallBlock');game.walls.push([13, 12]);
+			$('.mazeSq[col="14"][row="12"]').addClass('wallBlock');game.walls.push([14, 12]);
+			$('.mazeSq[col="15"][row="13"]').addClass('wallBlock');game.walls.push([15, 13]);
+			$('.mazeSq[col="16"][row="14"]').addClass('wallBlock');game.walls.push([16, 14]);
+			$('.mazeSq[col="19"][row="18"]').addClass('wallBlock');game.walls.push([19, 18]);
+			$('.mazeSq[col="18"][row="16"]').addClass('wallBlock');game.walls.push([18, 16]);
+			$('.mazeSq[col="19"][row="14"]').addClass('wallBlock');game.walls.push([19, 14]);
+			$('.mazeSq[col="18"][row="13"]').addClass('wallBlock');game.walls.push([18, 13]);
+			$('.mazeSq[col="17"][row="12"]').addClass('wallBlock');game.walls.push([17, 12]);
+			$('.mazeSq[col="16"][row="11"]').addClass('wallBlock');game.walls.push([16, 11]);
+			$('.mazeSq[col="15"][row="10"]').addClass('wallBlock');game.walls.push([15, 10]);
+			$('.mazeSq[col="13"][row="10"]').addClass('wallBlock');game.walls.push([13, 10]);
+			$('.mazeSq[col="12"][row="10"]').addClass('wallBlock');game.walls.push([12, 10]);
+			$('.mazeSq[col="11"][row="10"]').addClass('wallBlock');game.walls.push([11, 10]);
+			$('.mazeSq[col="10"][row="10"]').addClass('wallBlock');game.walls.push([10, 10]);
+			$('.mazeSq[col="9"][row="10"]').addClass('wallBlock');game.walls.push([9, 10]);
+			$('.mazeSq[col="8"][row="10"]').addClass('wallBlock');game.walls.push([8, 10]);
+			$('.mazeSq[col="7"][row="10"]').addClass('wallBlock');game.walls.push([7, 10]);
+			$('.mazeSq[col="5"][row="10"]').addClass('wallBlock');game.walls.push([5, 10]);
+			$('.mazeSq[col="4"][row="11"]').addClass('wallBlock');game.walls.push([4, 11]);
+			$('.mazeSq[col="3"][row="12"]').addClass('wallBlock');game.walls.push([3, 12]);
+			$('.mazeSq[col="2"][row="13"]').addClass('wallBlock');game.walls.push([2, 13]);
+			$('.mazeSq[col="10"][row="8"]').addClass('wallBlock');game.walls.push([10, 8]);
+			$('.mazeSq[col="9"][row="8"]').addClass('wallBlock');game.walls.push([9, 8]);
+			$('.mazeSq[col="8"][row="8"]').addClass('wallBlock');game.walls.push([8, 8]);
+			$('.mazeSq[col="7"][row="8"]').addClass('wallBlock');game.walls.push([7, 8]);
+			$('.mazeSq[col="6"][row="8"]').addClass('wallBlock');game.walls.push([6, 8]);
+			$('.mazeSq[col="5"][row="8"]').addClass('wallBlock');game.walls.push([5, 8]);
+			$('.mazeSq[col="11"][row="8"]').addClass('wallBlock');game.walls.push([11, 8]);
+			$('.mazeSq[col="12"][row="8"]').addClass('wallBlock');game.walls.push([12, 8]);
+			$('.mazeSq[col="13"][row="8"]').addClass('wallBlock');game.walls.push([13, 8]);
+			$('.mazeSq[col="14"][row="8"]').addClass('wallBlock');game.walls.push([14, 8]);
+			$('.mazeSq[col="15"][row="8"]').addClass('wallBlock');game.walls.push([15, 8]);
+			$('.mazeSq[col="16"][row="8"]').addClass('wallBlock');game.walls.push([16, 8]);
+			$('.mazeSq[col="17"][row="9"]').addClass('wallBlock');game.walls.push([17, 9]);
+			$('.mazeSq[col="18"][row="10"]').addClass('wallBlock');game.walls.push([18, 10]);
+			$('.mazeSq[col="19"][row="13"]').addClass('wallBlock');game.walls.push([19, 13]);
+			$('.mazeSq[col="2"][row="12"]').addClass('wallBlock');game.walls.push([2, 12]);
+			$('.mazeSq[col="4"][row="8"]').addClass('wallBlock');game.walls.push([4, 8]);
+			$('.mazeSq[col="3"][row="9"]').addClass('wallBlock');game.walls.push([3, 9]);
+			$('.mazeSq[col="3"][row="11"]').addClass('wallBlock');game.walls.push([3, 11]);
+			$('.mazeSq[col="2"][row="11"]').addClass('wallBlock');game.walls.push([2, 11]);
+			$('.mazeSq[col="18"][row="12"]').addClass('wallBlock');game.walls.push([18, 12]);
+			$('.mazeSq[col="19"][row="12"]').addClass('wallBlock');game.walls.push([19, 12]);
+			$('.mazeSq[col="19"][row="8"]').addClass('wallBlock');game.walls.push([19, 8]);
+			$('.mazeSq[col="18"][row="7"]').addClass('wallBlock');game.walls.push([18, 7]);
+			$('.mazeSq[col="17"][row="6"]').addClass('wallBlock');game.walls.push([17, 6]);
+			$('.mazeSq[col="16"][row="6"]').addClass('wallBlock');game.walls.push([16, 6]);
+			$('.mazeSq[col="15"][row="6"]').addClass('wallBlock');game.walls.push([15, 6]);
+			$('.mazeSq[col="13"][row="6"]').addClass('wallBlock');game.walls.push([13, 6]);
+			$('.mazeSq[col="12"][row="6"]').addClass('wallBlock');game.walls.push([12, 6]);
+			$('.mazeSq[col="11"][row="6"]').addClass('wallBlock');game.walls.push([11, 6]);
+			$('.mazeSq[col="10"][row="6"]').addClass('wallBlock');game.walls.push([10, 6]);
+			$('.mazeSq[col="9"][row="6"]').addClass('wallBlock');game.walls.push([9, 6]);
+			$('.mazeSq[col="8"][row="6"]').addClass('wallBlock');game.walls.push([8, 6]);
+			$('.mazeSq[col="7"][row="6"]').addClass('wallBlock');game.walls.push([7, 6]);
+			$('.mazeSq[col="5"][row="6"]').addClass('wallBlock');game.walls.push([5, 6]);
+			$('.mazeSq[col="4"][row="6"]').addClass('wallBlock');game.walls.push([4, 6]);
+			$('.mazeSq[col="3"][row="6"]').addClass('wallBlock');game.walls.push([3, 6]);
+			$('.mazeSq[col="2"][row="7"]').addClass('wallBlock');game.walls.push([2, 7]);
+			$('.mazeSq[col="2"][row="6"]').addClass('wallBlock');game.walls.push([2, 6]);
+			$('.mazeSq[col="18"][row="6"]').addClass('wallBlock');game.walls.push([18, 6]);
+			$('.mazeSq[col="19"][row="6"]').addClass('wallBlock');game.walls.push([19, 6]);
+			$('.mazeSq[col="19"][row="7"]').addClass('wallBlock');game.walls.push([19, 7]);
+			$('.mazeSq[col="11"][row="4"]').addClass('wallBlock');game.walls.push([11, 4]);
+			$('.mazeSq[col="12"][row="4"]').addClass('wallBlock');game.walls.push([12, 4]);
+			$('.mazeSq[col="13"][row="4"]').addClass('wallBlock');game.walls.push([13, 4]);
+			$('.mazeSq[col="10"][row="4"]').addClass('wallBlock');game.walls.push([10, 4]);
+			$('.mazeSq[col="9"][row="4"]').addClass('wallBlock');game.walls.push([9, 4]);
+			$('.mazeSq[col="8"][row="4"]').addClass('wallBlock');game.walls.push([8, 4]);
+			$('.mazeSq[col="7"][row="3"]').addClass('wallBlock');game.walls.push([7, 3]);
+			$('.mazeSq[col="14"][row="3"]').addClass('wallBlock');game.walls.push([14, 3]);
+			$('.mazeSq[col="15"][row="5"]').addClass('wallBlock');game.walls.push([15, 5]);
+			$('.mazeSq[col="16"][row="4"]').addClass('wallBlock');game.walls.push([16, 4]);
+			$('.mazeSq[col="17"][row="3"]').addClass('wallBlock');game.walls.push([17, 3]);
+			$('.mazeSq[col="18"][row="4"]').addClass('wallBlock');game.walls.push([18, 4]);
+			$('.mazeSq[col="17"][row="4"]').addClass('wallBlock');game.walls.push([17, 4]);
+			$('.mazeSq[col="19"][row="2"]').addClass('wallBlock');game.walls.push([19, 2]);
+			$('.mazeSq[col="5"][row="5"]').addClass('wallBlock');game.walls.push([5, 5]);
+			$('.mazeSq[col="4"][row="4"]').addClass('wallBlock');game.walls.push([4, 4]);
+			$('.mazeSq[col="3"][row="4"]').addClass('wallBlock');game.walls.push([3, 4]);
+			$('.mazeSq[col="3"][row="3"]').addClass('wallBlock');game.walls.push([3, 3]);
+			$('.mazeSq[col="4"][row="3"]').addClass('wallBlock');game.walls.push([4, 3]);
+			$('.mazeSq[col="5"][row="4"]').addClass('wallBlock');game.walls.push([5, 4]);	
+		}
+		addOuterWalls();
+
+		var roll = Math.floor(Math.random()*10+1);
+		switch(roll) {
+		    case 1:
+		        addInnerWalls_1();
+		        break;
+		    case 2:
+		        addInnerWalls_2();
+		        break;
+		    case 3:
+		        addInnerWalls_3();
+		        break;
+		    case 4:
+		        addInnerWalls_4();
+		        break;
+		    case 5:
+		        addInnerWalls_5();
+		        break;
+		    case 6:
+		        addInnerWalls_6();
+		        break;
+		    case 7:
+		        addInnerWalls_7();
+		        break;
+		    case 8:
+		        addInnerWalls_8();
+		        break;
+		    case 9:
+		        addInnerWalls_9();
+		        break;
+		    case 10:
+		        addInnerWalls_10();
+		        break;
+		    default:
+		        addInnerWalls_1();
+		}
+		
 	};
 	makeWalls();
+
 	function createEncounters() {
 		xpos = Math.floor(Math.random()*18+2);
 		ypos = Math.floor(Math.random()*18+2);
 		// re-choose positions near player starting point
 		if ((ypos >= 17) && (xpos >= 7) && (xpos <= 13)){ 
+			createEncounters();
+			return;
+		};
+		// re-choose positions on staits
+		if ((game.stairs[0] == xpos) && (game.stairs[1] == ypos)){
 			createEncounters();
 			return;
 		};
@@ -220,8 +1582,9 @@ makeGrid();
 		game.encounters.push([xpos, ypos]);
 		$('.mazeSq[row="'+ypos+'"][col="'+xpos+'"]').addClass('encounter');
 	};
-	//make some encounters
-	for (var i = 0; i < 15; i++) {
+
+	// make some encounters
+	for (var i = 0; i < 20; i++) {
 		createEncounters();	
 	};
 	function encounterCheck(){
@@ -233,6 +1596,36 @@ makeGrid();
 			};
 		};
 	};
+	function stairsCheck(){
+		if ((game.stairs[0] == player.xpos) && (game.stairs[1] == player.ypos)){
+			var conf = confirm('Go down to the next level?');
+			if (conf){
+				//reset dungeon
+				//clear:
+				$('.wallBlock').removeClass('wallBlock');
+				game.walls = [];
+				$('.encounter').removeClass('encounter');
+				game.encounters = [];
+				$('.trap').removeClass('trap');
+				game.traps = [];
+				$('.stairs').removeClass('stairs');
+				game.stairs = [];
+				$('.player').removeClass('player');
+				player.xpos = 10;
+				player.ypos = 19;
+				fogAdjust();
+				$('.mazeSq[col="10"][roe="19"]').addClass('player');
+				makeWalls();
+				for (var i = 0; i < 20; i++) {
+					createEncounters();	
+				};
+				for (var i = 0; i < 10; i++) {
+					createTraps();	
+				};
+				game.level += 1;
+			}
+		}
+	};
 
 	/*****************************************************
 				Traps
@@ -243,6 +1636,11 @@ makeGrid();
 		// re-choose positions near player starting point
 		if ((ypos >= 17) && (xpos >= 7) && (xpos <= 13)){ 
 			createTraps();
+			return;
+		};
+		// re-choose positions on staits
+		if ((game.stairs[0] == xpos) && (game.stairs[1] == ypos)){
+			createEncounters();
 			return;
 		};
 		// re-choose positions on walls
@@ -291,9 +1689,11 @@ makeGrid();
 			if (player.health <= 0){
 				player.health = 1;
 			}
+			displayPlayerHealth();
 		} else {
 			alert('found an item!');
-			getLoot();
+			var num = Math.floor(Math.random()*items.length);
+			addItem(items[num].name);
 		}
 
 	}
@@ -354,7 +1754,7 @@ makeGrid();
 		$('.fog').hide();
 		$('.battleScreen').fadeIn();
 		//random enemy
-		var x = Math.floor((Math.random() * enemies.length));
+		var x = Math.floor((Math.random() * game.enemiesTop + game.enemiesBot));
 		setEnemy(x);
 	};
 	function resetBattle(){
@@ -387,9 +1787,9 @@ makeGrid();
 		var roll = Math.random()*100+1;
 		var magicFind = roll*(1+(x/(x+50)));
 		if (roll >  70){
-			var num = Math.floor(Math.random()*items.length);
-			addItem(items[num].name);
-			$(".lootReport").html(items[num].title);
+			var num = Math.floor(Math.random()*loot.length);
+			addItem(loot[num].name);
+			$(".lootReport").html(loot[num].title);
 		} else if (roll > 40){
 			addItem('healthPotion');
 			$(".lootReport").html('Health Potion');
@@ -403,8 +1803,8 @@ makeGrid();
 	function checkForLevelUp(){
 		var expNeeded = player.level*player.level*100;
 		if (expNeeded <= player.exp){
-			player.level + 1;
-			player.skillPoints += 5;
+			player.level += 1;
+			player.skillPoints += 3;
 			alert('Leveled up! Skill points to spend: '+player.skillPoints);
 		}
 	}
@@ -441,13 +1841,11 @@ makeGrid();
 		};
 		if ((defender == 'player') && (typeOfDamage == 'magic')){
 			var defensePoints = player.resistanceNow;
-			console.log('player receiving maagic damage. player res = '+player.resistanceNow);
 		};
 		if (defensePoints <= 0){
 			defensePoints = 1;
 		}
 		var incomingDamage = (num * ( 1 - ( ( defensePoints/(defensePoints+50) * 0.9 ) )));
-		console.log('incoming damage:' +incomingDamage)
 		return incomingDamage;
 
 	}
@@ -495,7 +1893,6 @@ makeGrid();
 				playerIsHit(damage);
 			} else if (damageType == 'special'){
 				enemies[game.enemyId].special();
-				console.log('inc special atack');
 			} else if (damageType == 'varied2'){
 				var chance = Math.random()*100 + 1;
 				var atk1 = enemies[game.enemyId].varied1
@@ -525,9 +1922,7 @@ makeGrid();
 		}, 400);
 	}
 	function hitAnimation(color){
-		console.log(color);
 		if (color == 'yellow'){
-			console.log('test2');
 			$('.hitImg').css("background", "url('imgs/misc/hit-yellow.png')");
 		}
 		if (color == 'red'){
@@ -602,7 +1997,6 @@ makeGrid();
 	var speedCountDown;
 	function delayTimer(){
 		if (!player.wonBattle){
-			console.log('delayTimer');
 			if (game.delayTimerRunning && (player.delay > 0) && (game.delay > 0)){
 				player.delay -= (player.speedNow/100);
 				game.delay -= (game.speed/100);
@@ -633,8 +2027,6 @@ makeGrid();
 		for (var i = 0; i < usables.length; i++) {
 			var item = usables[i];
 			space = player.pack.indexOf(item);
-			console.log(space);
-			console.log(item);
 			if (space == -1){
 				$('button[type="'+item+'"').addClass('opacity');
 			} else {
@@ -787,7 +2179,7 @@ makeGrid();
 	window.addEventListener('keydown', togglePack, false);
 	function togglePack(e){
 		
-		if (!player.fighting && !player.searchingPack){
+		if (!player.fighting && !player.searchingPack && player.started){
 			if (e.keyCode == '32'){
 				player.searchingPack = true;
 				$('.mazeScreen').hide();
@@ -797,6 +2189,8 @@ makeGrid();
 		} else if (!player.fighting && player.searchingPack){
 			if (e.keyCode == '32'){
 				player.searchingPack = false;
+				$('.introScreen').hide();
+				$('.saveNLoad').hide();
 				$('.mazeScreen').show();
 				$('.fog').show();
 				$('.packScreen').hide();
@@ -933,10 +2327,8 @@ makeGrid();
 				player.pack[from] = 0;
 				player.pack[to] = item;
 
-				console.log('moved '+item+' from '+from +' to '+to);
 			} else if (hasItem && packSelecting){
 			// if item is here and one is selected, switch em
-				console.log('swapping');
 				var from = $('.selectedFromPack').attr('space');
 				var fromId = $('.selectedFromPack').attr('itemId');
 				var toId = $(this).attr('itemId');
@@ -952,7 +2344,6 @@ makeGrid();
 				$('.packSq[space="'+from+'"]').addClass(item2);
 				player.pack[from] = item2;
 				player.pack[to] = item1;
-				console.log('moved '+item1+' from '+from +' to '+to);
 			} else if (equipSelecting && !hasItem){
 				//if selecting from equip and empty, unequip
 				var itemId = $('.selectedFromEquipt').attr('itemId');
@@ -981,6 +2372,8 @@ makeGrid();
 				var est = equipSlotType(equipSpace);
 				var itemType2 = items[itemId2].equipSlot;
 				if ((est == itemType1) && (est == itemType2)){
+					items[itemId1].unequip();
+					items[itemId2].equip();
 					player.equip[equipSpace] = item2;
 					player.pack[packSpace] = item1;
 					$(this).removeClass(item2);
@@ -1105,7 +2498,7 @@ makeGrid();
 	*****************************************************/
 	window.addEventListener('keydown', consumeFromPack, false);
 	function consumeFromPack(e){ // z
-		if (player.searchingPack){
+		if (player.searchingPack && player.started){
 			if ((e.keyCode == '90')){
 				var itemId = $('.selectedFromPack').attr('itemId')
 				if (items[itemId].consumable){
@@ -1147,20 +2540,34 @@ makeGrid();
 	$('.packScreen').on('click', '.menuRight', function(){
 		$('.packScreen').hide();
 		updateStatDisplay();
+		correctSaveMenu();
 		$('.statsNSkills').show();
 	});
 	$('.packScreen').on('click', '.menuLeft', function(){
 		$('.packScreen').hide();
 		updateStatDisplay();
-		$('.statsNSkills').show();
+		correctSaveMenu();
+		$('.saveNLoad').show();
 	});
 	$('.statsNSkills').on('click', '.menuRight', function(){
 		$('.statsNSkills').hide();
-		$('.packScreen').show();
+		$('.saveNLoad').show();
+		correctSaveMenu();
 	});
 	$('.statsNSkills').on('click', '.menuLeft', function(){
 		$('.statsNSkills').hide();
 		$('.packScreen').show();
+		correctSaveMenu();
+	});
+	$('.saveNLoad').on('click', '.menuRight', function(){
+		$('.saveNLoad').hide();
+		$('.packScreen').show();
+		correctSaveMenu();
+	});
+	$('.saveNLoad').on('click', '.menuLeft', function(){
+		$('.saveNLoad').hide();
+		$('.statsNSkills').show();
+		correctSaveMenu();
 	});
 
 	function updateStatDisplay(){
@@ -1183,6 +2590,7 @@ makeGrid();
 
 	function addStartingAbilities(){
 	$('.abilitiesMenuWeapon').append('<div class="infoAbility" handle="Slash"><div class="top"><div class="abilityName">Slash</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Attack for 1.25x weapon damage.</div> </div>');
+	
 	$('.abilitiesMenuWeapon').append('<div class="infoAbility" handle="Pierce"><div class="top"><div class="abilityName">Pierce</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Deal 1x weapon damage, but 1/3 of this damage ignores armor</div> </div>');
 
 	$('.abilitiesMenuMagic').append('<div class="infoAbility" handle="Fireball"><div class="top"><div class="abilityName">Fireball</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Attack for 1.4x magic damage.</div> </div>');
@@ -1228,9 +2636,14 @@ makeGrid();
 
 
 	//open and close accordions
-	$('.infoAbility').on('click', '.abilityName', function(){
+	function accordionMenuToggle(){
+		$('.infoAbility').on('click', '.abilityName', function(){
+		console.log('testing');
 		$(this).parent().next().toggle();
 	});
+	}
+	accordionMenuToggle();
+	
 	function handleToButtonW(handle){
 		for (var i = 0; i < handleToButtonsW.length; i++) {
 			if (handleToButtonsW[i][0] == handle){
@@ -1461,6 +2874,7 @@ makeGrid();
 			} else if (((e.keyCode == '40') || (e.keyCode == '83')) && !wallCollision((player.xpos), player.ypos+1)){
 				player.ypos += 1; // down
 			};
+			stairsCheck();
 			trapCheck();
 			encounterCheck();
 			fogAdjust();
@@ -1471,6 +2885,271 @@ makeGrid();
 	redrawPlayer();
 
 
+	/*****************************************************
+			     	New / Load / Save
+	*****************************************************/
+function correctSaveMenu(){
+	$('.saveNLoadMenuB').hide();
+	$('.saveNLoadMenu').show();
+	$('.action p').html('');
+}
+
+
+function getSaveNames(){
+	if ( localStorage.getItem( 'saveNames' )){
+		saveNames = JSON.parse(( localStorage.getItem( 'saveNames' )));
+	} else {
+		saveNames = [0, 0, 0];
+	}
+	for (var i = 0; i < saveNames.length; i++) {
+		if (saveNames[i]){
+			$('.save_'+(i+1)).html(saveNames[i]);
+		} else {
+			$('.save_'+(i+1)).html('Empty');
+		}
+	};
+}
+
+$('.introMenu').on('click', '.newGame', function(){
+	$('.introMenu').hide();
+	$('.instructions').show();
+});
+$('.introMenu').on('click', '.loadGame', function(){
+	$('.introMenu').hide();
+	getSaveNames();
+	$('.loadMenu').show();
+});
+$('.instructions').on('click', '.playButton', function(){
+	$('.introScreen').hide();
+	$('.fog').show();
+	$('.mazeScreen').fadeIn();
+	player.started = true;
+});
+$('.loadMenu').on('click', '.return', function(){
+	$('.loadMenu').hide();
+	$('.introMenu').show();
+});
+
+
+function saveGame(save){
+	if (save == 1){
+		localStorage.setItem( 'player1', JSON.stringify(player) );
+		localStorage.setItem( 'game1', JSON.stringify(game) )
+	}
+	if (save == 2){
+		localStorage.setItem( 'player2', JSON.stringify(player) );
+		localStorage.setItem( 'game2', JSON.stringify(game) )
+	}
+	if (save == 3){
+		localStorage.setItem( 'player3', JSON.stringify(player) );
+		localStorage.setItem( 'game3', JSON.stringify(game) )
+	}
+	
+}
+function loadGame(save){
+	if (save == 1){
+		player = JSON.parse(localStorage.getItem( 'player1' ));
+		game = JSON.parse(localStorage.getItem( 'game1' ));
+	}
+	if (save == 2){
+		player = JSON.parse(localStorage.getItem( 'player2' ));
+		game = JSON.parse(localStorage.getItem( 'game2' ));
+	}
+	if (save == 3){
+		player = JSON.parse(localStorage.getItem( 'player3' ));
+		game = JSON.parse(localStorage.getItem( 'game3' ));
+	}
+	correctSaveMenu();
+	// remove all stuff from maze
+	$('.wallBlock').removeClass('wallBlock');
+	$('.encounter').removeClass('encounter');
+	$('.stairs').removeClass('stairs');
+	$('.trap').removeClass('trap');
+	$('.player').removeClass('player');
+
+	// remove all items
+	$('.hasItem').removeClass('hasItem');
+	$('[itemId]').removeAttr('itemId');
+	for (var i = 0; i < items.length; i++) {
+		var name = items[i].name;
+		$('.'+name).removeClass(name);
+	};
+
+	//repopulate walls
+	for (var i = 0; i < game.walls.length; i++) {
+		var x = game.walls[i][0];
+		var y = game.walls[i][1];
+		$('.mazeSq[col="'+x+'"][row="'+y+'"]').addClass('wallBlock');
+	};
+	//repopulate encounters
+	for (var i = 0; i < game.encounters.length; i++) {
+		var x = game.encounters[i][0];
+		var y = game.encounters[i][1];
+		$('.mazeSq[col="'+x+'"][row="'+y+'"]').addClass('encounter');
+	};
+	//repopulate traps
+	for (var i = 0; i < game.traps.length; i++) {
+		var x = game.traps[i][0];
+		var y = game.traps[i][1];
+		$('.mazeSq[col="'+x+'"][row="'+y+'"]').addClass('trap');
+	};
+	//stairs
+	function repopStairs(){
+		var x = game.stairs[0];
+		var y = game.stairs[1];
+		$('.mazeSq[col="'+x+'"][row="'+y+'"]').addClass('stairs');
+	}
+	repopStairs();
+	function repopPlayer(){
+		var x = player.xpos;
+		var y = player.ypos;
+		$('.mazeSq[col="'+x+'"][row="'+y+'"]').addClass('player');
+	}
+	repopPlayer();
+
+
+	//finish adjusting map
+	$('.introScreen').hide();
+	$('.saveNLoad').hide();
+	$('.packScreen').hide();
+	$('.fog').show();
+	$('.mazeScreen').fadeIn();
+	player.searchingPack = false;
+	fogAdjust();
+	
+	// reset available loot
+	availableLoot();
+
+	// reset items in pack
+	for (var i = 0; i < player.pack.length; i++) {
+		if (player.pack[i]){
+
+			for (var k = 0; k < items.length; k++) {
+				if (items[k].name == player.pack[i]){
+					var itemId = items[k].id;
+				} 
+			};
+
+			$('.packSq[space="'+i+'"]').addClass('hasItem');
+			$('.packSq[space="'+i+'"]').addClass(player.pack[i]);
+			$('.packSq[space="'+i+'"]').attr('itemId', itemId);
+		}
+	};
+
+	// reset items in equip
+	for (var i = 0; i < player.equip.length; i++) {
+		if (player.equip[i]){
+
+			for (var k = 0; k < items.length; k++) {
+				if (items[k].name == player.equip[i]){
+					var itemId = items[k].id;
+				} 
+			};
+
+			$('.equipSlot[space="'+i+'"]').addClass('hasItem');
+			$('.equipSlot[space="'+i+'"]').addClass(player.equip[i]);
+			$('.equipSlot[space="'+i+'"]').attr('itemId', itemId);
+		}
+	};
+
+
+	//************   skills   ***********//
+
+	// remove active and available skills
+
+	$('.activeSkill').removeClass('activeSkill');
+	$('.availableSkill').removeClass('availableSkill');
+	// replace active and available skills
+
+	for (var i = 0; i < player.weaponSkills.length; i++) {
+		if (player.weaponSkills[i]){
+			$('.weaponSkillTree [skillNum="'+i+'"]').addClass('activeSkill');
+		}
+	};
+	if (!player.weaponSkills[0]){
+		$('.weaponSkillTree [skillNum="0"]').addClass('availableSkill');
+	}
+	if (player.weaponSkills[0] && !player.weaponSkills[1]){
+		$('.weaponSkillTree [skillNum="1"]').addClass('availableSkill');
+	}
+	if ((player.weaponSkills[0] >= 5 )&& !player.weaponSkills[2]){
+		$('.weaponSkillTree [skillNum="2"]').addClass('availableSkill');
+	}
+	if (player.weaponSkills[2] && !player.weaponSkills[3]){
+		$('.weaponSkillTree [skillNum="3"]').addClass('availableSkill');
+	}
+	if ((player.weaponSkills[0] >= 10 )&& !player.weaponSkills[4]){
+		$('.weaponSkillTree [skillNum="4"]').addClass('availableSkill');
+	}
+	if (player.weaponSkills[4] && !player.weaponSkills[5]){
+		$('.weaponSkillTree [skillNum="5"]').addClass('availableSkill');
+	}
+	if ((player.weaponSkills[0] >= 15 )&& !player.weaponSkills[6]){
+		$('.weaponSkillTree [skillNum="6"]').addClass('availableSkill');
+	}
+	if (player.weaponSkills[6] && !player.weaponSkills[7]){
+		$('.weaponSkillTree [skillNum="7"]').addClass('availableSkill');
+	}
+
+	for (var i = 0; i < player.magicSkills.length; i++) {
+		if (player.magicSkills[i]){
+			$('.magicSkillTree [skillNum="'+i+'"]').addClass('activeSkill');
+		}
+	};
+	if (!player.magicSkills[0]){
+		$('.magicSkillTree [skillNum="0"]').addClass('availableSkill');
+	}
+	if (player.magicSkills[0] && !player.magicSkills[1]){
+		$('.magicSkillTree [skillNum="1"]').addClass('availableSkill');
+	}
+	if ((player.magicSkills[0] >= 5 )&& !player.magicSkills[2]){
+		$('.magicSkillTree [skillNum="2"]').addClass('availableSkill');
+	}
+	if (player.magicSkills[2] && !player.magicSkills[3]){
+		$('.magicSkillTree [skillNum="3"]').addClass('availableSkill');
+	}
+	if ((player.magicSkills[0] >= 10 )&& !player.magicSkills[4]){
+		$('.magicSkillTree [skillNum="4"]').addClass('availableSkill');
+	}
+	if (player.magicSkills[4] && !player.magicSkills[5]){
+		$('.magicSkillTree [skillNum="5"]').addClass('availableSkill');
+	}
+	if ((player.magicSkills[0] >= 15 )&& !player.magicSkills[6]){
+		$('.magicSkillTree [skillNum="6"]').addClass('availableSkill');
+	}
+	if (player.magicSkills[6] && !player.magicSkills[7]){
+		$('.magicSkillTree [skillNum="7"]').addClass('availableSkill');
+	}
+
+	for (var i = 0; i < player.tacticSkills.length; i++) {
+		if (player.tacticSkills[i]){
+			$('.tacticSkillTree [skillNum="'+i+'"]').addClass('activeSkill');
+		}
+	};
+	if (!player.tacticSkills[0]){
+		$('.tacticSkillTree [skillNum="0"]').addClass('availableSkill');
+	}
+	if (player.tacticSkills[0] && !player.tacticSkills[1]){
+		$('.tacticSkillTree [skillNum="1"]').addClass('availableSkill');
+	}
+	if ((player.tacticSkills[0] >= 5 )&& !player.tacticSkills[2]){
+		$('.tacticSkillTree [skillNum="2"]').addClass('availableSkill');
+	}
+	if (player.tacticSkills[2] && !player.tacticSkills[3]){
+		$('.tacticSkillTree [skillNum="3"]').addClass('availableSkill');
+	}
+	if ((player.tacticSkills[0] >= 10 )&& !player.tacticSkills[4]){
+		$('.tacticSkillTree [skillNum="4"]').addClass('availableSkill');
+	}
+	if (player.tacticSkills[4] && !player.tacticSkills[5]){
+		$('.tacticSkillTree [skillNum="5"]').addClass('availableSkill');
+	}
+	if ((player.tacticSkills[0] >= 15 )&& !player.tacticSkills[6]){
+		$('.tacticSkillTree [skillNum="6"]').addClass('availableSkill');
+	}
+	if (player.tacticSkills[6] && !player.tacticSkills[7]){
+		$('.tacticSkillTree [skillNum="7"]').addClass('availableSkill');
+	}
 
 
 
@@ -1479,6 +3158,242 @@ makeGrid();
 
 
 
+	// correct mastery skills html
+
+	$('[name="Weapon Mastery"] .skillCounter').html(player.weaponSkills[0]);
+	$('[name="Magic Mastery"] .skillCounter').html(player.magicSkills[0]);
+	$('[name="Tactic Mastery"] .skillCounter').html(player.tacticSkills[0]);
+
+	// remove all skill buttons and abilityInfos
+	$('.skillBtn').remove();
+	$('.infoAbility').remove();
+
+	// replace all skill buttons and abilityInfos
+
+		// buttons
+	for (var i = 0; i < player.weaponAbilities.length; i++) {
+		if (player.weaponAbilities[i]){
+			var name = player.weaponAbilities[i];
+
+			for (var k = 0; k < handleToButtonsW.length; k++) {
+				if (handleToButtonsW[k][0] == name){
+					
+					$('.activeWeaponSkills [slot="'+(i+1)+'"]').html(name);
+					$('.weaponAttackMenu .q'+(i+1)).append((handleToButtonsW[k][1]));
+				}
+			};
+		}
+	};
+	for (var i = 0; i < player.magicAbilities.length; i++) {
+		if (player.magicAbilities[i]){
+			var name = player.magicAbilities[i];
+			for (var k = 0; k < handleToButtonsM.length; k++) {
+				if (handleToButtonsM[k][0] == name){
+					$('.activeMagicSkills [slot="'+(i+1)+'"]').html(name);
+					$('.magicAttackMenu .q'+(i+1)).append((handleToButtonsM[k][1]));
+				}
+			};
+		}
+	};
+	for (var i = 0; i < player.tacticAbilities.length; i++) {
+		if (player.tacticAbilities[i]){
+			var name = player.tacticAbilities[i];
+			for (var k = 0; k < handleToButtonsT.length; k++) {
+				if (handleToButtonsT[k][0] == name){
+					$('.activeTacticSkills p[slot="'+(i+1)+'"]').html(name);
+					$('.tacticAttackMenu .q'+(i+1)).append((handleToButtonsT[k][1]));
+				}
+			};
+		}
+	};
+		//infoAbilities
+		addStartingAbilities();
+	for (var i = 0; i < player.weaponAbilitiesLearned.length; i++) {
+		if (player.weaponAbilitiesLearned[i] == 'Berserk'){
+			applyBerserk();
+		}
+		if (player.weaponAbilitiesLearned[i] == 'Focused Hit'){
+			applyFocusedHit();
+		}
+		if (player.weaponAbilitiesLearned[i] == 'Bloody Hit'){
+			applyBloodyHit();
+		}
+		if (player.weaponAbilitiesLearned[i] == 'Impale'){
+			applyImpale();
+		}
+	};
+	
+	for (var i = 0; i < player.magicAbilitiesLearned.length; i++) {
+		if (player.magicAbilitiesLearned[i] == 'Icebolt'){
+			applyIcebolt();
+		}
+		if (player.magicAbilitiesLearned[i] == 'Channel'){
+			applyChannel();
+		}
+		if (player.magicAbilitiesLearned[i] == 'Electrocute'){
+			applyElectrocute();
+		}
+		if (player.magicAbilitiesLearned[i] == 'Magic Missiles'){
+			applyMagicMissiles();
+		}
+	};
+	
+	for (var i = 0; i < player.tacticAbilitiesLearned.length; i++) {
+		if (player.tacticAbilitiesLearned[i] == 'Envenom'){
+			applyEnvenom();
+		}
+		if (player.tacticAbilitiesLearned[i] == 'Focus'){
+			applyFocus();
+		}
+		if (player.tacticAbilitiesLearned[i] == 'Weaken'){
+			applyWeaken();
+		}
+		if (player.tacticAbilitiesLearned[i] == 'Ghost Strike'){
+			applyGhostStrike();
+		}
+	};
+
+
+
+	// correct active skills display
+
+	$('.activeSkillsDisplay p').html('');
+
+	for (var i = 0; i < player.weaponAbilities.length; i++) {
+		if (player.weaponAbilities[i]){
+			$('.activeWeaponSkills p[slot="'+(i+1)+'"]').html(player.weaponAbilities[i]);
+		}
+	};
+	for (var i = 0; i < player.magicAbilities.length; i++) {
+		if (player.magicAbilities[i]){
+			$('.activeMagicSkills p[slot="'+(i+1)+'"]').html(player.magicAbilities[i]);
+		}	
+	};
+	for (var i = 0; i < player.tacticAbilities.length; i++) {
+		if (player.tacticAbilities[i]){
+			$('.activeTacticSkills p[slot="'+(i+1)+'"]').html(player.tacticAbilities[i]);
+		}
+		
+	};
+
+	displayPlayerHealth();
+	displayPlayerMana();
+
+} // end load function
+
+$('.gameScreen').on('click', '.save_1', function(){
+	var slot = saveNames[0];
+	// if saving and empty, save
+	// if saving and occupied, confirm
+	//else, load
+	if ((action == 'saving') && !slot){
+		var name = prompt('Enter a name for this game');
+		if (name != ""){
+			saveNames[0] = name;
+			localStorage.setItem( 'saveNames', JSON.stringify(saveNames) );
+			saveGame(1);
+		} else {
+			alert('that is not a name');
+		}
+	} else if ((action == 'saving') && slot){
+		var conf = confirm('Want to save over this previous game?');
+		if (conf){
+			var name = prompt('Enter a name for this game');
+			if (name != ""){
+				saveNames[0] = name;
+				localStorage.setItem( 'saveNames', JSON.stringify(saveNames) );
+				saveGame(1);
+			} else {
+				alert('that is not a name');
+			}
+		}
+	} else {
+		loadGame(1);
+	}
+	getSaveNames();
+});
+$('.gameScreen').on('click', '.save_2', function(){
+	var slot = saveNames[0];
+	// if saving and empty, save
+	// if saving and occupied, confirm
+	//else, load
+	if ((action == 'saving') && !slot){
+		var name = prompt('Enter a name for this game');
+		if (name != ""){
+			saveNames[0] = name;
+			localStorage.setItem( 'saveNames', JSON.stringify(saveNames) );
+			saveGame(2);
+		} else {
+			alert('that is not a name');
+		}
+	} else if ((action == 'saving') && slot){
+		var conf = confirm('Want to save over this previous game?');
+		if (conf){
+			var name = prompt('Enter a name for this game');
+			if (name != ""){
+				saveNames[0] = name;
+				localStorage.setItem( 'saveNames', JSON.stringify(saveNames) );
+				saveGame(2);
+			} else {
+				alert('that is not a name');
+			}
+		}
+	} else {
+		loadGame(2);
+	}
+	getSaveNames();
+});
+$('.gameScreen').on('click', '.save_3', function(){
+	var slot = saveNames[0];
+	// if saving and empty, save
+	// if saving and occupied, confirm
+	//else, load
+	if ((action == 'saving') && !slot){
+		var name = prompt('Enter a name for this game');
+		if (name != ""){
+			saveNames[0] = name;
+			localStorage.setItem( 'saveNames', JSON.stringify(saveNames) );
+			saveGame(3);
+		} else {
+			alert('that is not a name');
+		}
+	} else if ((action == 'saving') && slot){
+		var conf = confirm('Want to save over this previous game?');
+		if (conf){
+			var name = prompt('Enter a name for this game');
+			if (name != ""){
+				saveNames[0] = name;
+				localStorage.setItem( 'saveNames', JSON.stringify(saveNames) );
+				saveGame(3);
+			} else {
+				alert('that is not a name');
+			}
+		}
+	} else {
+		loadGame(3);
+	}
+	getSaveNames();
+});
+
+$('.saveNLoadMenuB').on('click', '.returnToSLM', function(){
+	correctSaveMenu();
+});
+var action = '';
+$('.saveNLoadMenu').on('click', '.saveCurrentGame', function(){
+	getSaveNames();
+	$('.saveNLoadMenu').hide();
+	$('.saveNLoadMenuB').show();
+	action = 'saving';
+	$('.action p').html('Saving');
+
+});
+$('.saveNLoadMenu').on('click', '.loadCurrentGame', function(){
+	getSaveNames();
+	$('.saveNLoadMenu').hide();
+	$('.saveNLoadMenuB').show();
+	action = 'loading';
+	$('.action p').html('Loading');
+});
 
 
 

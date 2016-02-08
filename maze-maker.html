@@ -1,0 +1,85 @@
+
+<!DOCTYPE html> 
+<html lang="en">
+    <head>
+        <title>maze-creator</title>
+        <meta charset="UTF-8">
+        <meta name="description" content="No description">
+        <meta name="author" content="JP Chaufan Field">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="shortcut icon" href="#">
+        <link rel="stylesheet" type="text/css" href="css/normalize.css">
+        <link rel="stylesheet" type="text/css" href="css/css.css">   
+        <style type="text/css">
+        .wally {
+        	background: grey;
+        }
+
+        </style>
+
+          
+    </head>
+    <body>
+        <div class="gameScreen"><div class="mazeScreen"></div></div>
+    	
+
+
+       <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+       <script type="text/javascript">
+
+       function makeGrid(){
+			var rows = 20;
+			var cols = 20;
+			for (var r = 1; r <= rows; r++) {
+				for (var c = 1; c <= cols; c++) {
+					$('.mazeScreen').append('<div class="mazeSq" col="'+c+'" row="'+r+'"></div>')
+				};
+			};
+		};
+		makeGrid();
+
+
+       function addOuterWalls(){
+			for (var i = 1; i <= 20; i++) { //left side
+				$('.mazeSq[row="'+i+'"][col="1"]').addClass('wally');
+				
+			};
+			for (var i = 1; i <= 20; i++) {  //right side
+				$('.mazeSq[row="'+i+'"][col="20"]').addClass('wally');
+				
+			};
+			for (var i = 1; i <= 20; i++) {  //top side
+				$('.mazeSq[row="1"][col="'+i+'"]').addClass('wally');
+				
+			};
+			for (var i = 1; i <= 20; i++) {  //right side
+				$('.mazeSq[row="20"][col="'+i+'"]').addClass('wally');
+				
+			};
+		};
+		addOuterWalls();
+
+		$('.mazeSq').click(function(){
+			var x = $(this).attr('col');
+			var y = $(this).attr('row');
+			$(this).addClass('wallBlock');
+			console.log('$(\'.mazeSq[col="'+x+'"][row="'+y+'"]\').addClass(\'wallBlock\');game.walls.push(['+x+', '+y+']);');
+			
+
+		});
+
+
+
+
+
+		
+
+
+       </script>
+       
+    </body>
+</html>
+
+
+
+		

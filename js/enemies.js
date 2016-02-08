@@ -1,3 +1,4 @@
+
 enemies = [
 {	
 	enemyName: "Goat Sucker",
@@ -85,7 +86,6 @@ enemies = [
 	
 }
 ];
-
 
 
 

@@ -1,28 +1,28 @@
 // buttons
 
 handleToButtonsW = [
-['Slash','<button class="slash"><b>Slash</b>: a powerful attack</button>'],
-['Pierce','<button class="pierce"><b>Pierce</b>: good against armor</button>'],
-['Berserk','<button class="berserk"><b>Berserk</b>: can hit really hard, or slow you down</button>'],
-['Focused Hit', '<button class="focusedHit"><b>Focused Hit</b>: attack, gaining armor and resistance</button>'],
-['Bloody Strike','<button class="bloodyStrike"><b>Bloody Strike</b>: attack, healing for some of the damage</button>'],
-['Impale', '<button class="impale"><b>Impale</b>: completely bypasses armor</button>']
+['Slash','<button class="skillBtn slash"><b>Slash</b>: a powerful attack</button>'],
+['Pierce','<button class="skillBtn pierce"><b>Pierce</b>: good against armor</button>'],
+['Berserk','<button class="skillBtn berserk"><b>Berserk</b>: can hit really hard, or slow you down</button>'],
+['Focused Hit', '<button class="skillBtn focusedHit"><b>Focused Hit</b>: attack, gaining armor and resistance</button>'],
+['Bloody Strike','<button class="skillBtn bloodyStrike"><b>Bloody Strike</b>: attack, healing for some of the damage</button>'],
+['Impale', '<button class="skillBtn impale"><b>Impale</b>: completely bypasses armor</button>']
 ];
 
 handleToButtonsM = [
-['Fireball','<button class="fireball"><b>Fireball</b>: basic magical attack</button>'],
-['Icebolt','<button class="icebolt"><b>Icebolt</b>: slows the enemy</button>'],
-['Channel','<button class="channel"><b>Channel</b>: Recover 75% of your mana</button>'],
-['Electrocute','<button class="electrocute"><b>Electrocute</b>: has a chance to critically hit</button>'],
-['Magic Missiles', '<button class="magicMissiles"><b>Magic Missiles</b>: fires 1-3 magic missiles</button>'],
+['Fireball','<button class="skillBtn fireball"><b>Fireball</b>: basic magical attack</button>'],
+['Icebolt','<button class="skillBtn icebolt"><b>Icebolt</b>: slows the enemy</button>'],
+['Channel','<button class="skillBtn channel"><b>Channel</b>: Recover 75% of your mana</button>'],
+['Electrocute','<button class="skillBtn electrocute"><b>Electrocute</b>: has a chance to critically hit</button>'],
+['Magic Missiles', '<button class="skillBtn magicMissiles"><b>Magic Missiles</b>: fires 1-3 magic missiles</button>'],
 ];
 
 handleToButtonsT = [
-['Safeguard','<button class="safeguard"><b>Safeguard</b>: recover health and gain armor</button>'],
-['Envenom','<button class="envenom"><b>Envenom</b>: attack with a poisoning blade</button>'],
-['Focus','<button class="focus"><b>Focus</b>: gain mana recovery and resistance</button>'],
-['Weaken', '<button class="weaken"><b>Weaken</b>: lower enemy\'s armor and resistance</button>'],
-['Ghost Strike', '<button class="ghostStrike"><b>Ghost Strike</b>: attack for weapon and then magic damage</button>'],
+['Safeguard','<button class="skillBtn safeguard"><b>Safeguard</b>: recover health and gain armor</button>'],
+['Envenom','<button class="skillBtn envenom"><b>Envenom</b>: attack with a poisoning blade</button>'],
+['Focus','<button class="skillBtn focus"><b>Focus</b>: gain mana recovery and resistance</button>'],
+['Weaken', '<button class="skillBtn weaken"><b>Weaken</b>: lower enemy\'s armor and resistance</button>'],
+['Ghost Strike', '<button class="skillBtn ghostStrike"><b>Ghost Strike</b>: attack for weapon and then magic damage</button>'],
 ];
 
 
@@ -102,12 +102,6 @@ function clickImpale(){
 
 
 
-
-
-
-
-
-
 /*********************************************************
 			Magic Attacks
 *********************************************************/
@@ -133,7 +127,7 @@ function clickIcebolt(){
 			player.mana -= 20;
 			displayPlayerMana();
 			var damage = calcDamage((player.magicDamageNow),'game','magic');
-			game.delay += 25;
+			game.delay += 35;
 			displayDelay();
 			gameIsHit(damage, 'blue');
 			displayPlayerReport(" You launch an icebolt at " + game.enemyName + "!");
@@ -241,7 +235,7 @@ function clickSafeguard(){
 			player.mana -= 30;
 			displayPlayerMana();
 			player.health += (player.tacticSkillNow*0.25);
-			if (player.health += player.maxHealth){
+			if (player.health >= player.maxHealth){
 				player.health = player.maxHealth;
 			}
 			player.restoreHealthNow += (player.tacticSkillNow*0.25);

@@ -1,0 +1,26 @@
+===============================
+Bugs to Fix:
+===============================
+
+
+
+
+
+
+
+===============================
+Things to Add:
+===============================
+
+> add more enemies and items that enter in as the game level progresses
+
+> bosses and quests
+
+> randomize damage a little bit?
+
+> findable books/scrolls containing unique skills
+
+
+
+
+

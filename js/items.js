@@ -1,3 +1,7 @@
+// loot holds the items currently available, while items holds all the items that exist
+var loot = [];
+
+
 items = [
 	{
 		name: 'healthPotion',
@@ -357,7 +361,7 @@ items = [
 		name: 'moonWand',
 		id: 21,
 		title: 'Moon Wand',
-		desc: '+25 magicDamage',
+		desc: '+25 Magic Damage',
 		consumable: false,
 		equipSlot: 'hand',
 		equip: function(){
@@ -506,13 +510,14 @@ items = [
 		consumable: false,
 		equipSlot: 'ring',
 		equip: function(){
-			player.mana += 30;
+			player.maxMana += 30;
 			player.restoreMana += 3;
-
+			displayPlayerMana();
 		},
 		unequip: function(){
-			player.mana -= 30;
+			player.maxMana -= 30;
 			player.restoreMana -= 3;
+			displayPlayerMana();
 		}
 	},
 	{
@@ -544,7 +549,13 @@ items = [
 
 
 
-
+function availableLoot(){
+	loot = [];
+	for (var i = 2; i < 31; i++) {
+		loot.push(items[i]);
+	};
+}
+availableLoot();
 
 
 

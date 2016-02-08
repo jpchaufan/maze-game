@@ -17,6 +17,66 @@
 }
 
 /**************************
+      Intro Screen
+**************************/
+
+.introScreen {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: url('../imgs/misc/intro-fx.png');
+	background-size: 100% 100%;
+}
+.instructions {
+	display: none;
+	background: rgba(255,255,255,.5);
+	text-align: center;
+	margin: 20px auto;
+	width: 240px;
+	font-size: 16px;
+	padding: 10px 0;
+	border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	-o-border-radius: 10px;
+}
+.gameName {
+	text-align: center;
+	font-weight: bolder;
+	padding-top: 40px;
+	font-size: 30px;
+	font-variant: small-caps;
+	text-shadow: 2px 2px 2px #dfdfdf;
+}
+.introMenu, .loadMenu {
+	background: rgba(255,255,255,.4);
+	text-align: center;
+	margin: 50px auto;
+	width: 120px;
+	padding: 10px 0;
+	border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	-o-border-radius: 10px;
+}
+.loadMenu {
+	margin: 20px auto;
+}
+.newGame, .loadGame, .save {
+	cursor: pointer;
+	font-size: 20px;
+	color: #202020;
+	padding: 3px 5px;
+}
+.newGame:hover, .loadGame:hover, .save:hover {
+	background: #404040;
+	color: #dfdfdf;
+}
+.loadMenu {
+	display: none;
+}
+
+/**************************
       Maze Screen
 **************************/
 
@@ -24,10 +84,10 @@
 	background: rgba(0, 0, 0, 0);
 }
 .mazeScreen {
+	display: none;
 	width: 100%;
 	height: 100%;
 	line-height: 0;
-	
 }
 .fog {
 	display: none;
@@ -36,12 +96,6 @@
 	width: 100%;
 	height: 100%;
 	box-shadow: inset 0px 150px 80px 150px black;
-	/*
-		box shadow is the fog, 
-		n1=(-150 to 150) n2=(-150 to 150), n3=80 n4=150.
-		n1 and n2 are x and y coords
-		n3 is the fuzziness, n4 is the range of vision
-	*/
 }
 .mazeSq {
 	display: inline-block;
@@ -62,7 +116,9 @@
 .encounter {
 	background: red;
 }
-.trap {
+.stairs {
+	background: url('../imgs/misc/stairs.png');
+	background-size: 100% 100%;
 }
 
 /**************************
@@ -111,7 +167,6 @@
 	background: red;
 }
 .gameDelayBar {
-	
 	width: 140px;
 	height: 16px;
 	border: 2px solid black;
@@ -535,6 +590,55 @@
 }
 .activeMagicSkills, .activeTacticSkills {
 	display: none;
+}
+
+/**************************
+      Save N Load Screen
+**************************/
+
+.saveNLoad {
+	position: absolute;
+	display: none;
+	height: 100%;
+	width: 100%;
+	background: #567890;
+}
+.saveNLoadMenu, .saveNLoadMenuB {
+	width: 200px;
+	height: 200px;
+	margin: 100px auto;
+	background: #345678;
+	border: 3px solid #123456;
+}
+.saveNLoadMenuB  {
+	display: none;
+}
+.saveCurrentGame, .loadCurrentGame {
+	width: 120px;
+	cursor: pointer;
+	text-align: center;
+	margin: 45px auto;
+	font-size: 20px;
+	color: #dfdfdf;
+}
+.saveNLoadMenuB p {
+	width: 120px;
+	cursor: pointer;
+	text-align: center;
+	margin: 16px auto;
+	font-size: 20px;
+	color: #dfdfdf;
+}
+.action {
+	position: absolute;
+	left: 174px;
+}
+.action p {
+    font-size: 20px;
+    color: #dfdfdf;
+}
+.saveCurrentGame:hover, .loadCurrentGame:hover, .saveNLoadMenuB p:hover {
+	background: #4E972F;
 }
 
 /**************************
