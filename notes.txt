@@ -12,14 +12,28 @@ Bugs to Fix:
 Things to Add:
 ===============================
 
+> create a simple web page for the game
+
+> find some audio, create some atmosphere
+
 > add more enemies and items that enter in as the game level progresses
+
+> also new items that get added as the game progresses
+	> How:
+	> the function to get a monster will have a top and bottom limit for random numbers as a var for the game object.
+	> so will the function to get loot from encounter victories and trap loot, which will also have a top and bottom as vars in the game object
+
+> find or make cooler graphics
 
 > bosses and quests
 
-> randomize damage a little bit?
-
 > findable books/scrolls containing unique skills
 
+> change player appearance in battle menu based on equipt weapon
+	>eg. all weapons have a 'type' like sword, wand, staff, sickle
+	>one pic of player corresponding to each weapon type
+
+> make the code 'private' such that the console nor inspect can not be used to cheat
 
 
 
