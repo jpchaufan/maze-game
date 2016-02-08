@@ -2,18 +2,25 @@
 <!DOCTYPE html> 
 <html lang="en">
     <head>
-        <title>Liberatus</title>
+        <title>Untitled</title>
         <meta charset="UTF-8">
         <meta name="description" content="No description">
         <meta name="author" content="JP Chaufan Field">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="#">
         <link rel="stylesheet" type="text/css" href="css/normalize.css">
-        <link rel="stylesheet" type="text/css" href="css/css.css">      
+        <link rel="stylesheet" type="text/css" href="css/main.css"> 
+        <link rel="stylesheet" type="text/css" href="css/css.css">     
     </head>
     <body>
-        
-        <div class="gameScreen">
+        <header>
+        	<h1>Liberatus</h1>
+        </header>
+        <main>
+
+
+
+             <div class="gameScreen">
             <div class="introScreen">
                 <div class="gameName">Liberatus</div>
                 <div class="introMenu"><p class="newGame">New Game</p><p class="loadGame">Load Game</p></div>
@@ -33,7 +40,7 @@
                     <p class="save return">Go Back</p>
                 </div>
             </div>
-        	<div class="mazeScreen"></div><div class="fog"></div>
+            <div class="mazeScreen"></div><div class="fog"></div>
 
             <div class="battleScreen">
                 <div class="gameSide">
@@ -325,29 +332,64 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </main>
+        <sidebar class="sidebarLeft">
+            <div class="dd-handle handle-story" >Story</div>
+            <div class="dd-handle handle-instructions">Instructions</div>
+
+            <div class="dd-menu menu-story">You wake up, in a damp and dark place that is unfamiliar.The chilling image of the wretched sorcerer who trapped you in this tomb is still painfully ingrained in your mind.<br><br>You have nothing left to do but to make your way to the deepest depths, however deep they may be, and achieve your liberation from this mental prison. </div>
+            <div class="dd-menu menu-instructions"><b>Controls:</b>
+                <ul>
+                    <li>SPACE BAR for menu</li>
+                    <li>ARROW KEYS or WASD to move</li>
+                    <li>Select a potion and press Z to drink it</li>
+                    <li>Select an item and press X to delete it</li>
+                </ul>
+                <b>Gameplay Guide:</b>
+                <ul>
+                    <li>Defeat enemies to gain items and experience</li>
+                    <li>Upgrade your skills and abilities</li>
+                    <li>Manage which of your known abilities are available in battle in the skills menu</li>
+                    <li>Note that you cannot take back any skill points or go back to a previous dungeon level, without loading a past saved game. (so save often!)</li>
+                </ul>
+
+            </div>
+        </sidebar>
+        <sidebar class="sidebarRight ">
+           <div class="dd-handle handle-about">About Liberatus</div>
+            <div class="dd-menu menu-about">Liberatus is an RPG game created just for fun. It was inspired by my favorite game series, the Diablo series, and by the pokemon gameboy games. Feel free to submit any questions or comments at <a href="http://jpchaufan.com">my website</a>
+
+            </div>
+        </sidebar>
+        
+
+
        <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
        <script type="text/javascript" src="js/jqueryui.js"></script>
+       <script type="text/javascript" src="js/page.js"></script>
        <script type="text/javascript" src="js/items.js"></script>
        <script type="text/javascript" src="js/enemies.js"></script>
        <script type="text/javascript" src="js/abilities.js"></script>
        <script type="text/javascript" src="js/game.js"></script>
        <script type="text/javascript" src="js/skills.js"></script>
+
     </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
