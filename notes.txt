@@ -6,26 +6,15 @@ Bugs to Fix:
 
 
 
-
-
 ===============================
 Things to Add:
 ===============================
 
-> create a simple web page for the game
+> add new items and bosses and enemies, up to level 10+
 
-> find some audio, create some atmosphere
+> change skill system
 
-> add more enemies and items that enter in as the game level progresses
-
-> also new items that get added as the game progresses
-	> How:
-	> the function to get a monster will have a top and bottom limit for random numbers as a var for the game object.
-	> so will the function to get loot from encounter victories and trap loot, which will also have a top and bottom as vars in the game object
-
-> find or make cooler graphics
-
-> bosses and quests
+> find or make cooler graphics, and audio
 
 > findable books/scrolls containing unique skills
 

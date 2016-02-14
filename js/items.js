@@ -213,7 +213,7 @@ items = [
 		name: 'tunic1',
 		id: 12,
 		title: 'Simple Tunic',
-		desc: '+8 Tactic Skill<br>+30 Armor',
+		desc: '+8 Tactic Skill<br>+30 Armor<br>+5 Speed',
 		consumable: false,
 		equipSlot: 'torso',
 		equip: function(){
@@ -327,7 +327,7 @@ items = [
 		name: 'spikedShield1',
 		id: 19,
 		title: 'Spiked Shield',
-		desc: '+70 armor<br>+8 weaponDamage',
+		desc: '+70 armor<br>+8 Weapon Damage',
 		consumable: false,
 		equipSlot: 'hand',
 		equip: function(){
@@ -489,16 +489,16 @@ items = [
 		name: 'battleAxe',
 		id: 29,
 		title: 'Battle Axe',
-		desc: '+35 Weapon Damage<br>-12 Speed',
+		desc: '+45 Weapon Damage<br>-12 Speed',
 		consumable: false,
 		equipSlot: 'hand',
 		equip: function(){
-			player.weaponDamage += 35;
+			player.weaponDamage += 45;
 			player.speed -= 12;
 
 		},
 		unequip: function(){
-			player.weaponDamage -= 35;
+			player.weaponDamage -= 45;
 			player.speed += 12;
 		}
 	},
@@ -539,23 +539,112 @@ items = [
 			player.resistance -= 40;
 		}
 	},
+	{
+		name: 'lightningRing',
+		id: 32,
+		title: 'Lightning Ring',
+		desc: '+15 Magic Damage<br>+4 Restore Mana<br>+15 Resistance',
+		consumable: false,
+		equipSlot: 'ring',
+		equip: function(){
+			player.magicDamage += 15;
+			player.restoreMana += 4;
+			player.resistance += 15;
+		},
+		unequip: function(){
+			player.magicDamage -= 10;
+			player.restoreMana -= 4;
+			player.resistance -= 15;
+		}
+	},
+	{
+		name: 'battlemageRing',
+		id: 32,
+		title: 'Battlemage Ring',
+		desc: '+15 Magic Damage<br>+4 Restore Mana<br>+15 Weapon Damage',
+		consumable: false,
+		equipSlot: 'ring',
+		equip: function(){
+			player.weaponDamage += 15;
+			player.restoreMana += 4;
+			player.magicDamage += 15;
+		},
+		unequip: function(){
+			player.weaponDamage -= 15;
+			player.restoreMana -= 4;
+			player.magicDamage -= 15;
+		}
+	},
+	{
+		name: 'mentalistsPendant',
+		id: 33,
+		title: 'Mentalist\'s Pendant',
+		desc: '+20 Magic Damage<br>+25 Armor',
+		consumable: false,
+		equipSlot: 'neck',
+		equip: function(){
+			player.magicDamage += 20;
+			player.armor += 25;
+		},
+		unequip: function(){
+			player.magicDamage -= 20;
+			player.armor -= 25;
+		}
+	},
+	{
+		name: 'ninjato',
+		id: 34,
+		title: 'Ninjato',
+		desc: '+20 Weapon Damage<br>+15 Speed',
+		consumable: false,
+		equipSlot: 'hand',
+		equip: function(){
+			player.weaponDamage += 20;
+			player.speed += 15;
+		},
+		unequip: function(){
+			player.weaponDamage -= 20;
+			player.speed -= 15;
+		}
+	},
+	{
+		name: 'spikeyMace',
+		id: 35,
+		title: 'SpikeyMace',
+		desc: '+32 Weapon Damage',
+		consumable: false,
+		equipSlot: 'hand',
+		equip: function(){
+			player.weaponDamage += 32;
+		},
+		unequip: function(){
+			player.weaponDamage -= 32;
+		}
+	},
+	{
+		name: 'kurki',
+		id: 36,
+		title: 'Kurki',
+		desc: '+15 Weapon Damage<br>+15 Tactic Skill<br>+10 Speed',
+		consumable: false,
+		equipSlot: 'hand',
+		equip: function(){
+			player.weaponDamage += 15;
+			player.tacticSkill +=15;
+			player.speed += 10;
+		},
+		unequip: function(){
+			player.weaponDamage -= 15;
+			player.tacticSkill -=15;
+			player.speed -= 10;
+		}
+	},
 ];
 
 
 
 
 
-
-
-
-
-function availableLoot(){
-	loot = [];
-	for (var i = 2; i < 31; i++) {
-		loot.push(items[i]);
-	};
-}
-availableLoot();
 
 
 

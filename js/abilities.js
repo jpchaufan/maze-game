@@ -1,28 +1,28 @@
 // buttons
 
 handleToButtonsW = [
-['Slash','<button class="skillBtn slash"><b>Slash</b>: a powerful attack</button>'],
-['Pierce','<button class="skillBtn pierce"><b>Pierce</b>: good against armor</button>'],
-['Berserk','<button class="skillBtn berserk"><b>Berserk</b>: can hit really hard, or slow you down</button>'],
-['Focused Hit', '<button class="skillBtn focusedHit"><b>Focused Hit</b>: attack, gaining armor and resistance</button>'],
-['Bloody Strike','<button class="skillBtn bloodyStrike"><b>Bloody Strike</b>: attack, healing for some of the damage</button>'],
-['Impale', '<button class="skillBtn impale"><b>Impale</b>: completely bypasses armor</button>']
+['Slash','<button class="skillBtn slash"><b>Slash</b>: A powerful attack</button>'],
+['Onslaught','<button class="skillBtn onslaught"><b>Onslaught</b>: A flurry of attacks</button>'],
+['Smite','<button class="skillBtn smite"><b>Smite</b>: Bash and delay the enemy</button>'],
+['Holy Light', '<button class="skillBtn holyLight"><b>Holy Light</b>: Heal yourself</button>'],
+['Holy Slash','<button class="skillBtn holySlash"><b>Holy Slash</b>: Deal magic damage with your weapon</button>']
 ];
 
 handleToButtonsM = [
-['Fireball','<button class="skillBtn fireball"><b>Fireball</b>: basic magical attack</button>'],
-['Icebolt','<button class="skillBtn icebolt"><b>Icebolt</b>: slows the enemy</button>'],
-['Channel','<button class="skillBtn channel"><b>Channel</b>: Recover 75% of your mana</button>'],
+['Fireball','<button class="skillBtn fireball"><b>Fireball</b>: A fiery attack.</button>'],
+['Icebolt','<button class="skillBtn icebolt"><b>Icebolt</b>: Slows the enemy</button>'],
+['Curse','<button class="skillBtn curse"><b>Curse</b>: Deals damage over time</button>'],
 ['Electrocute','<button class="skillBtn electrocute"><b>Electrocute</b>: has a chance to critically hit</button>'],
 ['Magic Missiles', '<button class="skillBtn magicMissiles"><b>Magic Missiles</b>: fires 1-3 magic missiles</button>'],
+['Channel', '<button class="skillBtn channel"><b>Channel</b>: Restore mana and gain magic damage</button>'],
 ];
 
 handleToButtonsT = [
-['Safeguard','<button class="skillBtn safeguard"><b>Safeguard</b>: recover health and gain armor</button>'],
-['Envenom','<button class="skillBtn envenom"><b>Envenom</b>: attack with a poisoning blade</button>'],
-['Focus','<button class="skillBtn focus"><b>Focus</b>: gain mana recovery and resistance</button>'],
-['Weaken', '<button class="skillBtn weaken"><b>Weaken</b>: lower enemy\'s armor and resistance</button>'],
-['Ghost Strike', '<button class="skillBtn ghostStrike"><b>Ghost Strike</b>: attack for weapon and then magic damage</button>'],
+['Envenom','<button class="skillBtn envenom"><b>Envenom</b>: Attack with a poisoning blade</button>'],
+['Ambush','<button class="skillBtn ambush"><b>Ambush</b>: A powerful opening attack</button>'],
+['Immobilize','<button class="skillBtn immobilize"><b>Immobilize</b>: An opening attack that stuns and weakens.</button>'],
+['Critical', '<button class="skillBtn critical"><b>Critical</b>: High chance for double damage.</button>'],
+['Ghost Strike', '<button class="skillBtn ghostStrike"><b>Ghost Strike</b>: Attacks for weapon and then magic damage</button>'],
 ];
 
 
@@ -39,63 +39,113 @@ function clickSlash(){
 	if (player.myturn && player.fighting){
 		var damage = calcDamage((player.weaponDamageNow*1.25),'game','weapon');
 		gameIsHit(damage, 'yellow');
-		displayPlayerReport(" You slash the " + game.enemyName + " with your sword! ");
+		if (player.weaponSkills[4]){
+			player.health += damage*.15;
+			if (player.health > player.maxHealth){
+				player.health = player.maxHealth;
+				
+			}
+			displayPlayerHealth();
+			displayPlayerReport(" You slash, stealing damage as health ");
+		} else {
+			displayPlayerReport(" You slash the " + game.enemyName + " with your weapon! ");
+		}
+
+		
 	};
 };
 
-$('.weaponAttackMenu').on('click', '.pierce', clickPierce);
-function clickPierce(){
+$('.weaponAttackMenu').on('click', '.onslaught', clickOnslaught);
+function clickOnslaught(){
 	if (player.myturn && player.fighting){
-		var damage = calcDamage((player.weaponDamageNow*0.66),'game','weapon')+(player.weaponDamageNow*0.34);
-		gameIsHit(damage, 'yellow');
-		displayPlayerReport(" You pierce the " + game.enemyName + "'s gut! ");
+
+		function lifeSteal(damage){
+			if (player.weaponSkills[4]){
+				player.health += damage*.15;
+				if (player.health > player.maxHealth){
+					player.health = player.maxHealth;
+					
+				}
+				displayPlayerHealth();
+			}
+		}
+
+
+
+		var roll = Math.random() * 100 + 1;
+		var hits = 0;
+		if (roll >= 20){
+			var damage = calcDamage((player.weaponDamageNow*0.9),'game','weapon');
+			gameIsHit(damage, 'yellow');
+			lifeSteal(damage);
+			hits = 1;
+		}
+		if (roll >= 40){
+			setTimeout(function(){
+				gameIsHit(damage, 'yellow');
+				lifeSteal(damage);
+			}, 350);
+			hits = 2;
+		}
+		if (roll >= 60){
+			setTimeout(function(){
+				gameIsHit(damage, 'yellow');
+				lifeSteal(damage);
+			}, 700);
+			hits = 3;
+		} 
+		if (roll >= 80) {
+			setTimeout(function(){
+				gameIsHit(damage, 'yellow');
+				lifeSteal(damage);
+			}, 1050);
+			hits = 4;
+		}
+		
+		setTimeout(function(){
+			if (hits){
+				var s = '';
+					if (hits > 1){
+						s = 's';
+					}
+				displayPlayerReport(" You hit "+hits+" time"+s+"!");
+			} else {
+				displayPlayerReport(" You miss completely! ");
+			}
+			
+		}, 1400);
+
 	};
 };
-$('.weaponAttackMenu').on('click', '.berserk', clickBerserk);
-function clickBerserk(){
+
+$('.weaponAttackMenu').on('click', '.smite', clickSmite);
+function clickSmite(){
 	if (player.myturn && player.fighting){
 		critical = Math.random()*100+1;
-		if (critical > 50){
-			var damage = calcDamage((player.weaponDamageNow*2),'game','weapon');
-			gameIsHit(damage, 'yellow');
-			displayPlayerReport(" You swing ruthlessly for massive damage!");
-		} else {
-			var damage = calcDamage((player.weaponDamageNow),'game','weapon');
-			gameIsHit(damage, 'yellow');
-			player.speedNow -= 20;
-			displayPlayerReport(" You slip, slowing yourself down ");
-		}
+		var damage = calcDamage((player.armorNow*.3),'game','weapon');
+		game.delay += 35;
+		displayDelay();
+		gameIsHit(damage, 'yellow');
+		displayPlayerReport(" You bash " + game.enemyName + "with your shield!");
 	};
 };
-$('.weaponAttackMenu').on('click', '.focusedHit', clickFocusedHit);
-function clickFocusedHit(){
+$('.weaponAttackMenu').on('click', '.holyLight', clickHolyLight);
+function clickHolyLight(){
 	if (player.myturn && player.fighting){
 		var damage = calcDamage((player.weaponDamageNow),'game','weapon');
-			player.armorNow += damage*0.5;
-			player.resistanceNow += damage*0.5;
-			gameIsHit(damage, 'yellow');
-			displayPlayerReport("You hit with focus, gaining armor and resistance.");
-	};
-};
-$('.weaponAttackMenu').on('click', '.bloodyStrike', clickBloodyStrike);
-function clickBloodyStrike(){
-	if (player.myturn && player.fighting){
-		var damage = calcDamage((player.weaponDamageNow),'game','weapon');
-			player.health += damage*0.15;
+			player.health += player.maxHealth*.7;
 			if (player.health > player.maxHealth){
 				player.health = player.maxHealth;
 			}
-			gameIsHit(damage, 'red');
-			displayPlayerHealth();
-			displayPlayerReport("You strike, and heal part of the damage.");
+			displayPlayerReport("You heal in holy light.");
 	};
 };
-$('.weaponAttackMenu').on('click', '.impale', clickImpale);
-function clickImpale(){
+$('.weaponAttackMenu').on('click', '.holySlash', clickHolyLight);
+function clickHolyLight(){
 	if (player.myturn && player.fighting){
-		var damage = player.weaponDamageNow;
-		gameIsHit(damage, 'yellow');
-		displayPlayerReport(" You impalethe " + game.enemyName + "'s gut! ");
+		var damage = calcDamage((player.weaponDamageNow*1.2),'game','magic');
+			gameIsHit(damage, 'yellow');
+			displayPlayerReport("You swing a blade of light!");
 	};
 };
 
@@ -109,12 +159,24 @@ function clickImpale(){
 $('.magicAttackMenu').on('click', '.fireball', clickFireball);
 function clickFireball(){
 	if (player.myturn && player.fighting){
-		if (player.mana > 15){
-			player.mana -= 15;
+		if (player.mana > 12){
+			player.mana -= 12;
 			displayPlayerMana();
 			var damage = calcDamage((player.magicDamageNow*1.4),'game','magic');
 			gameIsHit(damage, 'red');
-			displayPlayerReport(" You launch a fireball at " + game.enemyName + "!");
+
+			if (player.magicSkills[5]){
+				player.health += damage*.15;
+				if (player.health > player.maxHealth){
+					player.health = player.maxHealth;
+				}
+				displayPlayerHealth();
+				displayPlayerReport("You launch a fireball, draining the enemy's health! ");
+			} else {
+				displayPlayerReport("You launch a fireball at " + game.enemyName + "!");
+			}
+
+			
 		} else {
 			notEnoughMana();
 		};	
@@ -137,18 +199,33 @@ function clickIcebolt(){
 	};
 };
 
-$('.magicAttackMenu').on('click', '.channel', clickChannel);
-function clickChannel(){
+$('.magicAttackMenu').on('click', '.curse', clickCurse);
+function clickCurse(){
 	if (player.myturn && player.fighting){
-		if (player.mana > 0){
-			player.mana -= 0;
-			
-			player.mana += player.maxMana*0.65;
-			if (player.mana > player.maxMana){
-				player.mana = player.maxMana;
-			}
+		if (player.mana > 25){
+			player.mana -= 25;
 			displayPlayerMana();
-			displayPlayerReport(" You feel invigorated!");
+			turnEffectsGame.push(
+				{
+					name: 'curse',
+					duration: 5,
+					effect: function(){
+						damage = calcDamage((player.magicDamageNow*0.66), 'game', 'magic');
+						gameIsHit(damage, 'purple');
+						console.log('curse ran');
+						if (player.magicSkills[5]){
+							player.health += damage*.15;
+							if (player.health > player.maxHealth){
+								player.health = player.maxHealth;
+							}
+							displayPlayerHealth();
+							console.log('curse drains health');
+						}
+					}
+				}
+			);
+
+			displayPlayerReport("You cast a curse!");
 		} else {
 			notEnoughMana();
 		};	
@@ -178,12 +255,46 @@ function clickElectrocute(){
 		};	
 	};
 };
+
+$('.magicAttackMenu').on('click', '.channel', clickChannel);
+function clickChannel(){
+	if (player.myturn && player.fighting){
+		if (player.mana > 0){
+			player.mana -= 0;
+			
+			player.mana += player.maxMana*0.8;
+			if (player.mana > player.maxMana){
+				player.mana = player.maxMana;
+			}
+			player.magicDamageNow += player.magicDamageNow*.15;
+			displayPlayerMana();
+			displayPlayerReport(" You channel elemental power!");
+		} else {
+			notEnoughMana();
+		};	
+	};
+};
+
 $('.magicAttackMenu').on('click', '.magicMissiles', clickMagicMissiles);
 function clickMagicMissiles(){
 	if (player.myturn && player.fighting){
 		if (player.mana > 45){
 			player.mana -= 45;
 			displayPlayerMana();
+
+
+			function drainHealth(damage){
+				if (player.magicSkills[5]){
+					player.health += damage*.15;
+					if (player.health > player.maxHealth){
+						player.health = player.maxHealth;
+					}
+					displayPlayerHealth();
+				}
+			}
+
+
+
 			var roll = Math.random()*100+1;
 			if (roll >= 66.6){
 				var hits = 3;
@@ -195,18 +306,21 @@ function clickMagicMissiles(){
 
 			var damage = calcDamage((player.magicDamageNow*.7),'game','magic');
 			gameIsHit(damage, 'purple');
+			drainHealth(damage);
 			game.resistance -= 15;
 			$('.magicAttackMenu').hide();
 			if (hits >= 2){
 				setTimeout(function(){
 					gameIsHit(damage, 'purple');
-				game.resistance -= 15;
+					drainHealth(damage);
+					game.resistance -= 15;
 				}, 400);
 			}
 			if (hits >= 3){
 				setTimeout(function(){
 					gameIsHit(damage, 'purple');
-				game.resistance -= 15;
+					drainHealth(damage);
+					game.resistance -= 15;
 				}, 800);
 			}
 			var s = '';
@@ -228,30 +342,11 @@ function clickMagicMissiles(){
    Tactic Attacks   
 *********************************************************/
 
-$('.tacticAttackMenu').on('click', '.safeguard', clickSafeguard);
-function clickSafeguard(){
-	if (player.myturn && player.fighting){
-		if (player.mana > 30){
-			player.mana -= 30;
-			displayPlayerMana();
-			player.health += (player.tacticSkillNow*0.25);
-			if (player.health >= player.maxHealth){
-				player.health = player.maxHealth;
-			}
-			player.restoreHealthNow += (player.tacticSkillNow*0.25);
-			player.armorNow += (player.tacticSkillNow*1);
-			displayPlayerHealth();
-			displayPlayerReport("You improve your healing and armor!");
-		} else {
-			notEnoughMana();
-		};		
-	};
-};
 $('.tacticAttackMenu').on('click', '.envenom', clickEnvenom);
 function clickEnvenom(){
 	if (player.myturn && player.fighting){
-		if (player.mana > 20){
-			player.mana -= 20;
+		if (player.mana > 15){
+			player.mana -= 15;
 			displayPlayerMana();
 			var damage = calcDamage((player.weaponDamageNow*0.25),'game','weapon');
 			turnEffectsGame.push(
@@ -260,43 +355,76 @@ function clickEnvenom(){
 					duration: 8,
 					effect: function(){
 						damage = calcDamage((10+player.tacticSkillNow*0.33), 'game', 'magic');
-						game.health -= damage;
+						gameIsHit(damage, 'green');
 						displayGameHealth();
 						console.log('poison ran');
 					}
 				}
 			);
-			gameIsHit(damage, 'green');
+			gameIsHit(damage, 'yellow');
 			displayPlayerReport("You strike with a hidden blade, poisoning your foe!");
 		} else {
 			notEnoughMana();
 		};		
 	};
 };
-$('.tacticAttackMenu').on('click', '.focus', clickFocus);
-function clickFocus(){
-	if (player.myturn && player.fighting){
-		player.restoreManaNow += (player.tacticSkillNow*0.33);
-		player.resistanceNow += (player.tacticSkillNow*0.33);
-		// player.mana += player.tacticSkill;
-		// if (player.mana > player.maxMana){
-		// 	player.mana = player.maxMana;
-		// }
-		displayPlayerMana();
-		displayPlayerReport("You focus, gathering mana recovery and resistance");
+$('.tacticAttackMenu').on('click', '.ambush', clickAmbush);
+function clickAmbush(){
+	if (player.myturn && player.fighting && !game.firstStrike){
+		if (player.mana >= 20){
+			player.mana -= 20;
+			displayPlayerMana();
+			var damage = calcDamage((player.weaponDamageNow + player.tacticSkillNow),'game','weapon');
+			gameIsHit(damage, 'yellow');
+			displayPlayerReport("You ambush "+game.enemyName+"!");
+		} else {
+			notEnoughMana();
+		}
+		
 	};
 };
-$('.tacticAttackMenu').on('click', '.weaken', clickWeaken);
-function clickWeaken(){
+$('.tacticAttackMenu').on('click', '.immobilize', clickImmobilize);
+function clickImmobilize(){
+	if (player.myturn && player.fighting && !game.firstStrike){
+		if (player.mana >= 20){
+			player.mana -= 20;
+			displayPlayerMana();
+			game.delay += 100;
+			displayDelay();
+			game.armor -= player.tacticSkillNow;
+			game.resistance -= player.tacticSkillNow;
+			displayPlayerReport("You immobilize "+game.enemyName+"!");
+		} else {
+			notEnoughMana();
+		}
+		
+	};
+};
+$('.tacticAttackMenu').on('click', '.critical', clickCritical);
+function clickCritical(){
 	if (player.myturn && player.fighting){
-		game.armor -= (player.tacticSkillNow*0.5);
-		game.resistance -= (player.tacticSkillNow*0.5);
-		// player.mana += player.tacticSkill;
-		// if (player.mana > player.maxMana){
-		// 	player.mana = player.maxMana;
-		// }
-		displayPlayerMana();
-		displayPlayerReport("You lower the armor and resistance of "+game.enemyName+".");
+		if (player.mana >= 10){
+			player.mana -= 10;
+			displayPlayerMana();
+			var mod = player.tacticSkillNow/150;
+			if (mod > 1){
+				mod = 1;
+			}
+			var chance = (25 + 50*mod);
+			roll = Math.random() * 100 + 1;
+			if ( roll <= chance ){
+				damage = calcDamage((player.weaponDamageNow*2),'game','weapon');
+				gameIsHit(damage, 'yellow');
+				displayPlayerReport("Critical strike!");
+			} else {
+				damage = calcDamage((player.weaponDamageNow*1.2),'game','weapon');
+				gameIsHit(damage, 'yellow');
+				displayPlayerReport("You hit for regular damage.");
+			}
+		} else {
+			notEnoughMana();
+		}
+		
 	};
 };
 $('.tacticAttackMenu').on('click', '.ghostStrike', clickGhostStrike);

@@ -120,6 +120,10 @@
 	background: url('../imgs/misc/stairs.png');
 	background-size: 100% 100%;
 }
+.boss {
+	background: url('../imgs/misc/boss.png');
+	background-size: 100% 100%;
+}
 
 /**************************
       Battle Screen
@@ -723,67 +727,67 @@
 	opacity: 1;
 }
 /* Weapon Skills */
-[name="Weapon Mastery"] {
+[name="Warrior Mastery"] {
 	cursor: pointer;
 	background-image: url('../imgs/items/sword1.png');
 	background-size: 100% 100%;
 }
-[name='Berserk'] {
-	background-image: url('../imgs/items/battleAxe.png');
-	background-size: 100% 100%;
-}
-[name='Defender'] {
+[name='Paladin Mastery'] {
 	background-image: url('../imgs/items/shield1.png');
 	background-size: 100% 100%;
 }
-[name='Focused Hit'] {
-	background-image: url('../imgs/items/spikedShield1.png');
+[name='Enrage'] {
+	background-image: url('../imgs/items/battleAxe.png');
 	background-size: 100% 100%;
 }
-[name='Hearty'] {
+[name='Smite'] {
 	background-image: url('../imgs/items/knightsShield.png');
 	background-size: 100% 100%;
 }
-[name='Bloody Strike'] {
+[name='Life Steal'] {
 	background-image: url('../imgs/items/bloodyClub.png');
 	background-size: 100% 100%;
 }
-[name='Strength'] {
-	background-image: url('../imgs/items/hornedHelm.png');
+[name='Holy Light'] {
+	background-image: url('../imgs/items/holyAmulet.png');
 	background-size: 100% 100%;
 }
-[name='Impale'] {
+[name='Onslaught'] {
+	background-image: url('../imgs/items/spikeyMace.png');
+	background-size: 100% 100%;
+}
+[name='Holy Slash'] {
 	background-image: url('../imgs/items/knightsSword.png');
 	background-size: 100% 100%;
 }
 
 /* Magic Skills */
-[name='Magic Mastery'] {
+[name='Mage Mastery'] {
 	background-image: url('../imgs/items/staff1.png');
+	background-size: 100% 100%;
+}
+[name='Witch Mastery'] {
+	background-image: url('../imgs/items/magicShield.png');
 	background-size: 100% 100%;
 }
 [name='Icebolt'] {
 	background-image: url('../imgs/items/moonWand.png');
 	background-size: 100% 100%;
 }
-[name='Mage Armor'] {
-	background-image: url('../imgs/items/magicShield.png');
-	background-size: 100% 100%;
-}
-[name='Channel'] {
-	background-image: url('../imgs/items/saphireChalice.png');
-	background-size: 100% 100%;
-}
-[name='Surge'] {
-	background-image: url('../imgs/items/powerRobes.png');
+[name='Curse'] {
+	background-image: url('../imgs/items/mentalistsPendant.png');
 	background-size: 100% 100%;
 }
 [name='Electrocute'] {
 	background-image: url('../imgs/items/lightningRod.png');
 	background-size: 100% 100%;
 }
-[name='Fast Casting'] {
-	background-image: url('../imgs/items/ancientRing.png');
+[name='Drain Life'] {
+	background-image: url('../imgs/items/skullBand.png');
+	background-size: 100% 100%;
+}
+[name='Channel'] {
+	background-image: url('../imgs/items/saphireChalice.png');
 	background-size: 100% 100%;
 }
 [name='Magic Missiles'] {
@@ -792,36 +796,36 @@
 }
 
 /* Tactic Skills */
-[name='Tactic Mastery'] {
+[name='Scout Mastery'] {
+	background-image: url('../imgs/items/leafBand.png');
+	background-size: 100% 100%;
+}
+[name='Ninja Mastery'] {
 	background-image: url('../imgs/items/sickle1.png');
 	background-size: 100% 100%;
 }
-[name='Envenom'] {
-	background-image: url('../imgs/items/hookedSword.png');
+[name='Ambush'] {
+	background-image: url('../imgs/items/kurki.png');
 	background-size: 100% 100%;
 }
-[name='Quickness'] {
+[name='Immobilize'] {
 	background-image: url('../imgs/items/darkHood.png');
 	background-size: 100% 100%;
 }
-[name='Focus'] {
-	background-image: url('../imgs/items/darkAmulet.png');
+[name='Scavange'] {
+	background-image: url('../imgs/items/ringOfLuck.png');
 	background-size: 100% 100%;
 }
-[name='Recovery'] {
-	background-image: url('../imgs/items/copperNecklace.png');
-	background-size: 100% 100%;
-}
-[name='Weaken'] {
-	background-image: url('../imgs/items/hookNBlade.png');
-	background-size: 100% 100%;
-}
-[name='Awareness'] {
-	background-image: url('../imgs/items/banditsMask.png');
+[name='Critical'] {
+	background-image: url('../imgs/items/hookedSword.png');
 	background-size: 100% 100%;
 }
 [name='Ghost Strike'] {
-	background-image: url('../imgs/items/ninjaWarBlade.png');
+	background-image: url('../imgs/items/enchantedSword.png');
+	background-size: 100% 100%;
+}
+[name='Swiftness'] {
+	background-image: url('../imgs/items/darkAmulet.png');
 	background-size: 100% 100%;
 }
 .skillPointsLeft, .skillTreeTitle {
@@ -1060,6 +1064,43 @@
 	background: url('../imgs/items/saphireChalice.png');
 	background-size: 100% 100%;
 }
+.lightningRing {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/lightningRing.png');
+	background-size: 100% 100%;
+}
+.battlemageRing {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/battlemageRing.png');
+	background-size: 100% 100%;
+}
+.mentalistsPendant {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/mentalistsPendant.png');
+	background-size: 100% 100%;
+}
+.ninjato {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/ninjato.png');
+	background-size: 100% 100%;
+}
+.spikeyMace {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/spikeyMace.png');
+	background-size: 100% 100%;
+}
+.kurki {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/kurki.png');
+	background-size: 100% 100%;
+}
+
 
 
 

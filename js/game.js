@@ -11,16 +11,20 @@ makeGrid();
 
 
 	var game = {
+		mazeNum: 0,
 		/* enemies bot and top are used to set the enemies that can show up on a given level.
-		for example, if enemies bot and top are 0 and 5, then enemies with id 0 to 4 will be available.
-		to make enemies 5 to 9 be available, set bot and top to 5 and 10.
+		for example, if enemies bot and top are 0 and 4, then enemies with id 0 to 4 will be available.
+		to make enemies 5 to 9 be available, set bot and top to 5 and 9.
 		*/
-		enemiesBot: 0,
-		enemiesTop: 5,
+		enemiesBot: 10,
+		enemiesTop: 14,
+		itemsTop: 30,
+		itemsBot: 0,
 		walls: [],
 		stairs: 0,
 		encounters: [],
 		traps: [],
+		boss: [],
 		level: 1,
 		enemyName: "",
 		enemyId: 0,
@@ -32,27 +36,30 @@ makeGrid();
 		magicDamage: 0,
 		delay: 100,
 		speed: 100,
-		delayTimerRunning: false
+		delayTimerRunning: false,
+		firstStrike: false,
 	};
 	var player = {
+		hasKey: true,
 		started: false,
 		xpos: 10,
 		ypos: 19,
 		wonBattle: false,
 		fighting: false,
+		bossFight: false,
 		searchingPack: false,
 		fightsWon: 0,
 		level: 1,
 		exp: 0,
-		skillPoints: 10,
+		skillPoints: 100,
 		pack: [],
 		equip: [],
-		weaponAbilities: ['Slash','Pierce', 0],
-		weaponAbilitiesLearned: ['Slash','Pierce'],
+		weaponAbilities: ['Slash', 0 , 0],
+		weaponAbilitiesLearned: ['Slash', 0],
 		magicAbilities: ['Fireball', 0, 0],
 		magicAbilitiesLearned: ['Fireball'],
-		tacticAbilities: ['Safeguard', 0, 0],
-		tacticAbilitiesLearned: ['Safeguard'],
+		tacticAbilities: ['Envenom', 0, 0],
+		tacticAbilitiesLearned: ['Envenom'],
 		weaponSkills: [0,0,0,0,0,0,0,0],
 		magicSkills: [0,0,0,0,0,0,0,0],
 		tacticSkills: [0,0,0,0,0,0,0,0],
@@ -100,6 +107,7 @@ makeGrid();
 			};
 		};
 		function addInnerWalls_1(){
+			game.mazeNum = 1;
 			$('.mazeSq[col="2"][row="3"]').addClass('stairs');
 			game.stairs = [2, 3];
 			for (var i = 1; i <= 20; i++) {  //row 18
@@ -202,6 +210,7 @@ makeGrid();
 			game.walls.push([19, 2]);
 		};
 		function addInnerWalls_2() {
+			game.mazeNum = 2;
 			$('.mazeSq[col="3"][row="3"]').addClass('stairs');
 			game.stairs = [3, 3];
 			$('.mazeSq[col="10"][row="18"]').addClass('wallBlock');
@@ -467,6 +476,7 @@ makeGrid();
 		}
 
 		function addInnerWalls_3(){
+			game.mazeNum = 3;
 			$('.mazeSq[col="18"][row="2"]').addClass('stairs');
 			game.stairs = [18, 2];
 			$('.mazeSq[col="10"][row="18"]').addClass('wallBlock');game.walls.push([10, 18]);
@@ -602,6 +612,7 @@ makeGrid();
 			$('.mazeSq[col="18"][row="3"]').addClass('wallBlock');game.walls.push([18, 3]);
 		}
 		function addInnerWalls_4(){
+			game.mazeNum = 4;
 			$('.mazeSq[col="19"][row="3"]').addClass('stairs');
 			game.stairs = [19, 3];
 			$('.mazeSq[col="11"][row="18"]').addClass('wallBlock');game.walls.push([11, 18]);
@@ -740,6 +751,7 @@ makeGrid();
 		}
 
 		function addInnerWalls_5(){
+			game.mazeNum = 5;
 			$('.mazeSq[col="2"][row="7"]').addClass('stairs');
 			game.stairs = [2, 7];
 			$('.mazeSq[col="11"][row="18"]').addClass('wallBlock');game.walls.push([11, 18]);
@@ -877,6 +889,7 @@ makeGrid();
 			$('.mazeSq[col="5"][row="5"]').addClass('wallBlock');game.walls.push([5, 5]);
 		}
 		function addInnerWalls_6(){
+			game.mazeNum = 6;
 			$('.mazeSq[col="17"][row="3"]').addClass('stairs');
 			game.stairs = [17, 3];
 			$('.mazeSq[col="10"][row="18"]').addClass('wallBlock');game.walls.push([10, 18]);
@@ -1010,6 +1023,7 @@ makeGrid();
 			$('.mazeSq[col="15"][row="3"]').addClass('wallBlock');game.walls.push([15, 3]);
 		}
 		function addInnerWalls_7(){
+			game.mazeNum = 7;
 			$('.mazeSq[col="2"][row="11"]').addClass('stairs');
 			game.stairs = [2, 11];
 			$('.mazeSq[col="10"][row="18"]').addClass('wallBlock');game.walls.push([10, 18]);
@@ -1140,6 +1154,7 @@ makeGrid();
 			$('.mazeSq[col="6"][row="19"]').addClass('wallBlock');game.walls.push([6, 19]);
 		}
 		function addInnerWalls_8(){
+			game.mazeNum = 8;
 			$('.mazeSq[col="19"][row="7"]').addClass('stairs');
 			game.stairs = [19, 7];
 		$('.mazeSq[col="10"][row="18"]').addClass('wallBlock');game.walls.push([10, 18]);
@@ -1269,8 +1284,10 @@ makeGrid();
 			$('.mazeSq[col="2"][row="19"]').addClass('wallBlock');game.walls.push([2, 19]);	
 		}
 		function addInnerWalls_9(){
+			game.mazeNum = 9;
 			$('.mazeSq[col="19"][row="19"]').addClass('stairs');
 			game.stairs = [19, 19];
+			$('.mazeSq[col="6"][row="6"]').addClass('wallBlock');game.walls.push([6, 6]);
 			$('.mazeSq[col="11"][row="18"]').addClass('wallBlock');game.walls.push([11, 18]);
 			$('.mazeSq[col="9"][row="18"]').addClass('wallBlock');game.walls.push([9, 18]);
 			$('.mazeSq[col="7"][row="18"]').addClass('wallBlock');game.walls.push([7, 18]);
@@ -1381,6 +1398,7 @@ makeGrid();
 			$('.mazeSq[col="13"][row="7"]').addClass('wallBlock');game.walls.push([13, 7]);
 		}
 		function addInnerWalls_10(){
+			game.mazeNum = 10;
 			$('.mazeSq[col="4"][row="5"]').addClass('stairs');
 			game.stairs = [4, 5];
 			$('.mazeSq[col="7"][row="19"]').addClass('wallBlock');game.walls.push([7, 19]);
@@ -1592,38 +1610,62 @@ makeGrid();
 			if ((game.encounters[i][0] == player.xpos) && (game.encounters[i][1] == player.ypos)){
 				game.encounters.splice(i, 1);
 				$('.mazeSq[col="'+player.xpos+'"][row="'+player.ypos+'"]').removeClass('encounter');
-				encounterBattle();			
+				encounterBattle('enemy');	
+				console.log('encounter regular fight');		
 			};
 		};
 	};
+	function bossCheck(){
+		if ((game.boss[0] == player.xpos) && (game.boss[1] == player.ypos) ){
+			encounterBattle('boss');
+
+		}
+	}
+	function strengthenEnemies(){
+		if (game.level >= 2){
+			game.enemiesBot = 10;
+			game.enemiesTop = 17;
+			game.itemsTop = 36;
+		}
+		scaleEnemies();
+	}
 	function stairsCheck(){
 		if ((game.stairs[0] == player.xpos) && (game.stairs[1] == player.ypos)){
-			var conf = confirm('Go down to the next level?');
-			if (conf){
-				//reset dungeon
-				//clear:
-				$('.wallBlock').removeClass('wallBlock');
-				game.walls = [];
-				$('.encounter').removeClass('encounter');
-				game.encounters = [];
-				$('.trap').removeClass('trap');
-				game.traps = [];
-				$('.stairs').removeClass('stairs');
-				game.stairs = [];
-				$('.player').removeClass('player');
-				player.xpos = 10;
-				player.ypos = 19;
-				fogAdjust();
-				$('.mazeSq[col="10"][roe="19"]').addClass('player');
-				makeWalls();
-				for (var i = 0; i < 20; i++) {
-					createEncounters();	
-				};
-				for (var i = 0; i < 10; i++) {
-					createTraps();	
-				};
-				game.level += 1;
+			if (player.hasKey) {
+				var conf = confirm('Go down to the next level?');
+				if (conf){
+					//reset dungeon
+					//clear:
+					$('.wallBlock').removeClass('wallBlock');
+					game.walls = [];
+					$('.encounter').removeClass('encounter');
+					game.encounters = [];
+					$('.trap').removeClass('trap');
+					game.traps = [];
+					$('.stairs').removeClass('stairs');
+					game.stairs = [];
+					$('.player').removeClass('player');
+					player.xpos = 10;
+					player.ypos = 19;
+					fogAdjust();
+					$('.mazeSq[col="10"][roe="19"]').addClass('player');
+					makeWalls();
+					for (var i = 0; i < 20; i++) {
+						createEncounters();	
+					};
+					for (var i = 0; i < 10; i++) {
+						createTraps();	
+					};
+					game.level += 1;
+					player.hasKey = false;
+					strengthenEnemies();
+					createBoss();
+
+				}
+			} else {
+				alert('You need to beat this level\'s boss and get the key!');
 			}
+			
 		}
 	};
 
@@ -1640,7 +1682,7 @@ makeGrid();
 		};
 		// re-choose positions on staits
 		if ((game.stairs[0] == xpos) && (game.stairs[1] == ypos)){
-			createEncounters();
+			createTraps();
 			return;
 		};
 		// re-choose positions on walls
@@ -1681,9 +1723,13 @@ makeGrid();
 		if (roll >= 66.6){
 			alert('Ambush!');
 			$('.runInitial').hide();
-			encounterBattle();
+			encounterBattle('enemy');
 		} else if (roll >= 33.3){
-			var damage = player.health * 0.15;
+			var mod = (player.tacticSkill/150);
+			if (mod > 1){
+				mod = 1;
+			}
+			var damage = player.health * 0.25 * (1-mod);
 			alert('Trap! took '+damage+' damage...');
 			player.health -= damage;
 			if (player.health <= 0){
@@ -1691,8 +1737,17 @@ makeGrid();
 			}
 			displayPlayerHealth();
 		} else {
-			alert('found an item!');
-			var num = Math.floor(Math.random()*items.length);
+			var msg = "found an item!"
+			if (player.tacticSkills[4]){
+				var roll = Math.random() * 100 + 1;
+				if (roll >= 80){
+					var num = Math.floor(Math.random()*(game.itemsTop+1-game.itemsBot) + game.itemsBot);
+					addItem(items[num].name);
+					msg = "found an item, and scavanged one more!"
+				}
+			}
+			alert(msg);
+			var num = Math.floor(Math.random()*(game.itemsTop+1-game.itemsBot) + game.itemsBot);
 			addItem(items[num].name);
 		}
 
@@ -1707,12 +1762,57 @@ makeGrid();
 			};
 		};
 	};
+
+	/*****************************************************
+				boss encounter
+	*****************************************************/
+
+	function createBoss() {
+		xpos = Math.floor(Math.random()*18+2);
+		ypos = Math.floor(Math.random()*7+2);
+		// re-choose positions near player starting point
+		if ((ypos >= 17) && (xpos >= 7) && (xpos <= 8)){ 
+			createBoss();
+			return;
+		};
+		// re-choose positions on staits
+		if ((game.stairs[0] == xpos) && (game.stairs[1] == ypos)){
+			createBoss();
+			return;
+		};
+		// re-choose positions on walls
+		for (var i = 0; i < game.walls.length; i++) {
+			if ((game.walls[i][0] == xpos) && (game.walls[i][1] == ypos)){
+				createBoss();
+				return;
+			};
+		};
+		// re-choose positions on encounters
+		for (var i = 0; i < game.encounters.length; i++) {
+			if ((game.encounters[i][0] == xpos) && (game.encounters[i][1] == ypos)){
+				createBoss();
+				return;
+			};
+		};
+		// re-choose positions on traps
+		for (var i = 0; i < game.traps.length; i++) {
+			if ((game.traps[i][0] == xpos) && (game.traps[i][1] == ypos)){
+				createTraps();
+				return;
+			};
+		};
+		game.boss = [xpos, ypos];
+		$('.mazeSq[row="'+ypos+'"][col="'+xpos+'"]').addClass('boss');
+	};
+	
+	
 	/*****************************************************
 				encounter resolution functions
 	*****************************************************/
 
 
 	function setEnemy(x){
+		game.firstStrike = false;
 		game.enemyId = x;
 		game.damageType = enemies[x].damageType;
 		game.maxHealth = enemies[x].maxHealth;
@@ -1725,7 +1825,9 @@ makeGrid();
 		game.speed = enemies[x].speed;
 		game.delay = 100;
 		player.delay = 100;
-
+		console.log('weaponDamage: '+ game.weaponDamage);
+		console.log('magicDamage: '+ game.magicDamage);
+		console.log('health: '+ game.health);
 		displayDelay();
 		window.clearTimeout(speedCountDown);
 		$('.gamePic').show();
@@ -1744,7 +1846,7 @@ makeGrid();
 		player.speedNow = player.speed;
 
 	}
-	function encounterBattle(){
+	function encounterBattle(type){
 		player.wonBattle = false;
 		resetStatChanges();
 		turnEffects = [];
@@ -1754,8 +1856,18 @@ makeGrid();
 		$('.fog').hide();
 		$('.battleScreen').fadeIn();
 		//random enemy
-		var x = Math.floor((Math.random() * game.enemiesTop + game.enemiesBot));
-		setEnemy(x);
+		if (type == 'enemy'){
+			var x = Math.floor((Math.random() * (game.enemiesTop+1-game.enemiesBot) + game.enemiesBot));
+			console.log('setting enemy #'+x);
+			setEnemy(x);
+		} else if (type == 'boss'){
+			console.log('setting boss for level '+game.level);
+			if (game.level >= 2){
+				setEnemy(0);
+				player.bossFight = true;
+			}
+		}
+		
 	};
 	function resetBattle(){
 		$('.playerReport').hide();
@@ -1771,6 +1883,7 @@ makeGrid();
 		$('.fog').show();
 		resetStatChanges()
 		player.fighting = false;
+		player.bossFight = false;
 		resetBattle();
 	}	
 	function checkForGameOver(){
@@ -1787,9 +1900,9 @@ makeGrid();
 		var roll = Math.random()*100+1;
 		var magicFind = roll*(1+(x/(x+50)));
 		if (roll >  70){
-			var num = Math.floor(Math.random()*loot.length);
-			addItem(loot[num].name);
-			$(".lootReport").html(loot[num].title);
+			var num = Math.floor(Math.random()*(game.itemsTop+1-game.itemsBot) + game.itemsBot);
+			addItem(items[num].name);
+			$(".lootReport").html(items[num].title);
 		} else if (roll > 40){
 			addItem('healthPotion');
 			$(".lootReport").html('Health Potion');
@@ -1825,7 +1938,28 @@ makeGrid();
 				checkForLevelUp();
 				player.fightsWon += 1;
 				$('.victory').show();
-				getLoot();
+				if (player.bossFight){
+					player.bossFight = false;
+					player.hasKey = true;
+					$('.boss').removeClass('boss');
+					game.boss = 0;
+					player.magicFind += 100;
+					getLoot();
+					getLoot();
+					getLoot();
+					
+					player.magicFind -= 100;
+					$(".lootReport").html('Boss dropped many items!');
+				} else {
+					getLoot();	
+				}
+				if (player.tacticSkills[4]){
+					var roll = Math.random() * 100 + 1;
+					if (roll >= 80){
+						getLoot();
+					}
+				}
+			
 			}, 800);
 		}
 	}
@@ -1902,6 +2036,7 @@ makeGrid();
 					enemies[game.enemyId].special2();
 				}
 			}
+
 			$('.gameReport p').html(msg);
 			$('.gameReport').show();
 			
@@ -1909,8 +2044,16 @@ makeGrid();
 		
 	}
 	function playerIsHit(x){
+		game.firstStrike = true;
 		player.health -= x;
 		displayPlayerHealth();
+		if (player.weaponSkills[2]){
+			var roll = Math.random()*100+1;
+			if (roll >= 75){
+				player.weaponDamageNow += player.weaponDamageNow*.1;
+				alert('enrage triggers! +10% weapon damage bonus!');
+			}
+		}
 		$('.playerHealthBar').fadeOut().fadeIn();
 
 	}
@@ -1941,6 +2084,7 @@ makeGrid();
 		$('.hitImg').fadeIn(150).fadeOut(150);
 	}
 	function gameIsHit(x, color){
+		game.firstStrike = true;
 		game.health -= x;
 		displayGameHealth();
 		hitAnimation(color);
@@ -2045,6 +2189,7 @@ makeGrid();
 		if (player.myturn && player.fighting){
 			$('.encounterMsg').hide();
 			$('.runInitial').show();
+			$('.run').show();
 			game.delayTimerRunning = true;
 			delayTimer();
 		};
@@ -2589,13 +2734,11 @@ makeGrid();
 	
 
 	function addStartingAbilities(){
-	$('.abilitiesMenuWeapon').append('<div class="infoAbility" handle="Slash"><div class="top"><div class="abilityName">Slash</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Attack for 1.25x weapon damage.</div> </div>');
+	$('.abilitiesMenuWeapon').append('<div class="infoAbility" handle="Slash"><div class="top"><div class="abilityName">Slash</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Attack for 1.2x weapon damage.</div> </div>');
 	
-	$('.abilitiesMenuWeapon').append('<div class="infoAbility" handle="Pierce"><div class="top"><div class="abilityName">Pierce</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Deal 1x weapon damage, but 1/3 of this damage ignores armor</div> </div>');
-
 	$('.abilitiesMenuMagic').append('<div class="infoAbility" handle="Fireball"><div class="top"><div class="abilityName">Fireball</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Attack for 1.4x magic damage.</div> </div>');
 
-	$('.abilitiesMenuTactic').append('<div class="infoAbility" handle="Safeguard"><div class="top"><div class="abilityName">Safeguard</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Improve your health by .25x, health restoration by .1x, and armor by 1x your tactic skill.</div> </div>');
+	$('.abilitiesMenuTactic').append('<div class="infoAbility" handle="Envenom"><div class="top"><div class="abilityName">Envenom</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Attack for .25x weapon damage, applying a poison that does .33x your tactic damage per turn for 8 turns.</div> </div>');
 	}
 	addStartingAbilities();
 
@@ -2878,6 +3021,7 @@ makeGrid();
 			trapCheck();
 			encounterCheck();
 			fogAdjust();
+			bossCheck();
 			redrawPlayer();
 		};
 		
@@ -3069,25 +3213,25 @@ function loadGame(save){
 	if (!player.weaponSkills[0]){
 		$('.weaponSkillTree [skillNum="0"]').addClass('availableSkill');
 	}
-	if (player.weaponSkills[0] && !player.weaponSkills[1]){
-		$('.weaponSkillTree [skillNum="1"]').addClass('availableSkill');
+	if (!player.weaponSkills[1]){
+		$('.weaponSkillTree [skillNum="0"]').addClass('availableSkill');
 	}
-	if ((player.weaponSkills[0] >= 5 )&& !player.weaponSkills[2]){
+	if (player.weaponSkills[0] && !player.weaponSkills[2]){
 		$('.weaponSkillTree [skillNum="2"]').addClass('availableSkill');
 	}
-	if (player.weaponSkills[2] && !player.weaponSkills[3]){
+	if (player.weaponSkills[1] && !player.weaponSkills[3]){
 		$('.weaponSkillTree [skillNum="3"]').addClass('availableSkill');
 	}
-	if ((player.weaponSkills[0] >= 10 )&& !player.weaponSkills[4]){
+	if ((player.weaponSkills[0] >= 5 )&& !player.weaponSkills[4]){
 		$('.weaponSkillTree [skillNum="4"]').addClass('availableSkill');
 	}
-	if (player.weaponSkills[4] && !player.weaponSkills[5]){
+	if ((player.weaponSkills[1] >= 5 )&& !player.weaponSkills[5]){
 		$('.weaponSkillTree [skillNum="5"]').addClass('availableSkill');
 	}
-	if ((player.weaponSkills[0] >= 15 )&& !player.weaponSkills[6]){
+	if ((player.weaponSkills[0] >= 10 )&& !player.weaponSkills[6]){
 		$('.weaponSkillTree [skillNum="6"]').addClass('availableSkill');
 	}
-	if (player.weaponSkills[6] && !player.weaponSkills[7]){
+	if ((player.weaponSkills[1] >= 10 )&& !player.weaponSkills[7]){
 		$('.weaponSkillTree [skillNum="7"]').addClass('availableSkill');
 	}
 
@@ -3099,25 +3243,25 @@ function loadGame(save){
 	if (!player.magicSkills[0]){
 		$('.magicSkillTree [skillNum="0"]').addClass('availableSkill');
 	}
-	if (player.magicSkills[0] && !player.magicSkills[1]){
+	if (!player.magicSkills[1]){
 		$('.magicSkillTree [skillNum="1"]').addClass('availableSkill');
 	}
-	if ((player.magicSkills[0] >= 5 )&& !player.magicSkills[2]){
+	if (player.magicSkills[0] && !player.magicSkills[2]){
 		$('.magicSkillTree [skillNum="2"]').addClass('availableSkill');
 	}
-	if (player.magicSkills[2] && !player.magicSkills[3]){
+	if (player.magicSkills[1] && !player.magicSkills[3]){
 		$('.magicSkillTree [skillNum="3"]').addClass('availableSkill');
 	}
-	if ((player.magicSkills[0] >= 10 )&& !player.magicSkills[4]){
+	if ((player.magicSkills[0] >= 5 )&& !player.magicSkills[4]){
 		$('.magicSkillTree [skillNum="4"]').addClass('availableSkill');
 	}
-	if (player.magicSkills[4] && !player.magicSkills[5]){
+	if ((player.magicSkills[1] >= 5 )&& !player.magicSkills[5]){
 		$('.magicSkillTree [skillNum="5"]').addClass('availableSkill');
 	}
-	if ((player.magicSkills[0] >= 15 )&& !player.magicSkills[6]){
+	if ((player.magicSkills[0] >= 10 )&& !player.magicSkills[6]){
 		$('.magicSkillTree [skillNum="6"]').addClass('availableSkill');
 	}
-	if (player.magicSkills[6] && !player.magicSkills[7]){
+	if ((player.magicSkills[1] >= 10 )&& !player.magicSkills[7]){
 		$('.magicSkillTree [skillNum="7"]').addClass('availableSkill');
 	}
 
@@ -3129,25 +3273,25 @@ function loadGame(save){
 	if (!player.tacticSkills[0]){
 		$('.tacticSkillTree [skillNum="0"]').addClass('availableSkill');
 	}
-	if (player.tacticSkills[0] && !player.tacticSkills[1]){
+	if (!player.tacticSkills[1]){
 		$('.tacticSkillTree [skillNum="1"]').addClass('availableSkill');
 	}
-	if ((player.tacticSkills[0] >= 5 )&& !player.tacticSkills[2]){
+	if (player.tacticSkills[0] && !player.tacticSkills[2]){
 		$('.tacticSkillTree [skillNum="2"]').addClass('availableSkill');
 	}
-	if (player.tacticSkills[2] && !player.tacticSkills[3]){
+	if (player.tacticSkills[1] && !player.tacticSkills[3]){
 		$('.tacticSkillTree [skillNum="3"]').addClass('availableSkill');
 	}
-	if ((player.tacticSkills[0] >= 10 )&& !player.tacticSkills[4]){
+	if ((player.tacticSkills[0] >= 5 )&& !player.tacticSkills[4]){
 		$('.tacticSkillTree [skillNum="4"]').addClass('availableSkill');
 	}
-	if (player.tacticSkills[4] && !player.tacticSkills[5]){
+	if ((player.tacticSkills[1] >= 5 )&& !player.tacticSkills[5]){
 		$('.tacticSkillTree [skillNum="5"]').addClass('availableSkill');
 	}
-	if ((player.tacticSkills[0] >= 15 )&& !player.tacticSkills[6]){
+	if ((player.tacticSkills[0] >= 10 )&& !player.tacticSkills[6]){
 		$('.tacticSkillTree [skillNum="6"]').addClass('availableSkill');
 	}
-	if (player.tacticSkills[6] && !player.tacticSkills[7]){
+	if ((player.tacticSkills[01] >= 10 )&& !player.tacticSkills[7]){
 		$('.tacticSkillTree [skillNum="7"]').addClass('availableSkill');
 	}
 
@@ -3160,9 +3304,12 @@ function loadGame(save){
 
 	// correct mastery skills html
 
-	$('[name="Weapon Mastery"] .skillCounter').html(player.weaponSkills[0]);
-	$('[name="Magic Mastery"] .skillCounter').html(player.magicSkills[0]);
-	$('[name="Tactic Mastery"] .skillCounter').html(player.tacticSkills[0]);
+	$('[name="Warrior Mastery"] .skillCounter').html(player.weaponSkills[0]);
+	$('[name="Paladin Mastery"] .skillCounter').html(player.weaponSkills[1]);
+	$('[name="Mage Mastery"] .skillCounter').html(player.magicSkills[0]);
+	$('[name="Witch Mastery"] .skillCounter').html(player.magicSkills[1]);
+	$('[name="Scout Mastery"] .skillCounter').html(player.tacticSkills[0]);
+	$('[name="Ninja Mastery"] .skillCounter').html(player.tacticSkills[1]);
 
 	// remove all skill buttons and abilityInfos
 	$('.skillBtn').remove();
@@ -3209,17 +3356,17 @@ function loadGame(save){
 		//infoAbilities
 		addStartingAbilities();
 	for (var i = 0; i < player.weaponAbilitiesLearned.length; i++) {
-		if (player.weaponAbilitiesLearned[i] == 'Berserk'){
-			applyBerserk();
+		if (player.weaponAbilitiesLearned[i] == 'Onslaught'){
+			applyOnslaught();
 		}
-		if (player.weaponAbilitiesLearned[i] == 'Focused Hit'){
-			applyFocusedHit();
+		if (player.weaponAbilitiesLearned[i] == 'Smite'){
+			applySmite();
 		}
-		if (player.weaponAbilitiesLearned[i] == 'Bloody Hit'){
-			applyBloodyHit();
+		if (player.weaponAbilitiesLearned[i] == 'Holy Light'){
+			applyHolyLight();
 		}
-		if (player.weaponAbilitiesLearned[i] == 'Impale'){
-			applyImpale();
+		if (player.weaponAbilitiesLearned[i] == 'Holy Slash'){
+			applyHolySlash();
 		}
 	};
 	
@@ -3227,11 +3374,11 @@ function loadGame(save){
 		if (player.magicAbilitiesLearned[i] == 'Icebolt'){
 			applyIcebolt();
 		}
-		if (player.magicAbilitiesLearned[i] == 'Channel'){
-			applyChannel();
-		}
 		if (player.magicAbilitiesLearned[i] == 'Electrocute'){
 			applyElectrocute();
+		}
+		if (player.magicAbilitiesLearned[i] == 'Channel'){
+			applyChannel();
 		}
 		if (player.magicAbilitiesLearned[i] == 'Magic Missiles'){
 			applyMagicMissiles();
@@ -3239,14 +3386,14 @@ function loadGame(save){
 	};
 	
 	for (var i = 0; i < player.tacticAbilitiesLearned.length; i++) {
-		if (player.tacticAbilitiesLearned[i] == 'Envenom'){
-			applyEnvenom();
+		if (player.tacticAbilitiesLearned[i] == 'Ambush'){
+			applyAmbush();
 		}
-		if (player.tacticAbilitiesLearned[i] == 'Focus'){
-			applyFocus();
+		if (player.tacticAbilitiesLearned[i] == 'Immobilize'){
+			applyImmobilize();
 		}
-		if (player.tacticAbilitiesLearned[i] == 'Weaken'){
-			applyWeaken();
+		if (player.tacticAbilitiesLearned[i] == 'Critical'){
+			applyCritical();
 		}
 		if (player.tacticAbilitiesLearned[i] == 'Ghost Strike'){
 			applyGhostStrike();
@@ -3278,6 +3425,7 @@ function loadGame(save){
 
 	displayPlayerHealth();
 	displayPlayerMana();
+	strengthenEnemies();
 
 } // end load function
 
@@ -3313,14 +3461,14 @@ $('.gameScreen').on('click', '.save_1', function(){
 	getSaveNames();
 });
 $('.gameScreen').on('click', '.save_2', function(){
-	var slot = saveNames[0];
+	var slot = saveNames[1];
 	// if saving and empty, save
 	// if saving and occupied, confirm
 	//else, load
 	if ((action == 'saving') && !slot){
 		var name = prompt('Enter a name for this game');
 		if (name != ""){
-			saveNames[0] = name;
+			saveNames[1] = name;
 			localStorage.setItem( 'saveNames', JSON.stringify(saveNames) );
 			saveGame(2);
 		} else {
@@ -3331,7 +3479,7 @@ $('.gameScreen').on('click', '.save_2', function(){
 		if (conf){
 			var name = prompt('Enter a name for this game');
 			if (name != ""){
-				saveNames[0] = name;
+				saveNames[1] = name;
 				localStorage.setItem( 'saveNames', JSON.stringify(saveNames) );
 				saveGame(2);
 			} else {
@@ -3344,14 +3492,14 @@ $('.gameScreen').on('click', '.save_2', function(){
 	getSaveNames();
 });
 $('.gameScreen').on('click', '.save_3', function(){
-	var slot = saveNames[0];
+	var slot = saveNames[2];
 	// if saving and empty, save
 	// if saving and occupied, confirm
 	//else, load
 	if ((action == 'saving') && !slot){
 		var name = prompt('Enter a name for this game');
 		if (name != ""){
-			saveNames[0] = name;
+			saveNames[2] = name;
 			localStorage.setItem( 'saveNames', JSON.stringify(saveNames) );
 			saveGame(3);
 		} else {
@@ -3362,7 +3510,7 @@ $('.gameScreen').on('click', '.save_3', function(){
 		if (conf){
 			var name = prompt('Enter a name for this game');
 			if (name != ""){
-				saveNames[0] = name;
+				saveNames[2] = name;
 				localStorage.setItem( 'saveNames', JSON.stringify(saveNames) );
 				saveGame(3);
 			} else {

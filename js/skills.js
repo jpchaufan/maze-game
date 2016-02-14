@@ -1,66 +1,85 @@
 // Weapon Skills
 
-function applyWeaponMastery(){
+function applyWarriorMastery(){
 	var points = player.weaponSkills[0];
-	player.weaponDamage += 1;
-	player.maxHealth += 5;
-	player.health += 5;
+	player.weaponDamage += 5;
+	player.maxHealth += 25;
+	player.health += 25;
 	displayPlayerHealth();
 }
-function applyBerserk(){
-	x = player.weaponAbilitiesLearned.indexOf('Berserk');
+function applyPaladinMastery(){
+	var points = player.weaponSkills[1];
+	player.weaponDamage += 5;
+	player.maxHealth += 20;
+	player.health += 20;
+	player.armor += 5;
+	player.resistance += 5;
+	displayPlayerHealth();
+}
+function applyEnrage(){
+	x = player.weaponAbilitiesLearned.indexOf('Enrage');
 	if (x == -1){
-		player.weaponAbilitiesLearned.push('Berserk');
+		player.weaponAbilitiesLearned.push('Enrage');
 	}
-	$('.abilitiesMenuWeapon').append('<div class="infoAbility" handle="Berserk"><div class="top"><div class="abilityName">Berserk</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">50% chance to do 2x weapon damage. 50% chance to do 1x damage and lose 20 speed.</div> </div>');
+}
+function applyLifeSteal(){
+	x = player.weaponAbilitiesLearned.indexOf('Life Steal');
+	if (x == -1){
+		player.weaponAbilitiesLearned.push('Life Steal');
+	}
+}
+function applyOnslaught(){
+	x = player.weaponAbilitiesLearned.indexOf('Onslaught');
+	if (x == -1){
+		player.weaponAbilitiesLearned.push('Onslaught');
+	}
+	$('.abilitiesMenuWeapon').append('<div class="infoAbility" handle="Onslaught"><div class="top"><div class="abilityName">Onslaught</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Hit 0-4 times for .9x weapon damage.</div> </div>');
 	accordionMenuToggle();
 }
-function applyDefender(){
-	player.armor += 50;
-	player.resistance += 50;
-}
-function applyFocusedHit(){
-	x = player.weaponAbilitiesLearned.indexOf('Focused Hit');
+function applySmite(){
+	x = player.weaponAbilitiesLearned.indexOf('Smite');
 	if (x == -1){
-		player.weaponAbilitiesLearned.push('Focused Hit');
+		player.weaponAbilitiesLearned.push('Smite');
 	}
-	$('.abilitiesMenuWeapon').append('<div class="infoAbility" handle="Focused Hit"><div class="top"><div class="abilityName">Focused Hit</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Deal 1x weapon damage, gaining 50% of that damage as armor and resistance.</div> </div>');
+	$('.abilitiesMenuWeapon').append('<div class="infoAbility" handle="Smite"><div class="top"><div class="abilityName">Smite</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Bash enemy, delaying by 35 and damaging for .3x your armor.</div> </div>');
 	accordionMenuToggle();
 }
-function applyHearty(){
-	player.maxHealth += 100;
-	player.health += 100;
-}
-function applyBloodyStrike(){
-	x = player.weaponAbilitiesLearned.indexOf('Bloody Strike');
+function applyHolyLight(){
+	x = player.weaponAbilitiesLearned.indexOf('Holy Light');
 	if (x == -1){
-		player.weaponAbilitiesLearned.push('Bloody Strike');
+		player.weaponAbilitiesLearned.push('Holy Light');
 	}
-	$('.abilitiesMenuWeapon').append('<div class="infoAbility" handle="Bloody Strike"><div class="top"><div class="abilityName">Bloody Strike</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Deal 1x weapon damage, healing for 15% of that damage.</div> </div>');
+	$('.abilitiesMenuWeapon').append('<div class="infoAbility" handle="Holy Light"><div class="top"><div class="abilityName">Holy Light</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Heal yourself for 70% of your max health.</div> </div>');
 	accordionMenuToggle();
 }
-function applyStrength(){
-	player.weaponDamage += 25;
-	accordionMenuToggle();
-}
-function applyImpale(){
-	x = player.weaponAbilitiesLearned.indexOf('Impale');
+function applyHolySlash(){
+	x = player.weaponAbilitiesLearned.indexOf('Holy Slash');
 	if (x == -1){
-		player.weaponAbilitiesLearned.push('Impale');
+		player.weaponAbilitiesLearned.push('Holy Slash');
 	}
-	$('.abilitiesMenuWeapon').append('<div class="infoAbility" handle="Impale"><div class="top"><div class="abilityName">Impale</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Deal 1x weapon damage, completely bypassing armor.</div> </div>');
+	$('.abilitiesMenuWeapon').append('<div class="infoAbility" handle="Holy Slash"><div class="top"><div class="abilityName">Holy Slash</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Do 1.2x weapon damage as magic damage.</div> </div>');
 	accordionMenuToggle();
 }
 
 // Magic Skills
 
-function applyMagicMastery(){
+function applyMageMastery(){
 	var points = player.magicSkills[0];
-	player.magicDamage += 1;
-	player.maxHealth += 3;
-	player.health += 3;
-	player.maxMana += 2;
-	player.mana += 2;
+	player.magicDamage += 5;
+	player.maxHealth += 12;
+	player.health += 12;
+	player.maxMana += 15;
+	player.mana += 15;
+	displayPlayerHealth();
+	displayPlayerMana();
+}
+function applyWitchMastery(){
+	var points = player.magicSkills[01];
+	player.magicDamage += 5;
+	player.maxHealth += 15;
+	player.health += 15;
+	player.maxMana += 12;
+	player.mana += 12;
 	displayPlayerHealth();
 	displayPlayerMana();
 }
@@ -69,25 +88,16 @@ function applyIcebolt(){
 	if (x == -1){
 		player.magicAbilitiesLearned.push('Icebolt');
 	}
-	$('.abilitiesMenuMagic').append('<div class="infoAbility" handle="Icebolt"><div class="top"><div class="abilityName">Icebolt</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Deal 1x magic damage and delay enemy by 35%.</div> </div>');
+	$('.abilitiesMenuMagic').append('<div class="infoAbility" handle="Icebolt"><div class="top"><div class="abilityName">Icebolt</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Deal 1x magic damage and delay enemy by 35.</div> </div>');
 	accordionMenuToggle();
 }
-function applyMageArmor(){
-	player.armor += 50;
-	player.resistance += 50;
-}
-function applyChannel(){
-	x = player.magicAbilitiesLearned.indexOf('Channel');
+function applyCurse(){
+	x = player.magicAbilitiesLearned.indexOf('Curse');
 	if (x == -1){
-		player.magicAbilitiesLearned.push('Channel');
+		player.magicAbilitiesLearned.push('Curse');
 	}
-	$('.abilitiesMenuMagic').append('<div class="infoAbility" handle="Channel"><div class="top"><div class="abilityName">Channel</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Recover 75% of your mana.</div> </div>');
+	$('.abilitiesMenuMagic').append('<div class="infoAbility" handle="Curse"><div class="top"><div class="abilityName">Curse</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Deals .66x magic damage per turn for 5 turns.</div> </div>');
 	accordionMenuToggle();
-}
-function applySurge(){
-	player.maxHealth -= 20;
-	player.health -= 20;
-	player.magicDamage += 40;
 }
 function applyElectrocute(){
 	x = player.magicAbilitiesLearned.indexOf('Electrocute');
@@ -97,8 +107,19 @@ function applyElectrocute(){
 	$('.abilitiesMenuMagic').append('<div class="infoAbility" handle="Electrocute"><div class="top"><div class="abilityName">Electrocute</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Deal 1.2x magic damage, with a 25% chance to deal 2.5x magic damage.</div> </div>');
 	accordionMenuToggle();
 }
-function applyFastCasting(){
-	player.speed += 10;
+function applyDrainLife(){
+	x = player.magicAbilitiesLearned.indexOf('Drain Life');
+	if (x == -1){
+		player.magicAbilitiesLearned.push('Drain Life');
+	}
+}
+function applyChannel(){
+	x = player.magicAbilitiesLearned.indexOf('Channel');
+	if (x == -1){
+		player.magicAbilitiesLearned.push('Channel');
+	}
+	$('.abilitiesMenuMagic').append('<div class="infoAbility" handle="Channel"><div class="top"><div class="abilityName">Channel</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Channel the elements, recovering 80% of your max mana and gaining 15% bonus magic damage.</div> </div>');
+	accordionMenuToggle();
 }
 function applyMagicMissiles(){
 	x = player.magicAbilitiesLearned.indexOf('Magic Missiles');
@@ -112,49 +133,55 @@ function applyMagicMissiles(){
 
 // Tactic Skills
 
-function applyTacticMastery(){
+function applyScoutMastery(){
 	var points = player.tacticSkills[0];
-	player.tacticSkill += 1;
-	player.maxHealth += 4;
-	player.health += 4;
-	player.maxMana += 1;
-	player.mana += 1;
+	player.tacticSkill += 2;
+	player.weaponDamage += 2;
+	player.speed += 1;
+	player.maxHealth += 17;
+	player.health += 17;
+	player.restoreHealth += 1;
+	player.restoreMana += 1;
 	displayPlayerHealth();
-	displayPlayerMana();
 }
-function applyEnvenom(){
-	x = player.tacticAbilitiesLearned.indexOf('Envenom');
+function applyNinjaMastery(){
+	var points = player.tacticSkills[0];
+	player.tacticSkill += 3;
+	player.weaponDamage += 3;
+	player.speed += 1;
+	player.maxHealth += 17;
+	player.health += 17;
+	displayPlayerHealth();
+}
+function applyAmbush(){
+	x = player.tacticAbilitiesLearned.indexOf('Ambush');
 	if (x == -1){
-		player.tacticAbilitiesLearned.push('Envenom');
+		player.tacticAbilitiesLearned.push('Ambush');
 	}
-	$('.abilitiesMenuTactic').append('<div class="infoAbility" handle="Envenom"><div class="top"><div class="abilityName">Envenom</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Deal .25x weapon Damage, and poison your enemy for 8 turns, dealing .33x tactical damage per turn as magic damage. Can be used multiple times.</div> </div>');
+	$('.abilitiesMenuTactic').append('<div class="infoAbility" handle="Ambush"><div class="top"><div class="abilityName">Ambush</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">An opening attack that deals 1x of each weapon and tactic damage.</div> </div>');
 	accordionMenuToggle();
 }
-function applyQuickness(){
-	player.speed += 10;
-}
-function applyFocus(){
-	x = player.tacticAbilitiesLearned.indexOf('Focus');
+function applyImmobilize(){
+	x = player.tacticAbilitiesLearned.indexOf('Immobilize');
 	if (x == -1){
-		player.tacticAbilitiesLearned.push('Focus');
+		player.tacticAbilitiesLearned.push('Immobilize');
 	}
-	$('.abilitiesMenuTactic').append('<div class="infoAbility" handle="Focus"><div class="top"><div class="abilityName">Focus</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Gain 33% of tactic skill as mana restoration and resistance.</div> </div>');
+	$('.abilitiesMenuTactic').append('<div class="infoAbility" handle="Immobilize"><div class="top"><div class="abilityName">Immobilize</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">An opening attack that delays by 100 and lowers armor and resistance by 1x your tactic skill.</div> </div>');
 	accordionMenuToggle();
 }
-function applyRecovery(){
-	player.restoreHealth += 10;
-	player.restoreMana += 10;
-}
-function applyWeaken(){
-	x = player.tacticAbilitiesLearned.indexOf('Weaken');
+function applyScavange(){
+	x = player.tacticAbilitiesLearned.indexOf('Scavange');
 	if (x == -1){
-		player.tacticAbilitiesLearned.push('Weaken');
+		player.tacticAbilitiesLearned.push('Scavange');
 	}
-	$('.abilitiesMenuTactic').append('<div class="infoAbility" handle="Weaken"><div class="top"><div class="abilityName">Weaken</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">lowers enemy\'s armor and magic resist by .5x your tactical skill.</div> </div>');
-	accordionMenuToggle();
 }
-function applyAwareness(){
-	player.tacticSkill += 20;
+function applyCritical(){
+	x = player.tacticAbilitiesLearned.indexOf('Critical');
+	if (x == -1){
+		player.tacticAbilitiesLearned.push('Critical');
+	}
+	$('.abilitiesMenuTactic').append('<div class="infoAbility" handle="Critical"><div class="top"><div class="abilityName">Critical</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Attack for 1.2x weapon damage, with 25% to 75% chance to 2x damage instead.</div> </div>');
+	accordionMenuToggle();
 }
 function applyGhostStrike(){
 	x = player.tacticAbilitiesLearned.indexOf('Ghost Strike');
@@ -163,6 +190,13 @@ function applyGhostStrike(){
 	}
 	$('.abilitiesMenuTactic').append('<div class="infoAbility" handle="Ghost Strike"><div class="top"><div class="abilityName">Ghost Strike</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Deal .7x tactic skill as weapon damage, and then .7x tactic skills as magic damage.</div> </div>');
 	accordionMenuToggle();
+}
+function applySwiftness(){
+	x = player.tacticAbilitiesLearned.indexOf('Swiftness');
+	if (x == -1){
+		player.tacticAbilitiesLearned.push('Swiftness');
+	}
+	player.speed += 30;
 }
 
 
@@ -177,102 +211,123 @@ $('[class*="skillUp-"]').on('click', function(){
 		var conf = confirm('Are you sure you want to get '+x+"? This cannot be undone...");
 		if (conf){
 				/* Weapon Skills */
-			if (x == 'Weapon Mastery'){
+			if (x == 'Warrior Mastery'){
 				player.skillPoints -= 1;
 				player.weaponSkills[0] += 1;
-				applyWeaponMastery();
-				$('[name="Weapon Mastery"] .skillCounter').html(player.weaponSkills[0]);
-				if ($('[name="Weapon Mastery"]').hasClass('availableSkill')){
-					$('[name="Weapon Mastery"]').removeClass('availableSkill');
-					$('[name="Weapon Mastery"]').addClass('activeSkill');
+				applyWarriorMastery();
+				$('[name="Warrior Mastery"] .skillCounter').html(player.weaponSkills[0]);
+				if ($('[name="Warrior Mastery"]').hasClass('availableSkill')){
+					$('[name="Warrior Mastery"]').removeClass('availableSkill');
+					$('[name="Warrior Mastery"]').addClass('activeSkill');
 				}
-				if ((player.weaponSkills[0] >= 1) && (player.weaponSkills[1] == 0)){
-					$('[name="Berserk"]').addClass('availableSkill');
+				if ((player.weaponSkills[0] >= 1) && (player.weaponSkills[2] == 0)){
+					$('[name="Enrage"]').addClass('availableSkill');
 				}	
-				if ((player.weaponSkills[0] >= 5) && (player.weaponSkills[2] == 0)){
-					$('[name="Defender"]').addClass('availableSkill');
+				if ((player.weaponSkills[0] >= 5) && (player.weaponSkills[4] == 0)){
+					$('[name="Life Steal"]').addClass('availableSkill');
 				}
-				if ((player.weaponSkills[0] >= 10) && (player.weaponSkills[4] == 0)){
-					$('[name="Hearty"]').addClass('availableSkill');
-				}
-				if ((player.weaponSkills[0] >= 15) && (player.weaponSkills[6] == 0)){
-					$('[name="Strength"]').addClass('availableSkill');
+				if ((player.weaponSkills[0] >= 10) && (player.weaponSkills[6] == 0)){
+					$('[name="Onslaught"]').addClass('availableSkill');
 				}
 			}
-			if ((x == 'Berserk') && ($('[name="Berserk"]').hasClass('availableSkill'))){
-				$('[name="Berserk"]').removeClass('availableSkill')
-				$('[name="Berserk"]').addClass('activeSkill');
+			if (x == 'Paladin Mastery'){
 				player.skillPoints -= 1;
 				player.weaponSkills[1] += 1;
-				applyBerserk();
+				applyPaladinMastery();
+				$('[name="Paladin Mastery"] .skillCounter').html(player.weaponSkills[1]);
+				if ($('[name="Paladin Mastery"]').hasClass('availableSkill')){
+					$('[name="Paladin Mastery"]').removeClass('availableSkill');
+					$('[name="Paladin Mastery"]').addClass('activeSkill');
+				}
+				if ((player.weaponSkills[1] >= 1) && (player.weaponSkills[3] == 0)){
+					$('[name="Smite"]').addClass('availableSkill');
+				}	
+				if ((player.weaponSkills[1] >= 5) && (player.weaponSkills[5] == 0)){
+					$('[name="Holy Light"]').addClass('availableSkill');
+				}
+				if ((player.weaponSkills[1] >= 10) && (player.weaponSkills[7] == 0)){
+					$('[name="Holy Slash"]').addClass('availableSkill');
+				}
 			}
-			if ((x == 'Defender') && ($('[name="Defender"]').hasClass('availableSkill'))){
-				$('[name="Defender"]').removeClass('availableSkill')
-				$('[name="Defender"]').addClass('activeSkill');
+			if ((x == 'Enrage') && ($('[name="Enrage"]').hasClass('availableSkill'))){
+				$('[name="Enrage"]').removeClass('availableSkill')
+				$('[name="Enrage"]').addClass('activeSkill');
 				player.skillPoints -= 1;
 				player.weaponSkills[2] += 1;
-				$('[name="Focused Hit"]').addClass('availableSkill');
-				applyDefender();
+				applyEnrage();
 			}
-			if ((x == 'Focused Hit') && ($('[name="Focused Hit"]').hasClass('availableSkill'))){
-				$('[name="Focused Hit"]').removeClass('availableSkill')
-				$('[name="Focused Hit"]').addClass('activeSkill');
-				player.skillPoints -= 1;
-				player.weaponSkills[3] += 1;
-				applyFocusedHit();
-			}
-			if ((x == 'Hearty') && ($('[name="Hearty"]').hasClass('availableSkill'))){
-				$('[name="Hearty"]').removeClass('availableSkill')
-				$('[name="Hearty"]').addClass('activeSkill');
+			if ((x == 'Life Steal') && ($('[name="Life Steal"]').hasClass('availableSkill'))){
+				$('[name="Life Steal"]').removeClass('availableSkill')
+				$('[name="Life Steal"]').addClass('activeSkill');
 				player.skillPoints -= 1;
 				player.weaponSkills[4] += 1;
-				$('[name="Bloody Strike"]').addClass('availableSkill');
-				applyHearty();
+				applyLifeSteal();
 			}
-			if ((x == 'Bloody Strike') && ($('[name="Bloody Strike"]').hasClass('availableSkill'))){
-				$('[name="Bloody Strike"]').removeClass('availableSkill')
-				$('[name="Bloody Strike"]').addClass('activeSkill');
-				player.skillPoints -= 1;
-				player.weaponSkills[5] += 1;
-				applyBloodyStrike();
-			}
-			if ((x == 'Strength') && ($('[name="Strength"]').hasClass('availableSkill'))){
-				$('[name="Strength"]').removeClass('availableSkill')
-				$('[name="Strength"]').addClass('activeSkill');
+			if ((x == 'Onslaught') && ($('[name="Onslaught"]').hasClass('availableSkill'))){
+				$('[name="Onslaught"]').removeClass('availableSkill')
+				$('[name="Onslaught"]').addClass('activeSkill');
 				player.skillPoints -= 1;
 				player.weaponSkills[6] += 1;
-				$('[name="Impale"]').addClass('availableSkill');
-				applyStrength();
+				applyOnslaught();
 			}
-			if ((x == 'Impale') && ($('[name="Impale"]').hasClass('availableSkill'))){
-				$('[name="Impale"]').removeClass('availableSkill')
-				$('[name="Impale"]').addClass('activeSkill');
+			if ((x == 'Smite') && ($('[name="Smite"]').hasClass('availableSkill'))){
+				$('[name="Smite"]').removeClass('availableSkill')
+				$('[name="Smite"]').addClass('activeSkill');
+				player.skillPoints -= 1;
+				player.weaponSkills[3] += 1;
+				applySmite();
+			}
+			if ((x == 'Holy Light') && ($('[name="Holy Light"]').hasClass('availableSkill'))){
+				$('[name="Holy Light"]').removeClass('availableSkill')
+				$('[name="Holy Light"]').addClass('activeSkill');
+				player.skillPoints -= 1;
+				player.weaponSkills[5] += 1;
+				applyHolyLight();
+			}
+			if ((x == 'Holy Slash') && ($('[name="Holy Slash"]').hasClass('availableSkill'))){
+				$('[name="Holy Slash"]').removeClass('availableSkill')
+				$('[name="Holy Slash"]').addClass('activeSkill');
 				player.skillPoints -= 1;
 				player.weaponSkills[7] += 1;
-				applyImpale();
+				applyHolySlash();
 			}
 
 			/* Magic Skills */
-			if (x == 'Magic Mastery'){
+			if (x == 'Mage Mastery'){
 				player.skillPoints -= 1;
 				player.magicSkills[0] += 1;
-				applyMagicMastery();
-				$('[name="Magic Mastery"] .skillCounter').html(player.magicSkills[0]);
-				if ($('[name="Magic Mastery"]').hasClass('availableSkill')){
-					$('[name="Magic Mastery"]').removeClass('availableSkill');
-					$('[name="Magic Mastery"]').addClass('activeSkill');
+				applyMageMastery();
+				$('[name="Mage Mastery"] .skillCounter').html(player.magicSkills[0]);
+				if ($('[name="Mage Mastery"]').hasClass('availableSkill')){
+					$('[name="Mage Mastery"]').removeClass('availableSkill');
+					$('[name="Mage Mastery"]').addClass('activeSkill');
 				}
-				if ((player.magicSkills[0] >= 1) && (player.magicSkills[1] == 0)){
+				if ((player.magicSkills[0] >= 1) && (player.magicSkills[2] == 0)){
 					$('[name="Icebolt"]').addClass('availableSkill');
 				}	
-				if ((player.magicSkills[0] >= 5) && (player.magicSkills[2] == 0)){
-					$('[name="Mage Armor"]').addClass('availableSkill');
+				if ((player.magicSkills[0] >= 5) && (player.magicSkills[4] == 0)){
+					$('[name="Electrocute"]').addClass('availableSkill');
 				}
-				if ((player.magicSkills[0] >= 10) && (player.magicSkills[4] == 0)){
-					$('[name="Surge"]').addClass('availableSkill');
+				if ((player.magicSkills[0] >= 10) && (player.magicSkills[6] == 0)){
+					$('[name="Channel"]').addClass('availableSkill');
+				}			}
+			if (x == 'Witch Mastery'){
+				player.skillPoints -= 1;
+				player.magicSkills[1] += 1;
+				applyWitchMastery();
+				$('[name="Witch Mastery"] .skillCounter').html(player.magicSkills[1]);
+				if ($('[name="Witch Mastery"]').hasClass('availableSkill')){
+					$('[name="Witch Mastery"]').removeClass('availableSkill');
+					$('[name="Witch Mastery"]').addClass('activeSkill');
 				}
-				if ((player.magicSkills[0] >= 15) && (player.magicSkills[6] == 0)){
-					$('[name="Fast Casting"]').addClass('availableSkill');
+				if ((player.magicSkills[1] >= 1) && (player.magicSkills[3] == 0)){
+					$('[name="Curse"]').addClass('availableSkill');
+				}	
+				if ((player.magicSkills[1] >= 5) && (player.magicSkills[5] == 0)){
+					$('[name="Drain Life"]').addClass('availableSkill');
+				}
+				if ((player.magicSkills[1] >= 10) && (player.magicSkills[7] == 0)){
+					$('[name="Magic Missiles"]').addClass('availableSkill');
 				}
 			}
 			if ((x == 'Icebolt') && ($('[name="Icebolt"]').hasClass('availableSkill'))){
@@ -282,43 +337,33 @@ $('[class*="skillUp-"]').on('click', function(){
 				player.magicSkills[1] += 1;
 				applyIcebolt();
 			}
-			if ((x == 'Mage Armor') && ($('[name="Mage Armor"]').hasClass('availableSkill'))){
-				$('[name="Mage Armor"]').removeClass('availableSkill');
-				$('[name="Mage Armor"]').addClass('activeSkill');
-				player.skillPoints -= 1;
-				player.magicSkills[2] += 1;
-				$('[name="Channel"]').addClass('availableSkill');
-				applyMageArmor();
-			}
-			if ((x == 'Channel') && ($('[name="Channel"]').hasClass('availableSkill'))){
-				$('[name="Channel"]').removeClass('availableSkill');
-				$('[name="Channel"]').addClass('activeSkill');
+			if ((x == 'Curse') && ($('[name="Curse"]').hasClass('availableSkill'))){
+				$('[name="Curse"]').removeClass('availableSkill');
+				$('[name="Curse"]').addClass('activeSkill');
 				player.skillPoints -= 1;
 				player.magicSkills[3] += 1;
-				applyChannel();
-			}
-			if ((x == 'Surge') && ($('[name="Surge"]').hasClass('availableSkill'))){
-				$('[name="Surge"]').removeClass('availableSkill');
-				$('[name="Surge"]').addClass('activeSkill');
-				player.skillPoints -= 1;
-				player.magicSkills[4] += 1;
-				$('[name="Electrocute"]').addClass('availableSkill');
-				applySurge();
+				applyCurse();
 			}
 			if ((x == 'Electrocute') && ($('[name="Electrocute"]').hasClass('availableSkill'))){
 				$('[name="Electrocute"]').removeClass('availableSkill');
 				$('[name="Electrocute"]').addClass('activeSkill');
 				player.skillPoints -= 1;
-				player.magicSkills[5] += 1;
+				player.magicSkills[4] += 1;
 				applyElectrocute();
 			}
-			if ((x == 'Fast Casting') && ($('[name="Fast Casting"]').hasClass('availableSkill'))){
-				$('[name="Fast Casting"]').removeClass('availableSkill');
-				$('[name="Fast Casting"]').addClass('activeSkill');
+			if ((x == 'Drain Life') && ($('[name="Drain Life"]').hasClass('availableSkill'))){
+				$('[name="Drain Life"]').removeClass('availableSkill');
+				$('[name="Drain Life"]').addClass('activeSkill');
+				player.skillPoints -= 1;
+				player.magicSkills[5] += 1;
+				applyDrainLife();
+			}
+			if ((x == 'Channel') && ($('[name="Channel"]').hasClass('availableSkill'))){
+				$('[name="Channel"]').removeClass('availableSkill');
+				$('[name="Channel"]').addClass('activeSkill');
 				player.skillPoints -= 1;
 				player.magicSkills[6] += 1;
-				$('[name="Magic Missiles"]').addClass('availableSkill');
-				applyFastCasting();
+				applyChannel();
 			}
 			if ((x == 'Magic Missiles') && ($('[name="Magic Missiles"]').hasClass('availableSkill'))){
 				$('[name="Magic Missiles"]').removeClass('availableSkill');
@@ -330,79 +375,66 @@ $('[class*="skillUp-"]').on('click', function(){
 
 
 			/* Tactic Skills */
-			if (x == 'Tactic Mastery'){
+			if (x == 'Scout Mastery'){
 				player.skillPoints -= 1;
 				player.tacticSkills[0] += 1;
-				applyTacticMastery();
-				$('[name="Tactic Mastery"] .skillCounter').html(player.tacticSkills[0]);
-				if ($('[name="Tactic Mastery"]').hasClass('availableSkill')){
-					$('[name="Tactic Mastery"]').removeClass('availableSkill');
-					$('[name="Tactic Mastery"]').addClass('activeSkill');
+				applyScoutMastery();
+				$('[name="Scout Mastery"] .skillCounter').html(player.tacticSkills[0]);
+				if ($('[name="Scout Mastery"]').hasClass('availableSkill')){
+					$('[name="Scout Mastery"]').removeClass('availableSkill');
+					$('[name="Scout Mastery"]').addClass('activeSkill');
 				}
-				if ((player.tacticSkills[0] >= 1) && (player.tacticSkills[1] == 0)){
-					$('[name="Envenom"]').addClass('availableSkill');
+				if ((player.tacticSkills[0] >= 1) && (player.tacticSkills[2] == 0)){
+					$('[name="Ambush"]').addClass('availableSkill');
 				}	
-				if ((player.tacticSkills[0] >= 5) && (player.tacticSkills[2] == 0)){
-					$('[name="Quickness"]').addClass('availableSkill');
+				if ((player.tacticSkills[0] >= 5) && (player.tacticSkills[4] == 0)){
+					$('[name="Scavange"]').addClass('availableSkill');
 				}
-				if ((player.tacticSkills[0] >= 10) && (player.tacticSkills[4] == 0)){
-					$('[name="Recovery"]').addClass('availableSkill');
-				}
-				if ((player.tacticSkills[0] >= 15) && (player.tacticSkills[6] == 0)){
-					$('[name="Awareness"]').addClass('availableSkill');
+				if ((player.tacticSkills[0] >= 10) && (player.tacticSkills[6] == 0)){
+					$('[name="Ghost Strike"]').addClass('availableSkill');
 				}
 			}
-			if ((x == 'Envenom') && ($('[name="Envenom"]').hasClass('availableSkill'))){
-				player.skillPoints -= 1;
-				player.tacticSkills[1] += 1;
-				$('[name="Envenom"]').removeClass('availableSkill');
-				$('[name="Envenom"]').addClass('activeSkill');
-				applyEnvenom();
-			}
-			if ((x == 'Quickness') && ($('[name="Quickness"]').hasClass('availableSkill'))){
+			if ((x == 'Ambush') && ($('[name="Ambush"]').hasClass('availableSkill'))){
 				player.skillPoints -= 1;
 				player.tacticSkills[2] += 1;
-				$('[name="Quickness"]').removeClass('availableSkill');
-				$('[name="Quickness"]').addClass('activeSkill');
-				$('[name="Focus"]').addClass('availableSkill');
-				applyQuickness();
+				$('[name="Ambush"]').removeClass('availableSkill');
+				$('[name="Ambush"]').addClass('activeSkill');
+				applyAmbush();
 			}
-			if ((x == 'Focus') && ($('[name="Focus"]').hasClass('availableSkill'))){
-				player.skillPoints -= 1;
-				player.tacticSkills[3] += 1;
-				$('[name="Focus"]').removeClass('availableSkill');
-				$('[name="Focus"]').addClass('activeSkill');
-				applyFocus();
-			}
-			if ((x == 'Recovery') && ($('[name="Recovery"]').hasClass('availableSkill'))){
+			if ((x == 'Scavange') && ($('[name="Scavange"]').hasClass('availableSkill'))){
 				player.skillPoints -= 1;
 				player.tacticSkills[4] += 1;
-				$('[name="Recovery"]').removeClass('availableSkill');
-				$('[name="Recovery"]').addClass('activeSkill');
-				$('[name="Weaken"]').addClass('availableSkill');
-				applyRecovery();
-			}
-			if ((x == 'Weaken') && ($('[name="Weaken"]').hasClass('availableSkill'))){
-				player.skillPoints -= 1;
-				player.tacticSkills[5] += 1;
-				$('[name="Weaken"]').removeClass('availableSkill');
-				$('[name="Weaken"]').addClass('activeSkill');
-				applyWeaken();
-			}
-			if ((x == 'Awareness') && ($('[name="Awareness"]').hasClass('availableSkill'))){
-				player.skillPoints -= 1;
-				player.tacticSkills[6] += 1;
-				$('[name="Awareness"]').removeClass('availableSkill');
-				$('[name="Awareness"]').addClass('activeSkill');
-				$('[name="Ghost Strike"]').addClass('availableSkill');
-				applyAwareness();
+				$('[name="Scavange"]').removeClass('availableSkill');
+				$('[name="Scavange"]').addClass('activeSkill');
+				applyScavange();
 			}
 			if ((x == 'Ghost Strike') && ($('[name="Ghost Strike"]').hasClass('availableSkill'))){
 				player.skillPoints -= 1;
-				player.tacticSkills[7] += 1;
+				player.tacticSkills[6] += 1;
 				$('[name="Ghost Strike"]').removeClass('availableSkill');
 				$('[name="Ghost Strike"]').addClass('activeSkill');
 				applyGhostStrike();
+			}
+			if ((x == 'Immobilize') && ($('[name="Immobilize"]').hasClass('availableSkill'))){
+				player.skillPoints -= 1;
+				player.tacticSkills[3] += 1;
+				$('[name="Immobilize"]').removeClass('availableSkill');
+				$('[name="Immobilize"]').addClass('activeSkill');
+				applyImmobilize();
+			}
+			if ((x == 'Critical') && ($('[name="Critical"]').hasClass('availableSkill'))){
+				player.skillPoints -= 1;
+				player.tacticSkills[5] += 1;
+				$('[name="Critical"]').removeClass('availableSkill');
+				$('[name="Critical"]').addClass('activeSkill');
+				applyCritical();
+			}
+			if ((x == 'Swiftness') && ($('[name="Swiftness"]').hasClass('availableSkill'))){
+				player.skillPoints -= 1;
+				player.tacticSkills[7] += 1;
+				$('[name="Swiftness"]').removeClass('availableSkill');
+				$('[name="Swiftness"]').addClass('activeSkill');
+				applySwiftness();
 			}
 
 
