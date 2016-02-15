@@ -595,15 +595,15 @@ items = [
 		name: 'ninjato',
 		id: 34,
 		title: 'Ninjato',
-		desc: '+20 Weapon Damage<br>+15 Speed',
+		desc: '+23 Weapon Damage<br>+15 Speed',
 		consumable: false,
 		equipSlot: 'hand',
 		equip: function(){
-			player.weaponDamage += 20;
+			player.weaponDamage += 23;
 			player.speed += 15;
 		},
 		unequip: function(){
-			player.weaponDamage -= 20;
+			player.weaponDamage -= 23;
 			player.speed -= 15;
 		}
 	},
@@ -637,6 +637,94 @@ items = [
 			player.weaponDamage -= 15;
 			player.tacticSkill -=15;
 			player.speed -= 10;
+		}
+	},
+	{
+		name: 'knightsShield',
+		id: 37,
+		title: 'Knight\'s Shield',
+		desc: '+90 Armor<br>+90 Resistance',
+		consumable: false,
+		equipSlot: 'hand',
+		equip: function(){
+			player.armor += 90;
+			player.resistance +=90;
+		},
+		unequip: function(){
+			player.armor -= 90;
+			player.resistance -=90;
+		}
+	},
+	{
+		name: 'knightsSword',
+		id: 39,
+		title: 'Knight\'s Sword',
+		desc: '+30 Weapon Damage<br>+30 Health',
+		consumable: false,
+		equipSlot: 'hand',
+		equip: function(){
+			player.weaponDamage += 30;
+			player.maxHealth +=30;
+			displayPlayerHealth();
+		},
+		unequip: function(){
+			player.weaponDamage -= 90;
+			player.maxHealth -=30;
+			displayPlayerHealth();
+		}
+	},
+	{
+		name: 'curvedStaff',
+		id: 40,
+		title: 'Curved Staff',
+		desc: '+30 Magic Damage<br>+30 Armor',
+		consumable: false,
+		equipSlot: 'hand',
+		equip: function(){
+			player.magicDamage += 30;
+			player.armor +=30;
+		},
+		unequip: function(){
+			player.magicDamage -= 90;
+			player.armor -=30;
+		}
+	},
+	{
+		name: 'battleTunic',
+		id: 41,
+		title: 'Battle Tunic',
+		desc: '+70 Armor<br>+70 Resistance<br>+10 Restore Health',
+		consumable: false,
+		equipSlot: 'torso',
+		equip: function(){
+			player.armor += 70;
+			player.resistance +=70;
+			player.restoreHealth += 10;
+		},
+		unequip: function(){
+			player.armor -= 70;
+			player.resistance -=70;
+			player.restoreHealth -= 10;
+		}
+	},
+	{
+		name: 'acrobatsVest',
+		id: 42,
+		title: 'Acrobat\'s Vest',
+		desc: '+15 Tactic Skill<br>+30 Armor<br>+30 Resistance<br>+15 Restore Health',
+		consumable: false,
+		equipSlot: 'torso',
+		equip: function(){
+			player.tacticSkill += 15;
+			player.armor += 30;
+			player.resistance +=30;
+			player.restoreHealth += 15;
+		},
+		unequip: function(){
+			player.tacticSkill -= 15;
+			player.armor -= 30;
+			player.resistance -=30;
+			player.restoreHealth -= 15;
 		}
 	},
 ];

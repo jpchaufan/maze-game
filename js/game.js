@@ -19,7 +19,7 @@ makeGrid();
 		enemiesBot: 10,
 		enemiesTop: 14,
 		itemsTop: 30,
-		itemsBot: 0,
+		itemsBot: 2,
 		walls: [],
 		stairs: 0,
 		encounters: [],
@@ -36,6 +36,7 @@ makeGrid();
 		magicDamage: 0,
 		delay: 100,
 		speed: 100,
+		chargeUp: 0,
 		delayTimerRunning: false,
 		firstStrike: false,
 	};
@@ -51,7 +52,7 @@ makeGrid();
 		fightsWon: 0,
 		level: 1,
 		exp: 0,
-		skillPoints: 100,
+		skillPoints: 0,
 		pack: [],
 		equip: [],
 		weaponAbilities: ['Slash', 0 , 0],
@@ -1624,8 +1625,9 @@ makeGrid();
 	function strengthenEnemies(){
 		if (game.level >= 2){
 			game.enemiesBot = 10;
-			game.enemiesTop = 17;
+			game.enemiesTop = 16;
 			game.itemsTop = 36;
+			game.itemsBot = 5;
 		}
 		scaleEnemies();
 	}
@@ -1814,6 +1816,7 @@ makeGrid();
 	function setEnemy(x){
 		game.firstStrike = false;
 		game.enemyId = x;
+		game.chargeUp = enemies[x].chargeUp;
 		game.damageType = enemies[x].damageType;
 		game.maxHealth = enemies[x].maxHealth;
 		game.health = enemies[x].maxHealth;
@@ -1862,8 +1865,11 @@ makeGrid();
 			setEnemy(x);
 		} else if (type == 'boss'){
 			console.log('setting boss for level '+game.level);
-			if (game.level >= 2){
+			if (game.level == 2){
 				setEnemy(0);
+				player.bossFight = true;
+			} else if (game.level == 3){
+				setEnemy(1);
 				player.bossFight = true;
 			}
 		}
@@ -1899,14 +1905,14 @@ makeGrid();
 		}
 		var roll = Math.random()*100+1;
 		var magicFind = roll*(1+(x/(x+50)));
-		if (roll >  70){
+		if (roll >  62){
 			var num = Math.floor(Math.random()*(game.itemsTop+1-game.itemsBot) + game.itemsBot);
 			addItem(items[num].name);
 			$(".lootReport").html(items[num].title);
-		} else if (roll > 40){
+		} else if (roll > 30){
 			addItem('healthPotion');
 			$(".lootReport").html('Health Potion');
-		} else if (roll > 20){
+		} else if (roll > 10){
 			addItem('manaPotion');
 			$(".lootReport").html('Mana Potion');
 		} else {
@@ -2781,7 +2787,6 @@ makeGrid();
 	//open and close accordions
 	function accordionMenuToggle(){
 		$('.infoAbility').on('click', '.abilityName', function(){
-		console.log('testing');
 		$(this).parent().next().toggle();
 	});
 	}
@@ -3160,9 +3165,6 @@ function loadGame(save){
 	$('.mazeScreen').fadeIn();
 	player.searchingPack = false;
 	fogAdjust();
-	
-	// reset available loot
-	availableLoot();
 
 	// reset items in pack
 	for (var i = 0; i < player.pack.length; i++) {

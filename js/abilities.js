@@ -132,12 +132,18 @@ function clickSmite(){
 $('.weaponAttackMenu').on('click', '.holyLight', clickHolyLight);
 function clickHolyLight(){
 	if (player.myturn && player.fighting){
-		var damage = calcDamage((player.weaponDamageNow),'game','weapon');
+		if (player.mana >= 30){
+			player.mana -= 30;
+			displayPlayerMana();
 			player.health += player.maxHealth*.7;
 			if (player.health > player.maxHealth){
 				player.health = player.maxHealth;
 			}
 			displayPlayerReport("You heal in holy light.");
+		} else {
+			notEnoughMana();
+		}
+		
 	};
 };
 $('.weaponAttackMenu').on('click', '.holySlash', clickHolyLight);

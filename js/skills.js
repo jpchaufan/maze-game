@@ -394,6 +394,25 @@ $('[class*="skillUp-"]').on('click', function(){
 					$('[name="Ghost Strike"]').addClass('availableSkill');
 				}
 			}
+			if (x == 'Ninja Mastery'){
+				player.skillPoints -= 1;
+				player.tacticSkills[1] += 1;
+				applyNinjaMastery();
+				$('[name="Ninja Mastery"] .skillCounter').html(player.tacticSkills[1]);
+				if ($('[name="Ninja Mastery"]').hasClass('availableSkill')){
+					$('[name="Ninja Mastery"]').removeClass('availableSkill');
+					$('[name="Ninja Mastery"]').addClass('activeSkill');
+				}
+				if ((player.tacticSkills[1] >= 1) && (player.tacticSkills[3] == 0)){
+					$('[name="Immobilize"]').addClass('availableSkill');
+				}	
+				if ((player.tacticSkills[1] >= 5) && (player.tacticSkills[5] == 0)){
+					$('[name="Critical"]').addClass('availableSkill');
+				}
+				if ((player.tacticSkills[1] >= 10) && (player.tacticSkills[7] == 0)){
+					$('[name="Swiftness"]').addClass('availableSkill');
+				}
+			}
 			if ((x == 'Ambush') && ($('[name="Ambush"]').hasClass('availableSkill'))){
 				player.skillPoints -= 1;
 				player.tacticSkills[2] += 1;

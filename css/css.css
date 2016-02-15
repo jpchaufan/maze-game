@@ -1058,6 +1058,12 @@
 	background: url('../imgs/items/ringOfMana.png');
 	background-size: 100% 100%;
 }
+.battleAxe {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/battleAxe.png');
+	background-size: 100% 100%;
+}
 .saphireChalice {
 	width: 40px;
 	height: 40px;
@@ -1100,7 +1106,36 @@
 	background: url('../imgs/items/kurki.png');
 	background-size: 100% 100%;
 }
-
+.knightsShield {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/knightsShield.png');
+	background-size: 100% 100%;
+}
+.knightsSword {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/knightsSword.png');
+	background-size: 100% 100%;
+}
+.curvedStaff {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/curvedStaff.png');
+	background-size: 100% 100%;
+}
+.battleTunic {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/battleTunic.png');
+	background-size: 100% 100%;
+}
+.acrobatsVest {
+	width: 40px;
+	height: 40px;
+	background: url('../imgs/items/acrobatsVest.png');
+	background-size: 100% 100%;
+}
 
 
 

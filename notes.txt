@@ -10,9 +10,21 @@ Bugs to Fix:
 Things to Add:
 ===============================
 
-> add new items and bosses and enemies, up to level 10+
+++ charge-up visual effects
 
-> change skill system
+++ pretty alert windows
+
+++ fade-in text storyline
+
+
+
+
+
+
+
+
+
+> add new items and bosses and enemies, up to level 10+
 
 > find or make cooler graphics, and audio
 
