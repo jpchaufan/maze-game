@@ -13,20 +13,20 @@ enemies = [
 	varied2: 70,
 	chargeUp: 0,
 	special1: function(){
-		var damage = calcDamage((15 * game.level),'player','weapon');
+		var damage = calcDamage((23 * game.level),'player','weapon');
 		player.delay += 30;
 		displayDelay();
 		console.log('delay added');
 		msg = 'bashes you with his shield!';
 	},
 	special2: function(){
-		var damage = calcDamage((42 * game.level),'player','weapon');
+		var damage = calcDamage((50 * game.level),'player','weapon');
 		msg = 'stabs with his spear!';
 		console.log('spear\'s damage: ' + damage);
 		playerIsHit(damage);
 	},
 	armor: (50 + 50*game.level),
-	resistance: (30 + 30*game.level)
+	resistance: (35 + 35*game.level)
 },
 {	
 	enemyName: "Phantasmico",
@@ -36,7 +36,7 @@ enemies = [
 	speed: 110,
 	chargeUp: 0,
 	damageType: 'magic',
-	magicDamage: (52 * game.level),
+	magicDamage: (58 * game.level),
 	armor: (35*game.level),
 	resistance: (50*game.level)
 },
@@ -59,10 +59,10 @@ enemies = [
 	special2: function(){
 		var roll = Math.random() * 100 + 1;
 		if (roll >= 90){
-			var damage = calcDamage(((60 + 20*game.chargeUp) * game.level),'player','weapon');
+			var damage = calcDamage(((90 + 20*game.chargeUp) * game.level),'player','weapon');
 			msg = 'critically hits!';
 		} else {
-			var damage = calcDamage(((35 + 12*game.chargeUp) * game.level),'player','weapon');
+			var damage = calcDamage(((60 + 12*game.chargeUp) * game.level),'player','weapon');
 			msg = 'swipes with tigery claws!';
 		}
 		
@@ -164,7 +164,7 @@ enemies = [
 	speed: 100,
 	chargeUp: 0,
 	damageType: 'weapon',
-	weaponDamage: (25 * game.level),
+	weaponDamage: (22 * game.level),
 	armor: (50 + 50*game.level),
 	resistance: (20 + 20*game.level)
 },
@@ -176,7 +176,7 @@ enemies = [
 	img: "imgs/enemies/lordsknight.png",
 	maxHealth: (60 * game.level),
 	damageType: 'weapon',
-	weaponDamage: (35 * game.level),
+	weaponDamage: (28 * game.level),
 	armor: 120,
 	resistance: 50
 	
@@ -189,7 +189,7 @@ enemies = [
 	chargeUp: 0,
 	maxHealth: (70 * game.level),
 	damageType: 'magic',
-	magicDamage: (35 * game.level),
+	magicDamage: (31 * game.level),
 	armor: 0,
 	resistance: (50 + 30 * game.level)
 	
@@ -254,13 +254,13 @@ enemies = [
 	maxHealth: (80 * game.level),
 	damageType: 'special',
 	special: function(){
-		var damage = calcDamage((15 * game.level),'player','weapon');
+		var damage = calcDamage((12 * game.level),'player','weapon');
 			turnEffectsPlayer.push(
 				{
 					name: 'poison',
 					duration: 6,
 					effect: function(){
-						damage = calcDamage((10 * game.level), 'player', 'magic');
+						damage = calcDamage((8 * game.level), 'player', 'magic');
 						player.health -= damage;
 						displayPlayerHealth();
 					}
@@ -284,6 +284,19 @@ enemies = [
 	weaponDamage: (24 * game.level),
 	armor: (40 * game.level),
 	resistance: (40 * game.level)
+	
+},
+{	
+	enemyName: "Red Bandit",
+	id: 17,
+	img: "imgs/enemies/redBandit.png",
+	speed: 130,
+	chargeUp: 0,
+	maxHealth: (80 * game.level),
+	damageType: 'magic',
+	magicDamage: (25 * game.level),
+	armor: (20 * game.level),
+	resistance: (20 * game.level)
 	
 },
 ];

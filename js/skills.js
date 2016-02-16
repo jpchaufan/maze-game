@@ -52,13 +52,11 @@ function applyHolyLight(){
 	$('.abilitiesMenuWeapon').append('<div class="infoAbility" handle="Holy Light"><div class="top"><div class="abilityName">Holy Light</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Heal yourself for 70% of your max health.</div> </div>');
 	accordionMenuToggle();
 }
-function applyHolySlash(){
-	x = player.weaponAbilitiesLearned.indexOf('Holy Slash');
+function applyHolyStrength(){
+	x = player.weaponAbilitiesLearned.indexOf('Holy Strength');
 	if (x == -1){
-		player.weaponAbilitiesLearned.push('Holy Slash');
+		player.weaponAbilitiesLearned.push('Holy Strength');
 	}
-	$('.abilitiesMenuWeapon').append('<div class="infoAbility" handle="Holy Slash"><div class="top"><div class="abilityName">Holy Slash</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Do 1.2x weapon damage as magic damage.</div> </div>');
-	accordionMenuToggle();
 }
 
 // Magic Skills
@@ -113,13 +111,11 @@ function applyDrainLife(){
 		player.magicAbilitiesLearned.push('Drain Life');
 	}
 }
-function applyChannel(){
-	x = player.magicAbilitiesLearned.indexOf('Channel');
+function applyElementary(){
+	x = player.magicAbilitiesLearned.indexOf('Elementary');
 	if (x == -1){
-		player.magicAbilitiesLearned.push('Channel');
+		player.magicAbilitiesLearned.push('Elementary');
 	}
-	$('.abilitiesMenuMagic').append('<div class="infoAbility" handle="Channel"><div class="top"><div class="abilityName">Channel</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Channel the elements, recovering 80% of your max mana and gaining 15% bonus magic damage.</div> </div>');
-	accordionMenuToggle();
 }
 function applyMagicMissiles(){
 	x = player.magicAbilitiesLearned.indexOf('Magic Missiles');
@@ -246,7 +242,7 @@ $('[class*="skillUp-"]').on('click', function(){
 					$('[name="Holy Light"]').addClass('availableSkill');
 				}
 				if ((player.weaponSkills[1] >= 10) && (player.weaponSkills[7] == 0)){
-					$('[name="Holy Slash"]').addClass('availableSkill');
+					$('[name="Holy Strength"]').addClass('availableSkill');
 				}
 			}
 			if ((x == 'Enrage') && ($('[name="Enrage"]').hasClass('availableSkill'))){
@@ -284,12 +280,12 @@ $('[class*="skillUp-"]').on('click', function(){
 				player.weaponSkills[5] += 1;
 				applyHolyLight();
 			}
-			if ((x == 'Holy Slash') && ($('[name="Holy Slash"]').hasClass('availableSkill'))){
-				$('[name="Holy Slash"]').removeClass('availableSkill')
-				$('[name="Holy Slash"]').addClass('activeSkill');
+			if ((x == 'Holy Strength') && ($('[name="Holy Strength"]').hasClass('availableSkill'))){
+				$('[name="Holy Strength"]').removeClass('availableSkill')
+				$('[name="Holy Strength"]').addClass('activeSkill');
 				player.skillPoints -= 1;
 				player.weaponSkills[7] += 1;
-				applyHolySlash();
+				applyHolyStrength();
 			}
 
 			/* Magic Skills */
@@ -309,7 +305,7 @@ $('[class*="skillUp-"]').on('click', function(){
 					$('[name="Electrocute"]').addClass('availableSkill');
 				}
 				if ((player.magicSkills[0] >= 10) && (player.magicSkills[6] == 0)){
-					$('[name="Channel"]').addClass('availableSkill');
+					$('[name="Elementary"]').addClass('availableSkill');
 				}			}
 			if (x == 'Witch Mastery'){
 				player.skillPoints -= 1;
@@ -358,12 +354,12 @@ $('[class*="skillUp-"]').on('click', function(){
 				player.magicSkills[5] += 1;
 				applyDrainLife();
 			}
-			if ((x == 'Channel') && ($('[name="Channel"]').hasClass('availableSkill'))){
-				$('[name="Channel"]').removeClass('availableSkill');
-				$('[name="Channel"]').addClass('activeSkill');
+			if ((x == 'Elementary') && ($('[name="Elementary"]').hasClass('availableSkill'))){
+				$('[name="Elementary"]').removeClass('availableSkill');
+				$('[name="Elementary"]').addClass('activeSkill');
 				player.skillPoints -= 1;
 				player.magicSkills[6] += 1;
-				applyChannel();
+				applyElementary();
 			}
 			if ((x == 'Magic Missiles') && ($('[name="Magic Missiles"]').hasClass('availableSkill'))){
 				$('[name="Magic Missiles"]').removeClass('availableSkill');

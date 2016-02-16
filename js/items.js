@@ -6,6 +6,8 @@ items = [
 	{
 		name: 'healthPotion',
 		id: 0,
+		title: 'Health Potion',
+		desc: 'Drink to restore 70% of your health.<br>(press "z" to drink)',
 		consumable: true,
 		equipSlot: null,
 		effect: function(space){
@@ -13,7 +15,7 @@ items = [
 			$('.packSq[space="'+space+'"]').removeClass('hasItem');
 			$('.packSq[space="'+space+'"]').removeClass('healthPotion');
 			player.pack[space] = 0;
-			player.health += (player.maxHealth*0.6);
+			player.health += (player.maxHealth*0.7);
 			if (player.health > player.maxHealth){
 				player.health = player.maxHealth;
 			}
@@ -23,6 +25,8 @@ items = [
 	{
 		name: 'manaPotion',
 		id: 1,
+		title: 'Mana Potion',
+		desc: 'Drink to restore 70% of your mana.<br>(press "z" to drink)',
 		consumable: true,
 		equipSlot: null,
 		effect: function(space){
@@ -30,7 +34,7 @@ items = [
 			$('.packSq[space="'+space+'"]').removeClass('hasItem');
 			$('.packSq[space="'+space+'"]').removeClass('manaPotion');
 			player.pack[space] = 0;
-			player.mana += (player.maxMana*0.6);
+			player.mana += (player.maxMana*0.7);
 			if (player.mana > player.maxMana){
 				player.mana = player.maxMana;
 			}
@@ -558,24 +562,6 @@ items = [
 		}
 	},
 	{
-		name: 'battlemageRing',
-		id: 32,
-		title: 'Battlemage Ring',
-		desc: '+15 Magic Damage<br>+4 Restore Mana<br>+15 Weapon Damage',
-		consumable: false,
-		equipSlot: 'ring',
-		equip: function(){
-			player.weaponDamage += 15;
-			player.restoreMana += 4;
-			player.magicDamage += 15;
-		},
-		unequip: function(){
-			player.weaponDamage -= 15;
-			player.restoreMana -= 4;
-			player.magicDamage -= 15;
-		}
-	},
-	{
 		name: 'mentalistsPendant',
 		id: 33,
 		title: 'Mentalist\'s Pendant',
@@ -656,6 +642,26 @@ items = [
 		}
 	},
 	{
+		name: 'battlemageRing',
+		id: 38,
+		title: 'Battlemage Ring',
+		desc: '+15 Magic Damage<br>+4 Restore Mana<br>+4 Restore Health<br>+15 Weapon Damage',
+		consumable: false,
+		equipSlot: 'ring',
+		equip: function(){
+			player.weaponDamage += 15;
+			player.restoreMana += 4;
+			player.restoreHealth += 4;
+			player.magicDamage += 15;
+		},
+		unequip: function(){
+			player.weaponDamage -= 15;
+			player.restoreMana -= 4;
+			player.restoreHealth -= 4;
+			player.magicDamage -= 15;
+		}
+	},
+	{
 		name: 'knightsSword',
 		id: 39,
 		title: 'Knight\'s Sword',
@@ -685,7 +691,7 @@ items = [
 			player.armor +=30;
 		},
 		unequip: function(){
-			player.magicDamage -= 90;
+			player.magicDamage -= 30;
 			player.armor -=30;
 		}
 	},
@@ -711,22 +717,211 @@ items = [
 		name: 'acrobatsVest',
 		id: 42,
 		title: 'Acrobat\'s Vest',
-		desc: '+15 Tactic Skill<br>+30 Armor<br>+30 Resistance<br>+15 Restore Health',
+		desc: '+15 Tactic Skill<br>+30 Armor<br>+30 Resistance<br>+8 Restore Health',
 		consumable: false,
 		equipSlot: 'torso',
 		equip: function(){
 			player.tacticSkill += 15;
 			player.armor += 30;
 			player.resistance +=30;
-			player.restoreHealth += 15;
+			player.restoreHealth += 8;
 		},
 		unequip: function(){
 			player.tacticSkill -= 15;
 			player.armor -= 30;
 			player.resistance -=30;
-			player.restoreHealth -= 15;
+			player.restoreHealth -= 8;
 		}
 	},
+	{
+		name: 'threeOrbs',
+		id: 43,
+		title: 'Three Orbs',
+		desc: '+32 Magic Damage<br>+6 Restore Mana',
+		consumable: false,
+		equipSlot: 'hand',
+		equip: function(){
+			player.magicDamage += 32;
+			player.restoreMana +=6;
+		},
+		unequip: function(){
+			player.magicDamage -= 32;
+			player.restoreMana -=6;
+		}
+	},
+	{
+		name: 'featheredBandana',
+		id: 44,
+		title: 'Feathered Bandana',
+		desc: '+20 Magic Damage<br>+20 Tactic Skill<br>+6 Restore Mana',
+		consumable: false,
+		equipSlot: 'head',
+		equip: function(){
+			player.magicDamage += 20;
+			player.tacticSkill += 20;
+			player.restoreMana +=6;
+		},
+		unequip: function(){
+			player.magicDamage -= 20;
+			player.tacticSkill -= 20;
+			player.restoreMana -=6;
+		}
+	},
+	{
+		name: 'mysteriousRags',
+		id: 45,
+		title: 'Mysterious Rags',
+		desc: '+80 Health<br>+100 Resistance<br>+10 Restore Health',
+		consumable: false,
+		equipSlot: 'torso',
+		equip: function(){
+			player.maxHealth += 80;
+			player.resistance += 100;
+			player.restoreHealth += 10;
+			displayPlayerHealth();
+		},
+		unequip: function(){
+			player.maxHealth -= 80;
+			player.resistance -= 100;
+			player.restoreHealth -= 10;
+			displayPlayerHealth();
+		}
+	},
+	{
+		name: 'hornedHelm',
+		id: 46,
+		title: 'Horned Helm',
+		desc: '+80 Armor<br>+30 Weapon Damage<br>+5 Restore Health',
+		consumable: false,
+		equipSlot: 'head',
+		equip: function(){
+			player.armor += 80;
+			player.weaponDamage += 30;
+			player.restoreHealth += 5;
+			displayPlayerHealth();
+		},
+		unequip: function(){
+			player.armor -= 80;
+			player.weaponDamage -= 30;
+			player.restoreHealth -= 5;
+			displayPlayerHealth();
+		}
+	},
+	{
+		name: 'heavyCopperPendant',
+		id: 47,
+		title: 'Heavy Copper Pendant',
+		desc: '+12 Restore Mana<br>+12 Restore Health',
+		consumable: false,
+		equipSlot: 'neck',
+		equip: function(){
+			player.restoreHealth += 12;
+			player.restoreMana += 12;
+		},
+		unequip: function(){
+			player.restoreHealth -= 12;
+			player.restoreMana -= 12;
+		}
+	},
+	{
+		name: 'hookNBlade',
+		id: 48,
+		title: 'Hook n\' Blade',
+		desc: '+18 Weapon Damage<br>+18 Tactic Skill<br>+15 Speed',
+		consumable: false,
+		equipSlot: 'hand',
+		equip: function(){
+			player.weaponDamage += 18;
+			player.tacticSkill +=18;
+			player.speed += 15;
+		},
+		unequip: function(){
+			player.weaponDamage -= 18;
+			player.tacticSkill -=18;
+			player.speed -= 15;
+		}
+	},
+	{
+		name: 'speedBand',
+		id: 49,
+		title: 'Speed Band',
+		desc: '+25 Speed',
+		consumable: false,
+		equipSlot: 'head',
+		equip: function(){
+			player.speed += 25;
+		},
+		unequip: function(){
+			player.speed -= 25;
+		}
+	},
+	{
+		name: 'holyHandGrenade',
+		id: 50,
+		title: 'Holy Hand Grenade',
+		desc: '+27 Weapon Damage<br>+27 Magic Damage<br>',
+		consumable: false,
+		equipSlot: 'hand',
+		equip: function(){
+			player.weaponDamage += 27;
+			player.magicDamage += 27;
+		},
+		unequip: function(){
+			player.weaponDamage -= 27;
+			player.magicDamage -= 27;
+		}
+	},
+	{
+		name: 'pointedHelm',
+		id: 51,
+		title: 'Pointed Helm',
+		desc: '+80 Armor<br>+80 Resistance<br>',
+		consumable: false,
+		equipSlot: 'head',
+		equip: function(){
+			player.armor += 80;
+			player.resistance += 80;
+		},
+		unequip: function(){
+			player.armor -= 80;
+			player.resistance -= 80;
+		}
+	},
+	{
+		name: 'skullChain',
+		id: 52,
+		title: 'Skull Chain',
+		desc: '+8% Life Steal<br>+30 Resistance',
+		consumable: false,
+		equipSlot: 'neck',
+		equip: function(){
+			player.lifeSteal += .08;
+			player.resistance += 30;
+		},
+		unequip: function(){
+			player.lifeSteal -= .08;
+			player.resistance -= 30;
+		}
+	},
+	{
+		name: 'tigersEyeRing', 
+		id: 53,
+		title: 'Tiger\'s Eye Ring',
+		desc: '+6% Life Steal<br>+30 Armor',
+		consumable: false,
+		equipSlot: 'ring',
+		equip: function(){
+			player.lifeSteal += .06;
+			player.armor += 30;
+		},
+		unequip: function(){
+			player.lifeSteal -= .06;
+			player.armor -= 30;
+		}
+	},
+
+	
+
 ];
 
 

@@ -2,7 +2,7 @@
 Bugs to Fix:
 ===============================
 
-
+> saving is pretty wierd with the new alert windows
 
 
 
@@ -10,9 +10,11 @@ Bugs to Fix:
 Things to Add:
 ===============================
 
-++ charge-up visual effects
+
 
 ++ pretty alert windows
+
+	++ make alert window for traps display a health bar
 
 ++ fade-in text storyline
 

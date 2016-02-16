@@ -11,6 +11,7 @@ makeGrid();
 
 
 	var game = {
+		halted: false,
 		mazeNum: 0,
 		/* enemies bot and top are used to set the enemies that can show up on a given level.
 		for example, if enemies bot and top are 0 and 4, then enemies with id 0 to 4 will be available.
@@ -52,7 +53,7 @@ makeGrid();
 		fightsWon: 0,
 		level: 1,
 		exp: 0,
-		skillPoints: 0,
+		skillPoints: 20,
 		pack: [],
 		equip: [],
 		weaponAbilities: ['Slash', 0 , 0],
@@ -85,7 +86,9 @@ makeGrid();
 		magicFind: 0,
 		delay: 100,
 		speed: 100,
-		speedNow: 100
+		speedNow: 100,
+		lifeSteal: 0,
+		lifeStealNow: 0,
 		
 	};
 	function makeWalls(){
@@ -1571,6 +1574,101 @@ makeGrid();
 	};
 	makeWalls();
 
+
+	/**************************************************
+					Alerts and Messages
+	**************************************************/
+
+	function messageClick(callback){
+		$('.msgOK').click(function(){
+			game.halted = false;
+			$('.message').hide();
+			if (callback){
+				callback();
+			}
+		});
+	}
+	function confirmClick(callbackY, callbackN){
+		$('.msgYes').click(function(){
+			game.halted = false;
+			$('.message').hide();
+			if (callbackY){
+				callbackY();
+			}
+		});
+		$('.msgNo').click(function(){
+			game.halted = false;
+			$('.message').hide();
+			if (callbackN){
+				callbackN();
+			}
+		});
+	}
+	function promptClickPack(){
+		$('.msgOK').click(function(){
+			$('.message').hide();
+			if (callbackY){
+				callbackY();
+			}
+		});
+		$('.msgCancel').click(function(){
+			$('.message').hide();
+			if (callbackN){
+				callbackN();
+			}
+		});
+	}
+	function messagePlayer(type, msg, callback){
+		if (type == 'alert'){
+			game.halted = true;
+			$('.msgText').html(msg);
+			$('.msgButtons').html('<button class="msgOK">OK</button>');
+			if (callback){
+				messageClick(callback);
+			} else {
+				messageClick();
+			}
+			$('.msgBand').hide();
+			$('.message').show();
+			$('.msgBand').fadeIn();
+		} else if (type == 'confirm'){
+			game.halted = true;
+			$('.msgText').html(msg);
+			$('.msgButtons').html('<button class="msgYes">Yes</button> <button class="msgNo">No</button>');
+			confirmClick(callbackY, callbackN);
+			$('.msgBand').hide();
+			$('.message').show();
+			$('.msgBand').fadeIn();
+		} else if (type == 'prompt'){
+			game.halted = true;
+			$('.msgText').html(msg);
+			$('.msgButtons').html('<input class="msgInput" placeHolder="" type="text" /><br><button class="msgYes">Yes</button> <button class="msgNo">No</button>');
+			confirmClick(callbackY, callbackN);
+			$('.msgBand').hide();
+			$('.message').show();
+			$('.msgBand').fadeIn();
+		} 
+	}
+	function testing(){
+		callbackY = function(input){
+			var input = $('.msgInput').val();
+			messagePlayer('alert', 'you said: '+input);
+		}
+		callbackN = function(){
+			messagePlayer('alert', 'didnt do anything');
+		}
+
+		messagePlayer('prompt', 'test it?', callbackY, callbackN);
+		$('.msgInput').val('old value');
+	}
+	
+	
+	
+	
+	/**************************************************
+					Level and Map Features
+	**************************************************/
+
 	function createEncounters() {
 		xpos = Math.floor(Math.random()*18+2);
 		ypos = Math.floor(Math.random()*18+2);
@@ -1622,20 +1720,24 @@ makeGrid();
 
 		}
 	}
-	function strengthenEnemies(){
-		if (game.level >= 2){
+	function improveEnemiesAndItems(){
+		if (game.level == 2){
 			game.enemiesBot = 10;
 			game.enemiesTop = 16;
-			game.itemsTop = 36;
+			game.itemsTop = 47;
 			game.itemsBot = 5;
+		} else if (game.level >= 3){
+			game.enemiesBot = 13;
+			game.enemiesTop = 17;
+			game.itemsTop = 53;
+			game.itemsBot = 31;
 		}
 		scaleEnemies();
 	}
 	function stairsCheck(){
 		if ((game.stairs[0] == player.xpos) && (game.stairs[1] == player.ypos)){
 			if (player.hasKey) {
-				var conf = confirm('Go down to the next level?');
-				if (conf){
+				callbackY = function(){
 					//reset dungeon
 					//clear:
 					$('.wallBlock').removeClass('wallBlock');
@@ -1660,12 +1762,15 @@ makeGrid();
 					};
 					game.level += 1;
 					player.hasKey = false;
-					strengthenEnemies();
+					improveEnemiesAndItems();
 					createBoss();
-
+					redrawPlayer();
 				}
+				callbackN = function(){}
+				messagePlayer('confirm', 'Go down to the next level?', callbackY, callbackN)
+
 			} else {
-				alert('You need to beat this level\'s boss and get the key!');
+				messagePlayer('alert', 'You need to beat this level\'s boss and get the key!');
 			}
 			
 		}
@@ -1723,21 +1828,26 @@ makeGrid();
 
 		var roll = Math.random()*100+1;
 		if (roll >= 66.6){
-			alert('Ambush!');
-			$('.runInitial').hide();
-			encounterBattle('enemy');
+			callback = function(){
+				$('.runInitial').hide();
+				encounterBattle('enemy');
+			}
+			messagePlayer('alert', 'Ambush!', callback);
+			
 		} else if (roll >= 33.3){
 			var mod = (player.tacticSkill/150);
 			if (mod > 1){
 				mod = 1;
 			}
 			var damage = player.health * 0.25 * (1-mod);
-			alert('Trap! took '+damage+' damage...');
 			player.health -= damage;
 			if (player.health <= 0){
 				player.health = 1;
 			}
 			displayPlayerHealth();
+			var msg = 'Trap! took '+Math.floor(damage)+' damage...';
+			messagePlayer('alert', msg);
+			
 		} else {
 			var msg = "found an item!"
 			if (player.tacticSkills[4]){
@@ -1748,9 +1858,9 @@ makeGrid();
 					msg = "found an item, and scavanged one more!"
 				}
 			}
-			alert(msg);
 			var num = Math.floor(Math.random()*(game.itemsTop+1-game.itemsBot) + game.itemsBot);
 			addItem(items[num].name);
+			messagePlayer('alert', msg);
 		}
 
 	}
@@ -1833,6 +1943,7 @@ makeGrid();
 		console.log('health: '+ game.health);
 		displayDelay();
 		window.clearTimeout(speedCountDown);
+		$('.hitImg').hide();
 		$('.gamePic').show();
 		$('.gamePic').css('background', 'url("'+enemies[x].img+'")');
 		$('.gamePic').css('background-size', '100% 100%');
@@ -1847,6 +1958,7 @@ makeGrid();
 		player.restoreHealthNow = player.restoreHealth;
 		player.restoreManaNow = player.restoreMana;
 		player.speedNow = player.speed;
+		player.lifeStealNow = player.lifeSteal;
 
 	}
 	function encounterBattle(type){
@@ -1894,8 +2006,10 @@ makeGrid();
 	}	
 	function checkForGameOver(){
 		if (player.health  <= 0){
-			alert('Game Over!');
-			location.reload();
+			callback = function(){
+				location.reload();
+			}
+			messagePlayer('alert', 'Game Over!', callback);		
 		}
 	}
 	function getLoot(){
@@ -1924,7 +2038,8 @@ makeGrid();
 		if (expNeeded <= player.exp){
 			player.level += 1;
 			player.skillPoints += 3;
-			alert('Leveled up! Skill points to spend: '+player.skillPoints);
+			var msg = 'Leveled up! Skill points to spend: '+player.skillPoints;
+			messagePlayer('alert', msg);
 		}
 	}
 	function checkForGameDefeat(){
@@ -1949,12 +2064,12 @@ makeGrid();
 					player.hasKey = true;
 					$('.boss').removeClass('boss');
 					game.boss = 0;
-					player.magicFind += 100;
-					getLoot();
-					getLoot();
-					getLoot();
-					
-					player.magicFind -= 100;
+					for (var i = 0; i < 3; i++) {
+						var num = Math.floor(Math.random()*(game.itemsTop+1-game.itemsBot) + game.itemsBot);
+						addItem(items[num].name);
+					};
+					player.exp += 50+game.level*100;
+					checkForLevelUp();
 					$(".lootReport").html('Boss dropped many items!');
 				} else {
 					getLoot();	
@@ -1962,7 +2077,9 @@ makeGrid();
 				if (player.tacticSkills[4]){
 					var roll = Math.random() * 100 + 1;
 					if (roll >= 80){
-						getLoot();
+						var num = Math.floor(Math.random()*(game.itemsTop+1-game.itemsBot) + game.itemsBot);
+						addItem(items[num].name);
+						messagePlayer('alert', 'Scavanged an extra item: '+items[num].title);
 					}
 				}
 			
@@ -2057,7 +2174,7 @@ makeGrid();
 			var roll = Math.random()*100+1;
 			if (roll >= 75){
 				player.weaponDamageNow += player.weaponDamageNow*.1;
-				alert('enrage triggers! +10% weapon damage bonus!');
+				chargeAnimation('red');
 			}
 		}
 		$('.playerHealthBar').fadeOut().fadeIn();
@@ -2073,25 +2190,64 @@ makeGrid();
 	function hitAnimation(color){
 		if (color == 'yellow'){
 			$('.hitImg').css("background", "url('imgs/misc/hit-yellow.png')");
+			$('.hitImg').css('background-size', "100% 100%");
+			$('.hitImg').fadeIn(150).fadeOut(150);
+		}
+		if (color == 'light'){
+			$('.hitImg').css("background", "url('imgs/misc/hit-light.png')");
+			$('.hitImg').css('background-size', "100% 100%");
+			$('.hitImg').fadeIn(250).fadeOut(250);
 		}
 		if (color == 'red'){
 			$('.hitImg').css('background', "url('imgs/misc/hit-red.png')");
+			$('.hitImg').css('background-size', "100% 100%");
+			$('.hitImg').fadeIn(150).fadeOut(150);
 		}
 		if (color == 'blue'){
 			$('.hitImg').css('background', "url('imgs/misc/hit-blue.png')");
+			$('.hitImg').css('background-size', "100% 100%");
+			$('.hitImg').fadeIn(150).fadeOut(150);
 		}
 		if (color == 'green'){
 			$('.hitImg').css('background', "url('imgs/misc/hit-green.png')");
+			$('.hitImg').css('background-size', "100% 100%");
+			$('.hitImg').fadeIn(150).fadeOut(150);
 		}
 		if (color == 'purple'){
 			$('.hitImg').css('background', "url('imgs/misc/hit-purple.png')");
+			$('.hitImg').css('background-size', "100% 100%");
+			$('.hitImg').fadeIn(150).fadeOut(150);
+		} 
+		
+	}
+	function chargeAnimation(type){
+		if (type == 'red'){
+			$('.playerAnim').css('background', "url('imgs/misc/charge-red.png') no-repeat");
+			$('.playerAnim').css('background-size', "100% 30%");
+			$('.playerAnim').css('background-position-y', "180px");
+			$('.playerAnim').fadeIn(10).animate({
+				'background-position-y':'-50px'
+			},700).fadeOut(10);
 		}
-		$('.hitImg').css('background-size', "100% 100%");
-		$('.hitImg').fadeIn(150).fadeOut(150);
+		if (type == 'orange'){
+			$('.playerAnim').css('background', "url('imgs/misc/charge-orange.png') no-repeat");
+			$('.playerAnim').css('background-size', "100% 30%");
+			$('.playerAnim').css('background-position-y', "180px");
+			$('.playerAnim').fadeIn(10).animate({
+				'background-position-y':'-50px'
+			},700).fadeOut(10);
+		}
 	}
 	function gameIsHit(x, color){
 		game.firstStrike = true;
 		game.health -= x;
+		if (player.lifeStealNow){
+			player.health += x*player.lifeStealNow;
+			if (player.health > player.maxHealth){
+				player.health = player.maxHealth;
+			}
+			displayPlayerHealth();
+		}
 		displayGameHealth();
 		hitAnimation(color);
 		$('.gameHealthBar').fadeOut().fadeIn();
@@ -2330,14 +2486,14 @@ makeGrid();
 	window.addEventListener('keydown', togglePack, false);
 	function togglePack(e){
 		
-		if (!player.fighting && !player.searchingPack && player.started){
+		if (!player.fighting && !player.searchingPack && player.started && !game.halted){
 			if (e.keyCode == '32'){
 				player.searchingPack = true;
 				$('.mazeScreen').hide();
 				$('.fog').hide();
 				$('.packScreen').show();
 			}
-		} else if (!player.fighting && player.searchingPack){
+		} else if (!player.fighting && player.searchingPack && !game.halted){
 			if (e.keyCode == '32'){
 				player.searchingPack = false;
 				$('.introScreen').hide();
@@ -2373,7 +2529,7 @@ makeGrid();
 	function addItem(item){	
 		var freeSpace = player.pack.indexOf(0);
 		if (freeSpace == -1){
-			alert('Pack is too full! Dumping items...');
+			messagePlayer('alert', 'Pack is too full! Dumping items...');
 		} else {
 			player.pack[freeSpace] = item;
 			$('.packSq[space="'+freeSpace+'"]').addClass(item);
@@ -2649,7 +2805,7 @@ makeGrid();
 	*****************************************************/
 	window.addEventListener('keydown', consumeFromPack, false);
 	function consumeFromPack(e){ // z
-		if (player.searchingPack && player.started){
+		if (player.searchingPack && player.started && !game.halted){
 			if ((e.keyCode == '90')){
 				var itemId = $('.selectedFromPack').attr('itemId')
 				if (items[itemId].consumable){
@@ -2657,8 +2813,7 @@ makeGrid();
 					items[itemId].effect(space);
 				} 
 			} else if ((e.keyCode == '88') && $('.selectedFromPack').length){
-				conf = confirm('Are you sure you want to delete this item?');
-				if (conf){
+				callbackY = function(){
 					var itemId = $('.selectedFromPack').attr('itemId')
 					var space = $('.selectedFromPack').attr('space');
 					player.pack[space] = 0;
@@ -2666,8 +2821,11 @@ makeGrid();
 					$('.selectedFromPack').removeClass('hasItem');
 					$('.selectedFromPack').removeAttr('itemId');
 					$('.selectedFromPack').removeClass('selectedFromPack');
-
 				}
+				callbackN = function(){
+					$('.selectedFromPack').removeClass('selectedFromPack');
+				}
+				messagePlayer('confirm', 'Are you sure you want to delete this item?', callbackY, callbackN);
 			}
 		}
 	}
@@ -2744,7 +2902,7 @@ makeGrid();
 	
 	$('.abilitiesMenuMagic').append('<div class="infoAbility" handle="Fireball"><div class="top"><div class="abilityName">Fireball</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Attack for 1.4x magic damage.</div> </div>');
 
-	$('.abilitiesMenuTactic').append('<div class="infoAbility" handle="Envenom"><div class="top"><div class="abilityName">Envenom</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Attack for .25x weapon damage, applying a poison that does .33x your tactic damage per turn for 8 turns.</div> </div>');
+	$('.abilitiesMenuTactic').append('<div class="infoAbility" handle="Envenom"><div class="top"><div class="abilityName">Envenom</div> <div class="remove">-</div><div class="add">+</div></div><div class="abilityInfo">Attack for .25x weapon damage, applying a poison that does .66x your tactic damage per turn for 8 turns.</div> </div>');
 	}
 	addStartingAbilities();
 
@@ -3012,7 +3170,7 @@ makeGrid();
 
 	window.addEventListener('keydown', move, false);
 	function move(e){
-		if (!player.fighting && !player.searchingPack){
+		if (!player.fighting && !player.searchingPack && !game.halted){
 			if (((e.keyCode == '37') || (e.keyCode == '65')) && !wallCollision((player.xpos-1), player.ypos)){ 
 				player.xpos -= 1; //left
 			} else if (((e.keyCode == '38') || (e.keyCode == '87')) && !wallCollision((player.xpos), player.ypos-1)){
@@ -3155,6 +3313,13 @@ function loadGame(save){
 		$('.mazeSq[col="'+x+'"][row="'+y+'"]').addClass('player');
 	}
 	repopPlayer();
+	// boss
+	function repopBoss(){
+		var x = game.boss[0];
+		var y = game.boss[1];
+		$('.mazeSq[col="'+x+'"][row="'+y+'"]').addClass('boss');
+	}
+	repopBoss();
 
 
 	//finish adjusting map
@@ -3367,9 +3532,6 @@ function loadGame(save){
 		if (player.weaponAbilitiesLearned[i] == 'Holy Light'){
 			applyHolyLight();
 		}
-		if (player.weaponAbilitiesLearned[i] == 'Holy Slash'){
-			applyHolySlash();
-		}
 	};
 	
 	for (var i = 0; i < player.magicAbilitiesLearned.length; i++) {
@@ -3379,8 +3541,8 @@ function loadGame(save){
 		if (player.magicAbilitiesLearned[i] == 'Electrocute'){
 			applyElectrocute();
 		}
-		if (player.magicAbilitiesLearned[i] == 'Channel'){
-			applyChannel();
+		if (player.magicAbilitiesLearned[i] == 'Curse'){
+			applyCurse();
 		}
 		if (player.magicAbilitiesLearned[i] == 'Magic Missiles'){
 			applyMagicMissiles();
@@ -3427,9 +3589,18 @@ function loadGame(save){
 
 	displayPlayerHealth();
 	displayPlayerMana();
-	strengthenEnemies();
+	improveEnemiesAndItems();
 
 } // end load function
+function refreshSaveNames(num){
+	if (saveNames[num+1]){
+		$('.save_'+num).html(saveNames[num-1]);
+	} else {
+		$('.save_'+num).html('Empty');
+	}
+
+}
+
 
 $('.gameScreen').on('click', '.save_1', function(){
 	var slot = saveNames[0];
