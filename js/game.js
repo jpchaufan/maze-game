@@ -46,6 +46,7 @@ makeGrid();
 		started: false,
 		xpos: 10,
 		ypos: 19,
+		direction: 'd',
 		wonBattle: false,
 		fighting: false,
 		bossFight: false,
@@ -53,7 +54,7 @@ makeGrid();
 		fightsWon: 0,
 		level: 1,
 		exp: 0,
-		skillPoints: 20,
+		skillPoints: 0,
 		pack: [],
 		equip: [],
 		weaponAbilities: ['Slash', 0 , 0],
@@ -1619,6 +1620,7 @@ makeGrid();
 		});
 	}
 	function messagePlayer(type, msg, callback){
+		$('.msgScroll').hide();
 		if (type == 'alert'){
 			game.halted = true;
 			$('.msgText').html(msg);
@@ -1647,20 +1649,40 @@ makeGrid();
 			$('.msgBand').hide();
 			$('.message').show();
 			$('.msgBand').fadeIn();
-		} 
+		} else if (type == 'fadeInText'){
+			game.halted = true;
+			
+			$('.msgWriting').html('');
+			$('.msgButtons').html('<button class="msgOK">OK</button>');
+			if (callback){
+				messageClick(callback);
+			} else {
+				messageClick();
+			}
+			$('.msgBand').hide();
+			$('.message').show();
+			$('.msgScroll').fadeIn();
+			for (var i = 0; i < msg.length; i++) {
+				currentLetter = msg[i];
+				$(".msgWriting").append("<span class='fadingIn'>" + currentLetter + "</span>");
+				$(".fadingIn").hide();
+				$(".fadingIn").delay(i * 120).fadeIn();
+				$(".fadingIn").removeClass("fadingIn");
+			};
+		}
 	}
-	function testing(){
-		callbackY = function(input){
-			var input = $('.msgInput').val();
-			messagePlayer('alert', 'you said: '+input);
-		}
-		callbackN = function(){
-			messagePlayer('alert', 'didnt do anything');
-		}
+	// function testing(){
+	// 	callbackY = function(input){
+	// 		var input = $('.msgInput').val();
+	// 		messagePlayer('alert', 'you said: '+input);
+	// 	}
+	// 	callbackN = function(){
+	// 		messagePlayer('alert', 'didnt do anything');
+	// 	}
 
-		messagePlayer('prompt', 'test it?', callbackY, callbackN);
-		$('.msgInput').val('old value');
-	}
+	// 	messagePlayer('prompt', 'test it?', callbackY, callbackN);
+	// 	$('.msgInput').val('old value');
+	// }
 	
 	
 	
@@ -1668,7 +1690,13 @@ makeGrid();
 	/**************************************************
 					Level and Map Features
 	**************************************************/
-
+	function removePlayer(){
+		$('.player').removeClass('player');
+		$('.player-u').removeClass('player-u');
+		$('.player-d').removeClass('player-d');
+		$('.player-l').removeClass('player-l');
+		$('.player-r').removeClass('player-r');
+	}
 	function createEncounters() {
 		xpos = Math.floor(Math.random()*18+2);
 		ypos = Math.floor(Math.random()*18+2);
@@ -1748,7 +1776,7 @@ makeGrid();
 					game.traps = [];
 					$('.stairs').removeClass('stairs');
 					game.stairs = [];
-					$('.player').removeClass('player');
+					removePlayer();
 					player.xpos = 10;
 					player.ypos = 19;
 					fogAdjust();
@@ -1765,6 +1793,16 @@ makeGrid();
 					improveEnemiesAndItems();
 					createBoss();
 					redrawPlayer();
+					//scroll message for appropriate level
+					if (game.level == 2){
+						messagePlayer('fadeInText', 'Descending deeper into the dungeon, you hear the faint whispers of your own fears coming from all directions...');
+					} else if (game.level == 3){
+						messagePlayer('fadeInText', 'As your journey continues, you gain a sense of hope.');
+					} else if (game.level == 4){
+						messagePlayer('fadeInText', 'OMG you are soo tired of the battle by this point, the weight of your despair holds you down like a wet sack of potatoes.');
+					} else if (game.level >= 5){
+						messagePlayer('fadeInText', 'Wow, are you still playing?? This is amazing, you, sir, truly have the dedication of a warrior. You are like Leo the Lion, my friend, your staying power is superb.');
+					}
 				}
 				callbackN = function(){}
 				messagePlayer('confirm', 'Go down to the next level?', callbackY, callbackN)
@@ -1909,7 +1947,7 @@ makeGrid();
 		// re-choose positions on traps
 		for (var i = 0; i < game.traps.length; i++) {
 			if ((game.traps[i][0] == xpos) && (game.traps[i][1] == ypos)){
-				createTraps();
+				createBoss();
 				return;
 			};
 		};
@@ -1982,6 +2020,12 @@ makeGrid();
 				player.bossFight = true;
 			} else if (game.level == 3){
 				setEnemy(1);
+				player.bossFight = true;
+			} else if (game.level == 4){
+				setEnemy(2);
+				player.bossFight = true;
+			} else if (game.level == 5){
+				setEnemy(3);
 				player.bossFight = true;
 			}
 		}
@@ -2544,6 +2588,10 @@ makeGrid();
 		}	
 	}
 	//starting items:
+	addItem('healthPotion');
+	addItem('healthPotion');
+	addItem('healthPotion');
+	addItem('healthPotion');
 	addItem('healthPotion');
 	addItem('healthPotion');
 	addItem('healthPotion');
@@ -3163,8 +3211,20 @@ makeGrid();
 		} ;
 	};
 	function redrawPlayer(){
-		$('.player').removeClass('player');
+		removePlayer();
 		$('.mazeSq[col="'+player.xpos+'"][row="'+player.ypos+'"]').addClass('player');
+		if (player.direction == 'u'){
+			$('.player').addClass("player-u");
+		}
+		if (player.direction == 'd'){
+			$('.player').addClass("player-d");
+		}
+		if (player.direction == 'l'){
+			$('.player').addClass("player-l");
+		}
+		if (player.direction == 'r'){
+			$('.player').addClass("player-r");
+		}
 	};
 
 
@@ -3173,12 +3233,16 @@ makeGrid();
 		if (!player.fighting && !player.searchingPack && !game.halted){
 			if (((e.keyCode == '37') || (e.keyCode == '65')) && !wallCollision((player.xpos-1), player.ypos)){ 
 				player.xpos -= 1; //left
+				player.direction = 'l';
 			} else if (((e.keyCode == '38') || (e.keyCode == '87')) && !wallCollision((player.xpos), player.ypos-1)){
 				player.ypos -= 1; // up
+				player.direction = 'u';
 			} else if (((e.keyCode == '39') || (e.keyCode == '68')) && !wallCollision((player.xpos+1), player.ypos)){
 				player.xpos += 1; // right
+				player.direction = 'r';
 			} else if (((e.keyCode == '40') || (e.keyCode == '83')) && !wallCollision((player.xpos), player.ypos+1)){
 				player.ypos += 1; // down
+				player.direction = 'd';
 			};
 			stairsCheck();
 			trapCheck();
@@ -3227,10 +3291,18 @@ $('.introMenu').on('click', '.loadGame', function(){
 	$('.loadMenu').show();
 });
 $('.instructions').on('click', '.playButton', function(){
-	$('.introScreen').hide();
-	$('.fog').show();
-	$('.mazeScreen').fadeIn();
-	player.started = true;
+	var callback = function(){
+		$('.introScreen').hide();
+		$('.fog').show();
+		$('.mazeScreen').fadeIn();
+		player.started = true;
+		setTimeout(function(){
+			messagePlayer('alert', 'Press -space- and equip your items!');
+		},1000);
+	}
+	var msg = "You wake up, in a damp and dark place that is unfamiliar. The chilling image of the wretched sorcerer who trapped you in this tomb is still painfully ingrained in your mind. You have nothing left to do but to make your way to the deepest depths, however deep they may be, and achieve your liberation from this mental prison.";
+	messagePlayer('fadeInText', msg, callback);
+	
 });
 $('.loadMenu').on('click', '.return', function(){
 	$('.loadMenu').hide();
@@ -3272,7 +3344,7 @@ function loadGame(save){
 	$('.encounter').removeClass('encounter');
 	$('.stairs').removeClass('stairs');
 	$('.trap').removeClass('trap');
-	$('.player').removeClass('player');
+	removePlayer();
 
 	// remove all items
 	$('.hasItem').removeClass('hasItem');
@@ -3307,12 +3379,7 @@ function loadGame(save){
 		$('.mazeSq[col="'+x+'"][row="'+y+'"]').addClass('stairs');
 	}
 	repopStairs();
-	function repopPlayer(){
-		var x = player.xpos;
-		var y = player.ypos;
-		$('.mazeSq[col="'+x+'"][row="'+y+'"]').addClass('player');
-	}
-	repopPlayer();
+	redrawPlayer();
 	// boss
 	function repopBoss(){
 		var x = game.boss[0];

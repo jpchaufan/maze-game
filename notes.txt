@@ -4,7 +4,7 @@ Bugs to Fix:
 
 > saving is pretty wierd with the new alert windows
 
-
+> now working on scroll thing
 
 ===============================
 Things to Add:

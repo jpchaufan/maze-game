@@ -42,7 +42,7 @@ enemies = [
 },
 {	
 	enemyName: "Feline Monk",
-	id: 3,
+	id: 2,
 	img: "imgs/enemies/felineMonk.png",
 	maxHealth: (220 * game.level),
 	speed: 100,
@@ -73,16 +73,27 @@ enemies = [
 	resistance: (30 + 30*game.level)
 },
 {	
-	enemyName: "boss",
+	enemyName: "Dark Sorcerer",
 	id: 3,
-	img: "imgs/enemies/monster1.png",
-	maxHealth: (70 * game.level),
+	img: "imgs/enemies/darkSorcerer.png",
+	maxHealth: (250 * game.level),
 	speed: 100,
+	damageType: 'varied2',
 	chargeUp: 0,
-	damageType: 'weapon',
-	weaponDamage: (25 * game.level),
-	armor: (50 + 50*game.level),
-	resistance: (20 + 20*game.level)
+	varied1: 40,
+	varied2: 60,
+	weaponDamage: 0,
+	special1: function(){
+		var damage = calcDamage((70 * game.level),'player','weapon');
+		msg = 'slices with magic swords';
+	},
+	special2: function(){
+		var damage = calcDamage((80 * game.level),'player','magic');
+		msg = 'burninates you with magic!';
+		playerIsHit(damage);
+	},
+	armor: (50 + 40*game.level),
+	resistance: (50 + 40*game.level)
 },
 {	
 	enemyName: "boss",

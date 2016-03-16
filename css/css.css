@@ -20,19 +20,38 @@
 **************************/
 
 .message {
+	display: none;
 	z-index: 5;
 	position: absolute;
 	width: 100%;
 	height: 100%;
 	background: rgba(0,0,0,.5);
+}
+/*
+url('../imgs/misc/scroll.png')
+*/
+.msgScroll {
 	display: none;
+	background: url('../imgs/misc/scroll.png');
+	background-size: 100% 100%;
+	width: 90%;
+	height: 90%;
+	margin: 5%;
+	box-shadow: inset 0px 10px 5px -5px #404040, inset 0px -10px 5px -5px #404040;
+}
+.msgWriting {
+	width: 65%;
+	height: 53%;
+	padding-top: 20%;
+	margin: auto;
+	text-align: center;
 }
 .msgBand {
 	width: 100%;
 	height: 66%;
 	margin-top: 16.5%;
 	background: #dfdfdf;
-	box-shadow: inset 0px 10px 5px -5px #404040, inset 0px -10px 5px -5px #404040 ;
+	box-shadow: inset 0px 10px 5px -5px #404040, inset 0px -10px 5px -5px #404040;
 }
 .msgText {
 	width: 70%;
@@ -41,10 +60,10 @@
 	margin: auto;
 	text-align: center;
 }
-.msgButtons {
+.msgButtons, .msgScrollButtons {
 	text-align: center;
 }
-.msgButtons button {
+.msgButtons button, .msgScrollButtons button {
 	font-weight: bold;
 	padding: 4px 12px;
 	margin: 0 8px;
@@ -52,6 +71,9 @@
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	-o-border-radius: 5px;
+}
+.msgScrollButtons button {
+	background: rgba(0,0,0,0);
 }
 .msgButtons input {
 	margin: -12px 0 6px;
@@ -165,20 +187,103 @@
 .wallBlock {
 	background: #3f3f3f;
 }
-.player {
-	background: blue;
+
+.player-r {
+	position: relative;
+	width: 20px;
+	background: transparent;
 }
+.player-r:before {
+	content: " ";
+	position: absolute;	margin-top: -10px;
+	background-position: bottom;
+	background: url('../imgs/misc/player-sprite.png') no-repeat 1% 80%;
+	background-size: 630% 120%;
+	height: 30px;
+	width: 20px;
+}
+.player-l {
+	position: relative;
+	width: 20px;
+	background: transparent;
+}
+.player-l:before {
+	content: " ";
+	position: absolute;	margin-top: -10px;
+	background-position: bottom;
+	background: url('../imgs/misc/player-sprite.png') no-repeat 1% 80%;
+	background-size: 630% 120%;
+	height: 30px;
+	width: 20px;
+	background-position-x: 18%;
+}
+.player-d {
+	position: relative;
+	width: 20px;
+	background: transparent;
+}
+.player-d:before {
+	content: " ";
+	position: absolute;	margin-top: -10px;
+	background-position: bottom;
+	background: url('../imgs/misc/player-sprite.png') no-repeat 1% 80%;
+	background-size: 630% 120%;
+	height: 30px;
+	width: 20px;
+	background-position-x: 55%;
+}
+.player-u {
+	position: relative;
+	width: 20px;
+	background: transparent;
+}
+.player-u:before {
+	content: " ";
+	position: absolute;	margin-top: -10px;
+	background-position: bottom;
+	background: url('../imgs/misc/player-sprite.png') no-repeat 1% 80%;
+	background-size: 630% 120%;
+	height: 30px;
+	width: 20px;
+	background-position-x: 78%;
+}
+
 .encounter {
-	background: red;
+	position: relative;
+	width: 20px;
+	background: transparent;
 }
+.encounter:before {
+	content: " ";
+	position: absolute;
+	margin-top: -10px;
+	background-position: bottom;
+	background: url('../imgs/misc/encounter.png') no-repeat;
+	background-size: 100% 100%;
+	height: 30px;
+	width: 20px;
+}
+
 .stairs {
 	background: url('../imgs/misc/stairs.png');
 	background-size: 100% 100%;
 }
 .boss {
-	background: url('../imgs/misc/boss.png');
-	background-size: 100% 100%;
+	position: relative;
+	width: 20px;
+	background: transparent;
 }
+.boss:before {
+	content: " ";
+	position: absolute;
+	margin-top: -10px;
+	background-position: bottom;
+	background: url('../imgs/misc/boss.png') no-repeat 0% -30%;
+	background-size: 100% 100%;
+	height: 30px;
+	width: 20px;
+}
+
 
 /**************************
       Battle Screen
